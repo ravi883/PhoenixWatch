@@ -34,3 +34,10 @@ def login_view(request):
 
 def home_view(request):
     return render(request,'home.html')
+
+def logout_view(request):
+    if request.session.keys():  
+        request.session.flush()
+        return redirect("login")
+    else:
+        return redirect("login")
