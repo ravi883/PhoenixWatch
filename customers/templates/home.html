@@ -206,7 +206,7 @@
                     {% if request.session.customer_id is not none %}
                         <!-- Dropdown -->
                         <div class="absolute right-0 mt-2 w-48 bg-surface-container shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
-                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Profile</a>
+                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'profile' %}">Profile</a>
                             <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Orders</a>
                             <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Wishlist</a>
                             <div class="border-t border-outline-variant my-1"></div>
@@ -342,41 +342,6 @@
             <a class="font-label-caps text-label-caps text-secondary underline text-center block mt-4 md:hidden" href="#">VIEW ALL CATEGORIES</a>
         </section>
 
-        <!-- Featured Section (Bento Grid Style) -->
-<!-- <section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-low">
-<div class="max-w-container-max mx-auto">
-<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter md:h-[600px]"> -->
-<!-- Large Feature -->
-<!-- <div class="md:col-span-2 relative overflow-hidden rounded-lg group bg-surface-container h-[400px] md:h-full">
-<img alt="Featured Watch" class="absolute inset-0 w-full h-full object-cover zoom-img transition-transform duration-700" src="https://lh3.googleusercontent.com/aida/AP1WRLvtFtj-EcQ8xo0Yh2M2JjCNyYwtwArxff6J6QS62AR_2L_UjK0fFQbOmwtBGeUzNdjIKl1EMr3smDuvm2NNdYfYSSCo9WosQ1H96z7UTmmF4jQKV0pjvESQ9EyUxOPJFhgwlXfgvJ5MIPjJAr1ShhXEFIyJZRKtgh_DxAkVeDKRWxTumLq3p4a6zz8uUbCetZjFYfVGpzpxbJOJB3HGhW_lc2LdWEEVyWxFFwZ723Y1FO3M4lviKoSs_A"/>
-<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
-<div class="absolute bottom-0 left-0 p-stack-lg z-10 w-full">
-<span class="inline-block px-2 py-1 bg-surface/20 backdrop-blur-sm text-on-primary font-label-caps text-[10px] rounded mb-2">LIMITED EDITION</span>
-<h3 class="font-headline-lg text-headline-lg text-on-primary mb-2">The Celestial Chronograph</h3>
-<p class="font-body-md text-surface-variant max-w-md mb-4">Precision mechanics housed in a case forged from pure meteorite. A testament to engineering beyond boundaries.</p>
-<button class="bg-on-primary text-primary font-label-caps text-label-caps px-6 py-3 rounded hover:bg-surface-variant transition-colors">
-                                DISCOVER
-                            </button>
-</div>
-</div> -->
-<!-- Side Features -->
-<!-- <div class="flex flex-col gap-gutter h-full">
-<div class="flex-1 relative overflow-hidden rounded-lg group bg-surface h-[250px] md:h-auto p-6 flex flex-col justify-center items-center text-center">
-<h4 class="font-headline-md text-headline-md text-primary mb-2">Art of Watchmaking</h4>
-<p class="font-body-md text-secondary mb-4">Explore the heritage and craftsmanship behind every Phoenix timepiece.</p>
-<a class="font-label-caps text-label-caps text-primary underline decoration-1 underline-offset-4 hover:text-secondary" href="#">READ THE JOURNAL</a>
-</div>
-<div class="flex-1 relative overflow-hidden rounded-lg group bg-surface-container h-[250px] md:h-auto">
-<img class="absolute inset-0 w-full h-full object-cover zoom-img transition-transform duration-700" data-alt="A minimalist overhead view of watchmaker's tools and a partially assembled watch movement laid out on a pristine white work surface. The image is brightly lit, emphasizing the intricate gears and the precision of the tools. The mood is clinical, clean, and highly professional, fitting a high-end luxury light-mode design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIuoInNEldLtAlweH-llXnu-uhoN8ekIlbD2-8BQG97nAyjeUvYm0OniqseqLjYX1-O2rrFgn0rX6eBaHAlzkB61oji61XYfkrdph9-q22JVTrvWKkCUzj6F9KiTOxM7XdtDBZJ9qJhyQEFgHUYbjvRZm2CMSFa6JlLVvZTbUBeFnMTpogGq_aTITes9keySzHe7KbYtJ_iV9AsLT2lPCFIQqha0ScR2Q8LKy7iITRU7b53WHf5bmH"/>
-<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-<div class="absolute bottom-4 left-4 z-10">
-<h4 class="font-headline-md text-headline-md text-on-primary">Bespoke Service</h4>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section> -->
 
         <!-- Best Sellers -->
         <section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
@@ -660,6 +625,8 @@
           if (touchendX > touchstartX + 50) moveCarousel(-1); // Swiped right
         }
     </script>
+
+    <!-- Mobile Menu -->
     <div class="fixed inset-0 z-[100] invisible transition-all duration-300" id="mobile-menu-drawer">
         <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300" id="mobile-menu-overlay"></div>
         <div class="absolute left-0 top-0 h-full w-3/4 max-w-xs bg-surface p-6 -translate-x-full transition-transform duration-300 shadow-lg" id="mobile-menu-content">
@@ -674,18 +641,16 @@
                 <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Women's</a>
                 <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Contact Us</a>
                 <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Track Orders</a>
+                {% if request.session.customer_id is not none %}
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Profile</a>
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Your Orders</a>
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'logout' %}">Logout</a>
+                {% endif %}
+                {% if request.session.customer_id is none %}
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'login' %}">Login/Signup</a>
+                {% endif %}
             </nav>
 
-            <div class="mt-auto pt-8">
-                <a class="flex items-center gap-2 text-secondary mb-4" href="#">
-                    <span class="material-symbols-outlined">account_circle</span>
-                    <span class="font-body-md">My Account</span>
-                </a>
-                <a class="flex items-center gap-2 text-secondary" href="#">
-                    <span class="material-symbols-outlined">shopping_bag</span>
-                    <span class="font-body-md">Shopping Bag</span>
-                </a>
-            </div>
         </div>
     </div>
 
@@ -713,18 +678,18 @@
                             <span class="font-body-md text-primary">$1,250</span>
                         </div>
                         <p class="font-body-md text-sm text-secondary mb-2">Steel Strap</p>
-                        <div class="flex items-center gap-4 mt-auto">
-                            <div class="flex items-center border border-outline rounded">
-                                <button class="px-2 py-1 text-primary hover:bg-surface-variant">-</button>
-                                <span class="px-2 font-body-md">1</span>
-                                <button class="px-2 py-1 text-primary hover:bg-surface-variant">+</button>
+                        <div class="cart-item flex items-center gap-4 mt-auto">
+                            <div class="quantity-control flex items-center border border-outline rounded">
+                                <button type="button" class="quantity-minus px-2 py-1 text-primary hover:bg-surface-variant">-</button>
+                                    <span class="quantity px-2 font-body-md">1</span>
+                                <button type="button" class="quantity-plus px-2 py-1 text-primary hover:bg-surface-variant">+</button>
                             </div>
                             <button class="text-sm text-secondary hover:text-error underline underline-offset-2">Remove</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex gap-4">
+                <!-- <div class="flex gap-4">
                     <div class="w-24 h-24 bg-surface-container rounded-lg flex items-center justify-center p-2">
                         <img alt="Aura Rose" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqvF7R9by3zLRJxGbvLC7xveb-zwf0-rIJW3Zzd0D74HCJrUmTVGo0ljSyQvlaVP5D8o4pbzoPzYFI24--ySVMDlXjj68k3CQhWV4EDJMPMEpcywsEi74jQaCL-PVTP7FC8giCYB_bUDO4KK4w0VinEuK4rSvjnF-FUNmTg2V2BKDqkg85XT6aK8esPP3RKWXk_4qTK8H2C43SWu-3PXKZRKn2AJQDTOK5zQPDOCedRPVrgbQq5Aha"/>
                     </div>
@@ -744,7 +709,7 @@
                             <button class="text-sm text-secondary hover:text-error underline underline-offset-2">Remove</button>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="pt-6 border-t border-outline-variant mt-auto">
@@ -758,6 +723,47 @@
             </div>
         </div>
     </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const quantityControls = document.querySelectorAll(".quantity-control");
+    
+    quantityControls.forEach(function (control) {
+
+        const minusButton = control.querySelector(".quantity-minus");
+        const plusButton = control.querySelector(".quantity-plus");
+        const quantityValue = control.querySelector(".quantity");
+
+        const MIN_QUANTITY = 1;
+        const MAX_QUANTITY = 5;
+
+        plusButton.addEventListener("click", function () {
+
+            let quantity = parseInt(quantityValue.textContent);
+
+            if (quantity < MAX_QUANTITY) {
+                quantity++;
+                quantityValue.textContent = quantity;
+            }
+
+        });
+
+        minusButton.addEventListener("click", function () {
+
+            let quantity = parseInt(quantityValue.textContent);
+
+            if (quantity > MIN_QUANTITY) {
+                quantity--;
+                quantityValue.textContent = quantity;
+            }
+
+        });
+
+    });
+
+});
+</script>
 
 <script>
     (function() {
@@ -818,4 +824,7 @@
         if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
         if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
     })();
-</script></body></html>
+    
+</script>
+
+</body></html>
