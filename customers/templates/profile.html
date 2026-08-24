@@ -415,6 +415,16 @@
                                 {% endfor %}
                             </div>
 
+                            <div class="flex flex-col gap-unit md:col-span-2">
+                                <label class="font-label-caps text-label-caps text-secondary" for="address">Address</label>
+                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="address" name="address" type="tel" value="{{ customer.address}}">
+                                {% for error in form.phone_number.errors %}
+                                    <p class="text-red-500 text-sm mt-1">
+                                        {{ error }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
                             <div class="md:col-span-2 pt-stack-sm flex justify-end">
                                 <button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-caps text-label-caps hover:opacity-90 transition-opacity" type="submit">
                                     Update Profile

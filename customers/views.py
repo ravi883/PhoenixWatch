@@ -6,6 +6,7 @@ from .forms import CustomerSignupForm, CustomerLoginForm, ProfileUpdateForm, Cha
 from django.contrib.auth.hashers import check_password, make_password
 from .models import Customer
 from django.contrib.auth.decorators import login_required
+from banners.models import Banner, Headline
 
 def signup(request):
     if request.method == "POST":
@@ -34,7 +35,10 @@ def login_view(request):
     return render(request, "login.html",{ "form": form })
 
 def home_view(request):
-    return render(request,'home.html')
+    banners = Banner.objects.filter(is_active=True).order_by('id')
+    print(banners)
+    headlines = Headline.objects.filter(is_active=True)
+    return render(request, "home.html",{ "banners": banners , 'headlines' : headlines})
 
 def logout_view(request):
     if request.session.keys():  

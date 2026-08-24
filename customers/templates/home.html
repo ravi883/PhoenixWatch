@@ -249,42 +249,37 @@
 
     <main class="flex-grow pt-[88px] lg:pt-[104px]"> <!-- Offset for sticky header -->
         <!-- News Ticker -->
+        {% if headlines %}
         <div class="ticker-wrap font-label-caps text-label-caps tracking-widest">
             <div class="ticker">
-                <span class="px-8">COMPLIMENTARY OVERNIGHT SHIPPING ON ALL ORDERS OVER $500</span>
-                <span class="px-8">|</span>
-                <span class="px-8">DISCOVER THE NEW TITANIUM COLLECTION</span>
-                <span class="px-8">|</span>
-                <span class="px-8">BOOK A PRIVATE CONSULTATION AT OUR BOUTIQUES</span>
+                {% for headline in headlines %}
+                    <span class="px-8">{{ headline.description }}</span>
+                    <span class="px-8">|</span>
+                {% endfor %}
+
             </div>
         </div>
+        {% endif %}
 
         <!-- Hero Carousel -->
         <section class="w-full">
             <div class="carousel-container relative" id="heroCarousel">
                 <!-- Slide 1 -->
-                <div class="carousel-slide active" data-alt="A high-end, professional product photograph of a luxury mechanical watch with a black leather strap and gold casing. Minimalist composition, dramatic lighting with soft gold highlights, dark atmospheric background. Shot for a premium e-commerce website. 8k resolution, cinematic quality." style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLssrOBVpeMAyHc9JWcpooVwL9VLcmXKlY7PQ8urw-5l2peP-CurQc516h0V80fA7l5FgZ_hfKmuHcVKqzDFNM3Bu8w68B8-qzHSb-dKIciR7rZ0unL_mRvFaMrpNpTqvnobKU7Tb5zCSw--ZwFZH0F58dAwcGK6mFNscnek5bGOvC6dgK5QZ1uDN2f_d7GjncixVaGe6EIQmIuIFun7pncY7G8Xdhm3qLZ9KE8CeBHrdh6AuQXst7cVbw');">
-                    <div class="carousel-overlay"></div>
-                    <div class="carousel-content max-w-2xl px-margin-mobile md:px-margin-desktop">
-                        <h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-stack-md text-on-primary">The Heritage Collection</h2>
-                        <p class="font-body-lg text-body-lg mb-stack-lg text-surface-variant max-w-lg">Crafted for those who appreciate the delicate balance of history and innovation. Experience timeless precision.</p>
-                        <a class="inline-flex items-center justify-center bg-on-primary text-primary font-label-caps text-label-caps px-8 py-4 rounded hover:bg-surface-variant transition-colors" href="#">
-                                EXPLORE COLLECTION
-                        </a>
-                    </div>
-                </div>
 
-                <!-- Slide 2 (Placeholder fallback if multiple needed, using same image for demo) -->
-                <div class="carousel-slide" data-alt="A stunning lifestyle shot of an elegant silver watch on a wrist resting against the steering wheel of a classic vintage sports car. Soft morning light filtering through the window, emphasizing the polished metal and sophisticated luxury aesthetic. High contrast, clean modern look." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsPM73l8FBRBGRGObbr6R1vNSO4YEqmwajGSLFuAcahZcIODnbNe7mBBDFGKlrE3KI0xaUBMBdgM4TkWa95-0T6PCRdJhYuT7xi5kISPWuU3qN7CWd_znap9SUxPjX14azgnVy7ZrSyWuL2IIxJlZpDlVtRNUYuIUUIiuNctGlQWaljc28uKTqTePIQOKMwZNShp4gMkVsIuoVPb7DAPDcfQgWuPN9VNCeWRvUExg94Kr7l1-zN4Jq'); background-color: #1a1a1a;">
-                    <div class="carousel-overlay"></div>
-                    <div class="carousel-content max-w-2xl px-margin-mobile md:px-margin-desktop">
-                        <h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-stack-md text-on-primary">Modern Elegance</h2>
-                        <p class="font-body-lg text-body-lg mb-stack-lg text-surface-variant max-w-lg">Minimalist design meets uncompromising engineering.</p>
-                        <a class="inline-flex items-center justify-center bg-transparent border border-on-primary text-on-primary font-label-caps text-label-caps px-8 py-4 rounded hover:bg-on-primary hover:text-primary transition-colors" href="#">
-                                SHOP NEW ARRIVALS
-                        </a>
+                {% for banner in banners %}
+                    <div class="carousel-slide active" data-alt="A high-end, professional product photograph of a luxury mechanical watch with a black leather strap and gold casing. Minimalist composition, dramatic lighting with soft gold highlights, dark atmospheric background. Shot for a premium e-commerce website. 8k resolution, cinematic quality." style="background-image: url('{{banner.image.url}}');">
+                        <div class="carousel-overlay"></div>
+                        <div class="carousel-content max-w-2xl px-margin-mobile md:px-margin-desktop">
+                            <h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-stack-md text-on-primary">{{ banner.title }}</h2>
+                            <p class="font-body-lg text-body-lg mb-stack-lg text-surface-variant max-w-lg">{{banner.subtitle }}</p>
+                            {% if banner.button_text %}
+                                <a class="inline-flex items-center justify-center bg-on-primary text-primary font-label-caps text-label-caps px-8 py-4 rounded hover:bg-surface-variant transition-colors" href="#">
+                                        {{banner.button_text}}
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
 
                 <!-- Controls -->
                 <button class="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-on-primary p-2 hover:opacity-70" onclick="moveCarousel(-1)">
@@ -294,9 +289,9 @@
                     <span class="material-symbols-outlined text-4xl">chevron_right</span>
                 </button>
                 <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2" id="carouselDots">
-                    <button class="w-3 h-3 rounded-full bg-on-primary" onclick="setSlide(0)"></button>
-                    <button class="w-3 h-3 rounded-full bg-surface-variant/50" onclick="setSlide(1)"></button>
-                </div>
+                    {% for banner in banners %}
+                        <button class="w-3 h-3 rounded-full {% if forloop.first %}bg-on-primary{% else %}bg-surface-variant/50{% endif %}" onclick="setSlide({{ forloop.counter0 }})"></button>
+                    {% endfor %}
             </div>
         </section>
 
@@ -552,7 +547,7 @@
         <!-- Bottom Bar -->
         <div class="border-t border-outline-variant px-margin-desktop py-stack-md flex justify-between items-center w-full max-w-container-max mx-auto flex-col md:flex-row gap-4">
             <p class="font-body-md text-body-md text-on-surface-variant text-sm">
-                        © 2024 Phoenix Timepieces. All rights reserved. Crafted for Timeless Precision.
+                        © 2024 Phoenix. All rights reserved.
             </p>
             <!-- Payment Methods Placeholder -->
             <div class="flex gap-2 text-outline">
