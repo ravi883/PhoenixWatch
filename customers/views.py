@@ -136,3 +136,6 @@ def change_password_view(request):
             "customer": customer,
         }
     )
+
+def forgot_password_view(request):
+    return render(request, "forgot_password.html")
