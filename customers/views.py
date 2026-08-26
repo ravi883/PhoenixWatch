@@ -5,13 +5,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .forms import CustomerSignupForm, CustomerLoginForm, ProfileUpdateForm, ChangePasswordForm
 from django.contrib.auth.hashers import check_password, make_password
 from .models import Customer
-from django.contrib.auth.decorators import login_required
 from banners.models import Banner, Headline
 
 def signup(request):
     if request.method == "POST":
         form = CustomerSignupForm(request.POST)
-        
+
         if form.is_valid():
             customer = form.save()
             # messages.success(request, "Account created successfully! You can now login.")
@@ -36,7 +35,6 @@ def login_view(request):
 
 def home_view(request):
     banners = Banner.objects.filter(is_active=True).order_by('id')
-    print(banners)
     headlines = Headline.objects.filter(is_active=True)
     return render(request, "home.html",{ "banners": banners , 'headlines' : headlines})
 
