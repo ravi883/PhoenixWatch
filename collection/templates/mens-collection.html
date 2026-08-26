@@ -138,21 +138,6 @@
     </style>
 </head>
 
-<script>
-    setTimeout(function () {
-        const messages = document.querySelectorAll(".message-alert");
-
-        messages.forEach(function (message) {
-            message.style.transition = "opacity 0.5s ease";
-            message.style.opacity = "0";
-
-            setTimeout(function () {
-                message.remove();
-            }, 500);
-        });
-    }, 3000);
-</script>
-
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
     <!-- TopNavBar -->
     <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md shadow-sm transition-all duration-200 ease-in-out hover:opacity-100 opacity-95">
@@ -184,7 +169,7 @@
                     {% if request.session.customer_id is not none %}
                         <!-- Dropdown -->
                         <div class="absolute right-0 mt-2 w-48 bg-surface-container shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
-                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Profile</a>
+                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'profile' %}">Profile</a>
                             <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Orders</a>
                             <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Wishlist</a>
                             <div class="border-t border-outline-variant my-1"></div>
@@ -242,7 +227,7 @@
                 <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Contact Us</a>
                 <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Track Orders</a>
                 {% if request.session.customer_id is not none %}
-                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Profile</a>
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'profile' %}">Profile</a>
                     <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Your Orders</a>
                     <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'logout' %}">Logout</a>
                 {% endif %}
@@ -324,197 +309,97 @@
         </div>
     </div>
 
-    <main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
-        <!-- Page Header -->
-        <header class="mb-section-gap text-center md:text-left" style="margin-bottom: 40px;">
-            <h3 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-stack-sm">My Account</h3>
-            <p class="font-body-lg text-body-lg text-secondary">Manage your profile, security, and preferences.</p>
-        </header>
-        <div class="flex flex-col md:flex-row gap-gutter">
-            <!-- Sidebar Navigation -->
-            <aside class="w-full md:w-1/4 shrink-0">
-                <nav class="flex flex-row md:flex-col gap-stack-sm overflow-x-auto md:overflow-visible pb-4 md:pb-0">
-                    <a class="font-label-caps text-label-caps text-primary border-b-2 md:border-b-0 md:border-l-2 border-primary px-4 py-2 bg-surface-container-low transition-colors whitespace-nowrap" href="#">Account Settings</a>
-                    <a class="font-label-caps text-label-caps text-secondary hover:text-primary md:border-l-2 border-transparent hover:border-surface-variant hover:bg-surface-container-low px-4 py-2 transition-colors whitespace-nowrap" href="#">Security</a>
-                    <a class="font-label-caps text-label-caps text-secondary hover:text-primary md:border-l-2 border-transparent hover:border-surface-variant hover:bg-surface-container-low px-4 py-2 transition-colors whitespace-nowrap" href="#">Order History</a>
-                </nav>
-            </aside>
+    <main class="flex-grow pt-24 md:pt-32">
+        <!-- Hero Section -->
+        <section class="w-full mb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+            <div class="relative h-[614px] md:h-[716px] w-full rounded-lg overflow-hidden flex items-center justify-center">
+                <div class="absolute inset-0 bg-cover bg-center" data-alt="A striking close-up photograph of a luxury men's mechanical watch resting on dark, textured slate. The scene is illuminated by dramatic, high-contrast lighting that highlights the brushed steel casing, intricate dial, and sapphire crystal. The mood is sophisticated, masculine, and premium, perfectly reflecting a high-end minimalist corporate aesthetic. The color palette revolves around deep greys, pristine steel, and subtle champagne gold accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBvJX3hBV9sTZlJWZtr93Mibv0GJcVD5Bdg5CtW0_zrtppNkZDLk3wzq9t79mvbKBbq_-plr3P_jJqvsNMFZFjn4lUv3YatapGBk8EIdUp8DJVc0jsA9aMlU_WIAXTt9_LHj3CaVPRQKGCPwurXc0hOPq5UTuikRFiOJ_-X2X_zNp8XexkSKv6eSbt6IKdFFmfXchnij3h6zD2McYctLIWtx9rymyBLJmfSY2CcP8YVWijN5U2v8Orb')"></div>
+                <div class="absolute inset-0 bg-tertiary/30 mix-blend-multiply"></div>
+                <div class="relative z-10 text-center text-on-tertiary">
+                    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 drop-shadow-lg">Men's Collection</h1>
+                    <p class="font-body-lg text-body-lg max-w-2xl mx-auto drop-shadow-md">Precision engineering meets timeless elegance.</p>
+                </div>
+            </div>
+        </section>
 
-            <!-- Settings Canvas -->
-            <div class="w-full md:w-3/4 max-w-3xl">
-                <!-- Profile Image / Hero (Bento Style) -->
-                <div class="mb-stack-lg flex items-center gap-4 pb-stack-md border-b border-outline-variant">
-                    <div class="w-20 h-20 rounded-full bg-surface-container-low shadow-sm flex items-center justify-center overflow-hidden border-2 border-surface-container-low">
-                        <span class="material-symbols-outlined text-4xl text-primary" data-icon="person">person</span>
+        <!-- Product Gallery Grid -->
+        <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-section-gap">
+            <div class="flex justify-between items-center mb-stack-lg border-b border-surface-container pb-4">
+                <span class="font-label-caps text-label-caps text-secondary">Showing 24 Timepieces</span>
+                <button class="flex items-center gap-2 font-label-caps text-label-caps text-primary hover:text-secondary transition-colors">
+                                    Sort By <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-gutter gap-y-16">
+                <!-- Product Card 1 -->
+                <div class="group flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-container-low rounded-lg overflow-hidden mb-stack-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+                        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A pristine, studio-lit photograph of a minimalist silver men's dress watch with a dark blue sunburst dial and black leather strap, isolated on a soft off-white background. The lighting is soft and diffuse, creating elegant reflections on the polished bezel. High-end product photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXEL8VG0k7U3cBq4GsqQfNFrLm9eMyd-FDMeTJY4c9Wd_zRB_7A5pbBJgPgCyYu5AOIHZkUABCOgeF5UbEWvrGpdUCp-0COQ0i8iIKXwETL6UIrPGuHuZ_5pDsKA8rsjq9nYGHDF2FZ6dOQrGnzNJ4Dzk0Shwypn_JGXh17DhFiz9HJTze5NAuk-7oUJhJsZ-dGuuwjU9UA2-YkeUlzyGrhn_-p-E3BEf7l9hpHN3WVAx59YNjjj19"/>
+                        <div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded font-label-caps text-label-caps text-primary">New</div>
                     </div>
-                    <div>
-                        <h2 class="font-headline-md text-headline-md text-primary">{{customer.first_name}} {{customer.last_name}}</h2>
-                        <p class="font-label-caps text-label-caps text-secondary">{{customer.email}}</p>
+
+                    <div class="text-center">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-1">The Meridian</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-2">Automatic • 41mm • Steel</p>
+                        <p class="font-body-lg text-body-lg text-primary">$4,250</p>
                     </div>
                 </div>
-            
-                <!-- Account Settings Section -->
-                <section class="mb-section-gap">
-                    {% if messages %}
-                        {% for message in messages %}
-                            {% if "profile" in message.tags %}
-                                <div class="mb-4 p-3 rounded bg-green-100 text-green-700 message-alert">
-                                    {{ message }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    <div class="mb-stack-md flex justify-between items-end">
-                        <h2 class="font-headline-md text-headline-md text-primary">Account Details</h2>
-                        
+                
+                <!-- Product Card 2 -->
+                <div class="group flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-container-low rounded-lg overflow-hidden mb-stack-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+                        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A sleek, modern men's chronograph watch featuring a matte black titanium case and a complex skeleton dial, set against a subtle light grey gradient background. Crisp studio lighting emphasizes the intricate mechanical details and the sporty rubber strap. High-end luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-Rxep38V0FSQ3PaD8iXAOhOqenvp0W-O01FABKMTvlwThw-tFeE15HebcDCZO2vKJbrQqchFChLi4RWE2fXfdjsRsR_aDdoKrVpZJrlomwlqBHu1xFB-u97-WbvkJA0xvkItoTqEOpKAtl_RzpmtEkl73trgKqSJsLkTWhmfqd_3mMRlPvgpHFxuSXAizVZOIXiMUAsBZ5oLaXEJxqWChcjaIy0rw_m9dRxTg6jwaQTEZFHPN1WLh"/>
                     </div>
 
-                    <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                        <form class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg" name="update_detail" method="post" action="{% url 'profile' %}" novalidate>
-                            {% csrf_token %}
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="firstName">First Name</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="firstName" name="first_name"  type="text" value="{{ customer.first_name}}">
-                                {% for error in form.first_name.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="lastName">Last Name</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="lastName" name="last_name" type="text" value="{{ customer.last_name}}">
-                                {% for error in form.last_name.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit md:col-span-2">
-                                <label class="font-label-caps text-label-caps text-secondary flex items-center gap-2" for="email">
-                                    Email Address
-                                    <span class="material-symbols-outlined text-[16px] text-[#A67C52]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
-                                </label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="email" name="email" type="email" value="{{ customer.email}}">
-                                {% for error in form.email.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit md:col-span-2">
-                                <label class="font-label-caps text-label-caps text-secondary" for="phone">Phone Number</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="phone" name="phone_number" type="tel" value="{{ customer.phone_number}}">
-                                {% for error in form.phone_number.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit md:col-span-2">
-                                <label class="font-label-caps text-label-caps text-secondary" for="address">Address</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="address" name="address" type="tel" value="{{ customer.address}}">
-                                {% for error in form.phone_number.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="city">City</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="city" name="city"  type="text" value="{% if customer.city %}{{ customer.city}} {% endif%}">
-                                {% for error in form.city.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="state">state</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="state" name="state" type="text" value="{% if customer.state %}{{ customer.state}} {% endif%}">
-                                {% for error in form.state.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="city">Pincode</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="pincode" name="pincode"  type="text" value="{% if customer.pincode %}{{ customer.pincode}} {% endif%}">
-                                {% for error in form.pincode.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <!-- <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="state">state</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="state" name="state" type="text" value="{{ customer.country}}">
-                                {% for error in form.state.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div> -->
-
-                            <div class="md:col-span-2 pt-stack-sm flex justify-end">
-                                <button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-caps text-label-caps hover:opacity-90 transition-opacity" type="submit">
-                                    Update Profile
-                                </button>
-                            </div>
-                        </form>
+                    <div class="text-center">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-1">Apex Chronograph</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-2">Mechanical • 43mm • Titanium</p>
+                        <p class="font-body-lg text-body-lg text-primary">$6,800</p>
                     </div>
-                </section>
+                </div>
 
-                <!-- Security & Password Section -->
-                <section>
-                    <div class="mb-stack-md">
-                        <h2 class="font-headline-md text-headline-md text-primary">Security</h2>
+                <!-- Product Card 3 -->
+                <div class="group flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-container-low rounded-lg overflow-hidden mb-stack-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+                        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A classic men's luxury watch with a rose gold case, crisp white enamel dial with Roman numerals, and a rich brown alligator leather strap, presented on a pure white background. The lighting is warm and inviting, highlighting the elegant polished finish of the gold." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTzbnPj3BM37_yEjuj_wfsycvi3_QHme9ZAQ11fqiasBqM24gkizKdBYCtWv19KmB0SuRRYdUbUCY64paPqpLTiU0EGZbhZcHcHehD50E68K9JZBySWKHHuZOpSU0B2l9w42H5VXwX_uwsEjoWkIRfa2Sa1drQ8vcKxZCGP5ss5CcDNYFs-MR-uXdmZKVvJ7r93brO5RWzMm6U9JpNUNPybTyTSlPyd_ELada7rSX0tf30FMT4JEjA"/>
                     </div>
-
-                    <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                        <form class="flex flex-col gap-stack-lg" name="change_password" method="post" action="{% url 'change_password' %}" novalidate>
-                            {% csrf_token %}
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="currentPassword">Current Password</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="currentPassword" name="current_password" placeholder="••••••••" type="password">
-                                {% for error in form.current_password.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
-                                <div class="flex flex-col gap-unit">
-                                    <label class="font-label-caps text-label-caps text-secondary" for="newPassword">New Password</label>
-                                    <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="newPassword" name="new_password" type="password">
-                                </div>
-                                <div class="flex flex-col gap-unit">
-                                    <label class="font-label-caps text-label-caps text-secondary" for="confirmPassword">Confirm New Password</label>
-                                    <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="confirmPassword" name="confirm_password" type="password">
-                                </div>
-                            </div>
-
-                            <div class="pt-stack-sm flex justify-end">
-                                <button class="border border-outline text-primary px-8 py-3 rounded-lg font-label-caps text-label-caps hover:bg-surface-container-low transition-colors" name="update_password" type="submit">
-                                    Update Password
-                                </button>
-                            </div>
-                        </form>
+                    <div class="text-center">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-1">Heritage Classic</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-2">Manual • 39mm • Rose Gold</p>
+                        <p class="font-body-lg text-body-lg text-primary">$12,500</p>
                     </div>
-                </section>
+                </div>
+
+                <!-- Product Card 4 -->
+                <div class="group flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-container-low rounded-lg overflow-hidden mb-stack-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+                        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A robust men's dive watch with a brushed stainless steel bracelet, striking green rotating bezel, and a black textured dial. Captured in sharp focus against a soft, bright studio background, showcasing its rugged yet sophisticated aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB92bAwUVR5F1M2TjiKM154GZ8aiS7MMhm8MVf5ithxdFh8Fa9tzUFfUkpaL-KiwapDGWBVtr8QBS_fBz8FH6wUg-GlCaxiFw5I_hrjtFWGKOQFZd3KGq6NOCNCr-zGz7IFbg9PCPimMaAQ6aUroQ43xkFUD9YQGBFzdP3QEP7WZAmJboV0dvONYS7_QdkHfq-xTMxpVTO_NNpoB629NYFrL9MQMESHUUasvqkay4PEWsz9pnniYPG-"/>
+                        <div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded font-label-caps text-label-caps text-primary">Best Seller</div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-headline-md text-headline-md text-primary mb-1">Oceanic Pro</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-2">Automatic • 42mm • Steel</p>
+                        <p class="font-body-lg text-body-lg text-primary">$5,100</p>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <!-- Pagination -->
+            <div class="mt-section-gap flex justify-center items-center gap-stack-md font-body-md text-body-md">
+                <button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-on-primary transition-colors">1</button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors">2</button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors">3</button>
+                <span class="text-secondary">...</span>
+                <button class="flex items-center gap-2 text-primary hover:text-secondary transition-colors ml-4 font-label-caps text-label-caps">
+                                    Next <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+                </button>
+            </div>
+        </section>
     </main>
+
+
+
 <script>
     (function() {
         const openBtn = document.getElementById('open-mobile-menu');
@@ -577,4 +462,66 @@
     
 </script>
 
+
+<!-- Footer -->
+    <footer class="w-full rounded-none bg-surface-container dark:bg-surface-container mt-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-section-gap w-full max-w-container-max mx-auto">
+            <!-- Brand Column -->
+            <div class="flex flex-col">
+                <a class="font-headline-lg text-headline-lg text-primary dark:text-on-primary-fixed mb-stack-md" href="/">
+                    Phoenix
+                </a>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-stack-md max-w-xs">
+                    Crafting timeless precision since 1994. Elevate your everyday with uncompromising quality.
+                </p>
+                <div class="flex gap-4 mt-auto">
+                    <!-- Social Icons (Placeholders using generic icons) -->
+                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera_alt</span></a>
+                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">play_arrow</span></a>
+                </div>
+            </div>
+
+            <!-- Links Column 1 -->
+            <div class="flex flex-col">
+                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">THE BRAND</h4>
+                <div class="flex flex-col gap-stack-sm">
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">About Us</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Collections</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Boutiques</a>
+                </div>
+            </div>
+
+            <!-- Links Column 2 -->
+            <div class="flex flex-col">
+                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">LEGAL</h4>
+                <div class="flex flex-col gap-stack-sm">
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Privacy Policy</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Shipping &amp; Returns</a>
+                </div>
+            </div>
+
+            <!-- Contact Column -->
+            <div class="flex flex-col">
+                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">SUPPORT</h4>
+                <div class="flex flex-col gap-stack-sm">
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Contact Us</a>
+                    <p class="font-body-md text-body-md text-on-surface-variant mt-2">
+                                    1-800-PHOENIX<br/>
+                                    support@phoenix.com
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Bottom Bar -->
+        <div class="border-t border-outline-variant px-margin-desktop py-stack-md flex justify-between items-center w-full max-w-container-max mx-auto flex-col md:flex-row gap-4">
+            <p class="font-body-md text-body-md text-on-surface-variant text-sm">
+                        © 2024 Phoenix. All rights reserved.
+            </p>
+            <!-- Payment Methods Placeholder -->
+            <div class="flex gap-2 text-outline">
+                <span class="material-symbols-outlined text-[32px]">credit_card</span>
+                <span class="material-symbols-outlined text-[32px]">account_balance_wallet</span>
+            </div>
+        </div>
+    </footer>
 </body></html>
