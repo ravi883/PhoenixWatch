@@ -137,3 +137,9 @@ def change_password_view(request):
 
 def forgot_password_view(request):
     return render(request, "forgot_password.html")
+
+def checkout_view(request):
+    return render(request, "checkout.html")
+
+def cart_view(request):
+    return render(request, "cart.html")
