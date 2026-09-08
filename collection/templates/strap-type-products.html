@@ -136,22 +136,27 @@
         }
         
     </style>
+
+<style data-purpose="typography">
+    .font-serif {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .font-sans {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+  </style>
+<style data-purpose="animations-and-effects">
+    .card-zoom-img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .product-card:hover .card-zoom-img {
+      transform: scale(1.04);
+    }
+    .hover-gold-transition {
+      transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    }
+  </style>
 </head>
-
-<script>
-    setTimeout(function () {
-        const messages = document.querySelectorAll(".message-alert");
-
-        messages.forEach(function (message) {
-            message.style.transition = "opacity 0.5s ease";
-            message.style.opacity = "0";
-
-            setTimeout(function () {
-                message.remove();
-            }, 500);
-        });
-    }, 3000);
-</script>
 
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
     <!-- TopNavBar -->
@@ -201,10 +206,11 @@
 
                 </div>
 
-                <button aria-label="Cart" class="p-2 hover:opacity-80 transition-opacity relative cart-toggle-btn">
+                <button aria-label="Cart" class="p-2 hover:opacity-80 transition-opacity relative cart-toggle-btn" data-purpose="cart-counter-action">
                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_bag</span>
-                    <span class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
+                    <span id="cart-counter-desktop" class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">0</span>
                 </button>
+                
             </div>
         </div>
 
@@ -218,13 +224,12 @@
                 Phoenix
             </a>
 
-            <button aria-label="Cart" class="p-2 text-primary relative cart-toggle-btn">
-                <span class="material-symbols-outlined">shopping_bag</span>
-                <span class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
+            <button aria-label="Cart" class="p-2 hover:opacity-80 transition-opacity relative cart-toggle-btn" data-purpose="cart-counter-action">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_bag</span>
+                <span id="cart-counter-mobile" class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">0</span>
             </button>
         </div>
     </header>
-
 
     <!-- Mobile Menu -->
     <div class="fixed inset-0 z-[100] invisible transition-all duration-300" id="mobile-menu-drawer">
@@ -324,197 +329,175 @@
         </div>
     </div>
 
-    <main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
-        <!-- Page Header -->
-        <header class="mb-section-gap text-center md:text-left" style="margin-bottom: 40px;">
-            <h3 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-stack-sm" style="font-size: 35px;">My Account</h3>
-            <p class="font-body-lg text-body-lg text-secondary">Manage your profile, security, and preferences.</p>
-        </header>
-        <div class="flex flex-col md:flex-row gap-gutter">
-            <!-- Sidebar Navigation -->
-            <aside class="w-full md:w-1/4 shrink-0">
-                <nav class="flex flex-row md:flex-col gap-stack-sm overflow-x-auto md:overflow-visible pb-4 md:pb-0">
-                    <a class="font-label-caps text-label-caps text-primary border-b-2 md:border-b-0 md:border-l-2 border-primary px-4 py-2 bg-surface-container-low transition-colors whitespace-nowrap" href="#">Account Settings</a>
-                    <a class="font-label-caps text-label-caps text-secondary hover:text-primary md:border-l-2 border-transparent hover:border-surface-variant hover:bg-surface-container-low px-4 py-2 transition-colors whitespace-nowrap" href="#">Security</a>
-                    <a class="font-label-caps text-label-caps text-secondary hover:text-primary md:border-l-2 border-transparent hover:border-surface-variant hover:bg-surface-container-low px-4 py-2 transition-colors whitespace-nowrap" href="#">Order History</a>
-                </nav>
-            </aside>
+    <!-- BEGIN: CollectionHeader -->
+    <section class="bg-gradient-to-b from-white via-alabaster to-[#f8f6f0] border-b border-sand py-12 lg:py-16 text-center px-4">
+        <!-- <div class="max-w-4xl mx-auto">
+            <nav class="text-[11px] uppercase tracking-[0.25em] text-stone-500 mb-3 flex items-center justify-center space-x-2">
+                <a class="hover:text-gold" href="#">Home</a>
+                <span class="text-stone-300">/</span>
+                <a class="hover:text-gold" href="#">Salon Atelier</a>
+                <span class="text-stone-300">/</span>
+                <span class="text-charcoal font-medium">Bespoke Timepieces</span>
+            </nav>
+            <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-charcoal mb-4">
+                    Bespoke &amp; Customized Timepieces
+            </h1>
+            <p class="text-stone-600 text-sm sm:text-base font-light max-w-2xl mx-auto leading-relaxed">
+                Artisanal Swiss-caliber mechanics customized to your personal legacy. Explore handcrafted dial micro-engravings, rare meteorite inlays, diamond pave bezels, and personal family crest exhibition casebacks.
+            </p>
+        </div> -->
+    </section> 
+    <!-- END: CollectionHeader -->
 
-            <!-- Settings Canvas -->
-            <div class="w-full md:w-3/4 max-w-3xl">
-                <!-- Profile Image / Hero (Bento Style) -->
-                <div class="mb-stack-lg flex items-center gap-4 pb-stack-md border-b border-outline-variant">
-                    <div class="w-20 h-20 rounded-full bg-surface-container-low shadow-sm flex items-center justify-center overflow-hidden border-2 border-surface-container-low">
-                        <span class="material-symbols-outlined text-4xl text-primary" data-icon="person">person</span>
-                    </div>
-                    <div>
-                        <h2 class="font-headline-md text-headline-md text-primary">{{customer.first_name}} {{customer.last_name}}</h2>
-                        <p class="font-label-caps text-label-caps text-secondary">{{customer.email}}</p>
+    <!-- BEGIN: CatalogControlsBar -->
+    <section class="sticky top-20 z-30 bg-white border-b border-sand shadow-sm" data-purpose="filter-toggle-handler">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <!-- Left Filter Button -->
+            <div class="flex items-center gap-3">
+                <button class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-medium border border-stone-300 px-4 py-2 hover:border-gold hover:text-gold transition-colors bg-white" id="filter-toggle-btn">
+                    <svg class="w-3.5 h-3.5 text-stone-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                    Filter <span class="text-[10px] text-stone-400 font-normal">{{products.count}}</span>
+                </button>
+
+                <!-- <span class="text-xs text-stone-500 hidden sm:inline-block tracking-wider">12 Bespoke Pieces</span> -->
+            </div>
+
+            <!-- Center Grid View Selectors (Visual Reference from Zivi) -->
+            <div class="hidden md:flex items-center space-x-2" data-purpose="grid-column-switcher">
+                <button aria-label="2 Columns View" class="grid-view-btn p-1.5 text-stone-400 hover:text-charcoal transition-all border-b-2 border-transparent pb-1" data-cols="2" title="2 Columns View">
+                    <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M4 4h7v16H4zm9 0h7v16h-7z"></path></svg>
+                </button>
+                <button aria-label="3 Columns View" class="grid-view-btn p-1.5 text-stone-400 hover:text-charcoal transition-all border-b-2 border-transparent pb-1" data-cols="3" title="3 Columns View">
+                    <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M3 4h5v16H3zm6.5 0h5v16h-5zM16 4h5v16h-5z"></path></svg>
+                </button>
+                <button aria-label="4 Columns View" class="grid-view-btn p-1.5 text-charcoal border-b-2 border-charcoal pb-1 transition-all" data-cols="4" title="4 Columns View">
+                    <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M2 4h4v16H2zm5.33 0h4v16h-4zm5.34 0h4v16h-4zm5.33 0h4v16h-4z"></path></svg>
+                </button>
+            </div>
+
+            <!-- Right Sort By Dropdown -->
+            <form method="GET" id="sort-form">
+
+                {# Preserve price filters when sorting #}
+                {% if min_price %}
+                    <input type="hidden" name="min_price" value="{{ min_price }}">
+                {% endif %}
+
+                {% if max_price %}
+                    <input type="hidden" name="max_price" value="{{ max_price }}">
+                {% endif %}
+                <div class="flex items-center gap-2">
+                    <label class="text-xs uppercase tracking-wider text-stone-500 hidden sm:block" for="sort-dropdown">Sort By:</label>
+                    <div class="relative">
+                        <select name="sort" class="text-xs tracking-wider border border-stone-300 py-1.5 pl-3 pr-8 focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold bg-white cursor-pointer appearance-none text-charcoal" id="sort-dropdown" onchange="this.form.submit()">
+                            <option value="alpha-asc" {% if sort == "alpha-asc" %}selected{% endif %}> Alphabetically, A-Z</option>
+                            <option value="alpha-desc" {% if sort == "alpha-desc" %}selected{% endif %}> Alphabetically, Z-A</option>
+                            <option value="price-asc" {% if sort == "price-asc" %}selected{% endif %}> Price: Low to High</option>
+                            <option value="price-desc" {% if sort == "price-desc" %}selected{% endif %}>Price: High to Low</option>
+                        </select>
                     </div>
                 </div>
-            
-                <!-- Account Settings Section -->
-                <section class="mb-section-gap">
-                    {% if messages %}
-                        {% for message in messages %}
-                            {% if "profile" in message.tags %}
-                                <div class="mb-4 p-3 rounded bg-green-100 text-green-700 message-alert">
-                                    {{ message }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    <div class="mb-stack-md flex justify-between items-end">
-                        <h2 class="font-headline-md text-headline-md text-primary">Account Details</h2>
-                        
+            </form>
+        </div>
+
+        <!-- Filter Drawer Panel (Collapsible) -->
+        <div class="hidden border-t border-sand bg-alabaster px-4 sm:px-8 py-6 transition-all duration-300" id="filter-drawer">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-xs">
+                <!-- Category Filter -->
+                <!-- <div>
+                    <h2 class="font-serif text-sm tracking-wider uppercase text-charcoal mb-3 font-semibold">Caliber &amp; Type</h2>
+                    <div class="space-y-2 text-stone-600">
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input checked="" class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Automatic Tourbillon (5)</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input checked="" class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Chronograph Flyback (4)</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Dual Time / GMT (3)</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Celestial &amp; Moonphase (2)</label>
                     </div>
-
-                    <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                        <form class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg" name="update_detail" method="post" action="{% url 'profile' %}" novalidate>
-                            {% csrf_token %}
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="firstName">First Name</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="firstName" name="first_name"  type="text" value="{{ customer.first_name}}">
-                                {% for error in form.first_name.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="lastName">Last Name</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="lastName" name="last_name" type="text" value="{{ customer.last_name}}">
-                                {% for error in form.last_name.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit md:col-span-2">
-                                <label class="font-label-caps text-label-caps text-secondary flex items-center gap-2" for="email">
-                                    Email Address
-                                    <span class="material-symbols-outlined text-[16px] text-[#A67C52]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
-                                </label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="email" name="email" type="email" value="{{ customer.email}}">
-                                {% for error in form.email.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit md:col-span-2">
-                                <label class="font-label-caps text-label-caps text-secondary" for="phone">Phone Number</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="phone" name="phone_number" type="tel" value="{{ customer.phone_number}}">
-                                {% for error in form.phone_number.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit md:col-span-2">
-                                <label class="font-label-caps text-label-caps text-secondary" for="address">Address</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="address" name="address" type="tel" value="{{ customer.address}}">
-                                {% for error in form.phone_number.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="city">City</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="city" name="city"  type="text" value="{% if customer.city %}{{ customer.city}} {% endif%}">
-                                {% for error in form.city.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="state">state</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="state" name="state" type="text" value="{% if customer.state %}{{ customer.state}} {% endif%}">
-                                {% for error in form.state.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="city">Pincode</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="pincode" name="pincode"  type="text" value="{% if customer.pincode %}{{ customer.pincode}} {% endif%}">
-                                {% for error in form.pincode.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <!-- <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="state">state</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="state" name="state" type="text" value="{{ customer.country}}">
-                                {% for error in form.state.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div> -->
-
-                            <div class="md:col-span-2 pt-stack-sm flex justify-end">
-                                <button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-caps text-label-caps hover:opacity-90 transition-opacity" type="submit">
-                                    Update Profile
-                                </button>
-                            </div>
-                        </form>
+                </div> -->
+                <!-- Customization Type -->
+                <!-- <div>
+                    <h2 class="font-serif text-sm tracking-wider uppercase text-charcoal mb-3 font-semibold">Custom Artistry</h2>
+                    <div class="space-y-2 text-stone-600">
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Hand Guilloché Dials</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Baguette Diamond Setting</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Custom Rotor Monogram</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Arabic Calligraphy Markers</label>
                     </div>
-                </section>
+                </div> -->
 
-                <!-- Security & Password Section -->
-                <section>
-                    <div class="mb-stack-md">
-                        <h2 class="font-headline-md text-headline-md text-primary">Security</h2>
+                <!-- Case Material -->
+                <!-- <div>
+                    <h2 class="font-serif text-sm tracking-wider uppercase text-charcoal mb-3 font-semibold">Precious Metal</h2>
+                    <div class="space-y-2 text-stone-600">
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> 18K Sedna Rose Gold</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> 950 Solid Platinum</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> Brushed Grade 5 Titanium</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-charcoal"><input class="rounded text-gold focus:ring-gold border-stone-300" type="checkbox"/> DLC Obsidian Carbon</label>
                     </div>
+                </div> -->
 
-                    <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                        <form class="flex flex-col gap-stack-lg" name="change_password" method="post" action="{% url 'change_password' %}" novalidate>
-                            {% csrf_token %}
-                            <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="currentPassword">Current Password</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="currentPassword" name="current_password" placeholder="••••••••" type="password">
-                                {% for error in form.current_password.errors %}
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ error }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
-                                <div class="flex flex-col gap-unit">
-                                    <label class="font-label-caps text-label-caps text-secondary" for="newPassword">New Password</label>
-                                    <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="newPassword" name="new_password" type="password">
-                                </div>
-                                <div class="flex flex-col gap-unit">
-                                    <label class="font-label-caps text-label-caps text-secondary" for="confirmPassword">Confirm New Password</label>
-                                    <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="confirmPassword" name="confirm_password" type="password">
-                                </div>
-                            </div>
-
-                            <div class="pt-stack-sm flex justify-end">
-                                <button class="border border-outline text-primary px-8 py-3 rounded-lg font-label-caps text-label-caps hover:bg-surface-container-low transition-colors" name="update_password" type="submit">
-                                    Update Password
-                                </button>
-                            </div>
-                        </form>
+                <!-- Price Range -->
+                <form method="GET">
+                    <div>
+                        <h2 class="font-serif text-sm tracking-wider uppercase text-charcoal mb-3 font-semibold">Price Range (₹ RS)</h2>
+                        <div class="flex items-center gap-2 mb-3">
+                            <input class="w-24 text-xs border border-stone-300 px-2 py-1 rounded-none" placeholder="1000" type="number" name="min_price"
+                                min="0" value="{{ min_price }}"/>
+                            <span class="text-stone-400">to</span>
+                            <input class="w-24 text-xs border border-stone-300 px-2 py-1 rounded-none" placeholder="2000" type="number" name="max_price"
+                            min="0"
+                            value="{{ max_price }}"/>
+                        </div>
+                        <button class="bg-charcoal text-white text-[10px] tracking-widest uppercase px-4 py-1.5 hover:bg-gold transition-colors" type="submit" style="color: #fcf9f8; background-color: black;">Apply Filters</button>
+                        {% if min_price or max_price %}
+                            <a href="{% if watch_type %}{% url 'watch-type-products' watch_type.slug %}{% else %}{% url 'strap_type_products' category.slug %}{% endif %}"
+                                class="border border-stone-300 text-charcoal text-[10px] tracking-widest uppercase px-4 py-1.5 hover:bg-stone-100 transition-colors">
+                                Clear Filter
+                            </a>
+                        {% endif %}
                     </div>
-                </section>
+                </form>
             </div>
         </div>
+    </section>
+    <!-- END: CatalogControlsBar -->
+
+    <!-- BEGIN: ProductCatalogGrid -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" data-purpose="product-collection-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 transition-all duration-300" id="product-grid">
+            <!-- Product Card 1 -->
+            {% for product in products %}
+            <article class="product-card group flex flex-col bg-white border border-sand hover:border-gold transition-all duration-300 p-3 relative">
+                <div class="relative overflow-hidden aspect-square bg-[#f5f3ef] flex items-center justify-center mb-3">
+                    <img alt="{{product.name}}" class="card-zoom-img object-cover w-full h-full" 
+                    src="{{product.primary_image.image.url}}"/>
+                    
+                </div>
+                <div class="flex-1 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-serif text-base font-medium text-charcoal group-hover:text-gold transition-colors leading-snug">
+                            {{product.name}}
+                        </h3>
+                        <p class="text-[11px] text-stone-500 mt-1 uppercase tracking-wider">{{product.strap_type}} | {{product.color}}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
+                        <div>
+                            <!-- <span class="text-xs text-stone-400 line-through mr-1.5">$38,000</span> -->
+                            <span class="text-sm font-serif font-semibold text-charcoal">₹ {{ product.price}}</span>
+                        </div>
+                        <button class="bg-alabaster border border-stone-300 hover:border-gold hover:bg-gold hover:text-black px-3 py-1.5 text-[10px] tracking-widest uppercase transition-colors" 
+                            onclick="addToBag('{{ product.product_id }}', '{{ product.name|escapejs }}', '{{ product.price }}')">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
     </main>
+    <!-- END: ProductCatalogGrid -->
+
+
 
     <!-- Footer -->
     <footer class="w-full rounded-none bg-surface-container dark:bg-surface-container mt-auto">
@@ -577,7 +560,8 @@
             </div>
         </div>
     </footer>
-    
+
+
 <script>
     (function() {
         const openBtn = document.getElementById('open-mobile-menu');
@@ -640,4 +624,128 @@
     
 </script>
 
+<!-- Filter -->
+<script data-purpose="filter-toggle-handler">
+    const filterBtn = document.getElementById('filter-toggle-btn');
+    const filterDrawer = document.getElementById('filter-drawer');
+
+    filterBtn.addEventListener('click', () => {
+      filterDrawer.classList.toggle('hidden');
+    });
+  </script>
+
+<!-- Column switcher -->
+<script data-purpose="grid-column-switcher">
+    const gridEl = document.getElementById('product-grid');
+    const switcherButtons = document.querySelectorAll('.grid-view-btn');
+
+    function setGridColumns(cols) {
+      // Remove any previously assigned grid-cols variations
+      gridEl.classList.remove('sm:grid-cols-2', 'lg:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4');
+
+      if (cols === '2') {
+        gridEl.classList.add('grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-2');
+      } else if (cols === '3') {
+        gridEl.classList.add('grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3');
+      } else {
+        // default 4 cols
+        gridEl.classList.add('grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-4');
+      }
+
+      // Update button active / inactive visual styles
+      switcherButtons.forEach(btn => {
+        const btnCols = btn.getAttribute('data-cols');
+        if (btnCols === cols) {
+          btn.classList.remove('text-stone-400', 'border-transparent');
+          btn.classList.add('text-charcoal', 'border-charcoal');
+        } else {
+          btn.classList.remove('text-charcoal', 'border-charcoal');
+          btn.classList.add('text-stone-400', 'border-transparent');
+        }
+      });
+    }
+
+    switcherButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cols = btn.getAttribute('data-cols');
+        setGridColumns(cols);
+      });
+    });
+  </script>
+
+<!-- Cart Counter -->
+<script>
+    function getCart() {
+        return JSON.parse(localStorage.getItem("cart")) || [];
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+
+    // Update BOTH desktop and mobile counters
+    function updateCartCounter() {
+
+        const cart = getCart();
+
+        const totalItems = cart.reduce(
+            (total, item) => total + item.quantity,
+            0
+        );
+
+        const desktopCounter =
+            document.getElementById("cart-counter-desktop");
+
+        const mobileCounter =
+            document.getElementById("cart-counter-mobile");
+
+
+        if (desktopCounter) {
+            desktopCounter.textContent = totalItems;
+        }
+
+        if (mobileCounter) {
+            mobileCounter.textContent = totalItems;
+        }
+    }
+
+
+    function addToBag(productId, productName, price) {
+
+        let cart = getCart();
+
+        const existingProduct = cart.find(
+            item => item.product_id === productId
+        );
+
+
+        if (existingProduct) {
+
+            existingProduct.quantity += 1;
+
+        } else {
+
+            cart.push({
+                product_id: productId,
+                name: productName,
+                price: parseFloat(price),
+                quantity: 1
+            });
+
+        }
+
+
+        saveCart(cart);
+
+        // Update desktop + mobile
+        updateCartCounter();
+    }
+
+
+    // Load cart counter when page opens
+    document.addEventListener("DOMContentLoaded", function () {
+        updateCartCounter();
+    });
+</script>
 </body></html>

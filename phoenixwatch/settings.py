@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'customers',
     'banners',
-    'collection'
+    'collection',
+    'products',
 ]
 
 # AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend']

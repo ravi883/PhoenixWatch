@@ -247,7 +247,7 @@
         </div>
     </header>
 
-    <main class="flex-grow pt-[88px] lg:pt-[104px]"> <!-- Offset for sticky header -->
+    <main class="flex-grow pt-[88px] lg:pt-[104px]"> 
         <!-- News Ticker -->
         {% if headlines %}
         <div class="ticker-wrap font-label-caps text-label-caps tracking-widest">
@@ -296,43 +296,28 @@
         </section>
 
         <!-- Shop By Category -->
-        <section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+        <section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto" style="padding-bottom:0px;">
             <div class="flex justify-between items-end mb-stack-lg">
                 <h3 class="font-headline-lg text-headline-lg text-primary">Shop by Category</h3>
-                <a class="font-label-caps text-label-caps text-secondary hover:text-primary underline decoration-1 underline-offset-4 hidden md:inline-block" href="#">VIEW ALL CATEGORIES</a>
+                <a class="font-label-caps text-label-caps text-secondary hover:text-primary underline decoration-1 underline-offset-4 hidden md:inline-block" href="{% url 'all-collection-view' %}">VIEW ALL CATEGORIES</a>
             </div>
             <div class="flex overflow-x-auto hide-scrollbar gap-gutter md:grid md:grid-cols-5 pb-4">
                 <!-- Category Item -->
-                <a class="group flex flex-col items-center min-w-[150px] md:min-w-0" href="#">
-                    <div class="w-32 h-32 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-surface-container mb-stack-sm overflow-hidden border border-transparent group-hover:border-outline-variant transition-all flex items-center justify-center relative">
-                        <img class="w-3/4 h-3/4 object-cover rounded-full zoom-img transition-transform duration-500" data-alt="A meticulously crafted analog watch face hovering in a clean, brightly lit, minimalist white studio space. Soft, diffused lighting accentuates the crisp hour markers and sweeping second hand. The aesthetic is extremely modern, pristine, and sophisticated, reflecting a high-end light-mode e-commerce feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxfX-cVTf_OiCxjwsuRRniFYSVEKKzS3T6kP5XGM7W1pFjf-fsWj5Gv-Rsp-qVjTeJzczcg4YPJ67F9MPd7jSl-jCRYSZD8kBTsabUqGB51zb-yOytzdhY5UigmKGcvsZcLJ56MjO_ljYo8qK6_ps057U_Tah4MpECjMZg2fZLBAhoi20f2tqcx1LzDvgPkzoEtSTGhcxHMpBoY7nV_r8VoWaehogwPjcyyUGrKId_I0agKpXOGeN2"/>
-                    </div>
-                    <span class="font-label-caps text-label-caps text-primary group-hover:text-secondary transition-colors text-center">ANALOG</span>
-                </a>
-                <a class="group flex flex-col items-center min-w-[150px] md:min-w-0" href="#">
-                    <div class="w-32 h-32 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-surface-container mb-stack-sm overflow-hidden border border-transparent group-hover:border-outline-variant transition-all flex items-center justify-center relative">
-                        <img class="w-3/4 h-3/4 object-cover rounded-full zoom-img transition-transform duration-500" data-alt="A sleek, futuristic digital watch displaying crisp monochromatic numerals on a dark screen, set against a pristine, soft light gray background. Minimalist shadows ground the object. The lighting is even and high-key, conveying a sense of advanced technology in a premium, airy environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhmIZH4eQhojhWoomjwllEARicNp7g1WpA9p5Swenq4U5odF_oIBas3Zx9LHIJyFQ-dE540_6J28x_mh7cLbNrZirSqvueiVS7npTnAa1_zbo3u7HLgbeYuLrg3G-O0TK_hnGbPJ6fSgoKea_QWYaogV4pSt2UcmS-NLCrpughFBIDbrH8CxrWTST-rxP9l6JaFppRWfT0fzILK8GfcFBlK5-q83qQ81HpJE7heTN60E7qZt5MaLpL"/>
-                    </div>
-                    <span class="font-label-caps text-label-caps text-primary group-hover:text-secondary transition-colors text-center">DIGITAL</span>
-                </a>
-                <a class="group flex flex-col items-center min-w-[150px] md:min-w-0" href="#">
-                    <div class="w-32 h-32 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-surface-container mb-stack-sm overflow-hidden border border-transparent group-hover:border-outline-variant transition-all flex items-center justify-center relative">
-                        <img class="w-3/4 h-3/4 object-cover rounded-full zoom-img transition-transform duration-500" data-alt="A detailed close-up of a rich, textured brown leather watch strap curled elegantly over a smooth white marble surface. Bright natural sunlight creates soft, luxurious shadows. The focus is entirely on the craftsmanship of the leather stitching, emphasizing a classic, premium quality suitable for a bright, clean website." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkf3ysvecWhRYzduCOBCOiNlvYWyrOLTlv7NJK-Ozg9B-TCZCai58wK6ZAsGHKAarBd6yp6uETH6YaW9g3R2YWw0gqXKxV5E23Gw9MIeT9yh-1RwRp750yBuxbU3YWP89PQvPK2KsEPHPUQ58odxp-cBiBngrgnsRmOMSHq9h0LVecgl-JmKzYkGwvtpMo-T6uTGeF5rvy27SYuDn472PRcNQYb94PYXdcqxvlT9kqthWdVOG8feXL"/>
-                    </div>
-                    <span class="font-label-caps text-label-caps text-primary group-hover:text-secondary transition-colors text-center">LEATHER STRAP</span>
-                </a>
-                <a class="group flex flex-col items-center min-w-[150px] md:min-w-0" href="#">
-                    <div class="w-32 h-32 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-surface-container mb-stack-sm overflow-hidden border border-transparent group-hover:border-outline-variant transition-all flex items-center justify-center relative">
-                        <img class="w-3/4 h-3/4 object-cover rounded-full zoom-img transition-transform duration-500" data-alt="A highly polished stainless steel watch bracelet coiled on a clean, stark white background. High-key lighting highlights the interlocking metal links, creating brilliant reflections that signify durability and modern luxury. The composition is simple, geometric, and perfectly suited for a light-mode layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTcaDsY3sF_MtROz_-DmY25PQi0ZrfWVeSVHkAZfh2MJWeV6pH0pLlSsEMPf1-IKea5h9NqiweR6nwacHugUnmQeqDHzCad9PJAsi745-vSxWvkJqSN40Yue3qPT4x48u2g8TWJmSKVcsApw32hKaMEWj63j8eYAcsYaU66Hocv-U9qKtxgDN-en9VSa9jlUOFxRIAUb2XH7jynVh6yTesKPx6jYcfomQyfxud5I-Ee-UBvEk-e9mT"/>
-                    </div>
-                    <span class="font-label-caps text-label-caps text-primary group-hover:text-secondary transition-colors text-center">STEEL STRAP</span>
-                </a>
-                <a class="group flex flex-col items-center min-w-[150px] md:min-w-0" href="#">
-                    <div class="w-32 h-32 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-surface-container mb-stack-sm overflow-hidden border border-transparent group-hover:border-outline-variant transition-all flex items-center justify-center relative">
-                        <img class="w-3/4 h-3/4 object-cover rounded-full zoom-img transition-transform duration-500" data-alt="A delicate, ornate jewelry bracelet intended to complement a watch, placed gracefully on a soft pastel background. The lighting is extremely gentle and diffused, creating an ethereal, light, and airy mood. The intricate details of the bracelet are sharply in focus, projecting exclusivity and refinement." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO6rfzIjeGOOAPv3rOryh3Ey_2CLGkrCJc4NrFMO5G3tNIW_BZMbM3RIJTciDzxhKsUMkE9DX7suiFZCQPAiu7H7QMwT6SrMzLoe--p55Yv98QhRtgiYjHAlRqDo2wCk9NhdkNPJ3KHYc0DMBkb7BOB3UoCMnyUuYl1X2acF4JU6jZSvlbR7M0T18OSUQK4_UGSFQPP4IhKv39yTKq1nNCtloPMYh13cM8710mjh9Ry_2NqHiVCf-B"/>
-                    </div>
-                    <span class="font-label-caps text-label-caps text-primary group-hover:text-secondary transition-colors text-center">BRACELETS</span>
-                </a>
+                {% for category in categories %}
+                    {% if category.category_type == "watch" %}
+                        <a href="{% url 'watch-type-products' category.slug %}"
+                        class="group flex flex-col items-center min-w-[150px] md:min-w-0">
+                    {% else %}
+                        <a href="{% url 'strap_type_products' category.slug %}"
+                        class="group flex flex-col items-center min-w-[150px] md:min-w-0">
+                    {% endif %}
+                            <div class="w-32 h-32 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-surface-container mb-stack-sm overflow-hidden border border-transparent group-hover:border-outline-variant transition-all flex items-center justify-center relative">
+                                <img class="w-full h-full object-contain object-cover rounded-full zoom-img transition-transform duration-500" data-alt="A meticulously crafted analog watch face hovering in a clean, brightly lit, minimalist white studio space. Soft, diffused lighting accentuates the crisp hour markers and sweeping second hand. The aesthetic is extremely modern, pristine, and sophisticated, reflecting a high-end light-mode e-commerce feel."
+                                src="{{ category.image.url}}"/>
+                            </div>
+                            <span class="font-label-caps text-label-caps text-primary group-hover:text-secondary transition-colors text-center">{{ category.name|title }}</span>
+                        </a>
+                {% endfor %}
             </div>
             <a class="font-label-caps text-label-caps text-secondary underline text-center block mt-4 md:hidden" href="#">VIEW ALL CATEGORIES</a>
         </section>
@@ -469,7 +454,7 @@
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <h3 class="font-headline-lg text-headline-lg text-on-primary mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">MEN</h3>
-                        <a class="inline-block border-b-2 border-on-primary text-on-primary font-label-caps text-label-caps pb-1 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100" href="#">SHOP NOW</a>
+                        <a class="inline-block border-b-2 border-on-primary text-on-primary font-label-caps text-label-caps pb-1 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100" href="{% url 'men-collection' %}">SHOP NOW</a>
                     </div>
                 </div>
 
