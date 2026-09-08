@@ -6,6 +6,8 @@ from .forms import CustomerSignupForm, CustomerLoginForm, ProfileUpdateForm, Cha
 from django.contrib.auth.hashers import check_password, make_password
 from .models import Customer
 from banners.models import Banner, Headline
+from products.models import *
+from itertools import chain
 
 def signup(request):
     if request.method == "POST":
@@ -36,7 +38,24 @@ def login_view(request):
 def home_view(request):
     banners = Banner.objects.filter(is_active=True).order_by('id')
     headlines = Headline.objects.filter(is_active=True)
-    return render(request, "home.html",{ "banners": banners , 'headlines' : headlines})
+
+    watch_types = WatchType.objects.filter(is_active=True).order_by("created_at")
+    strap_types = StrapType.objects.filter(is_active=True).order_by('created_at')
+
+    categories = []
+    
+    for category in watch_types:
+        category.category_type = "watch"
+        categories.append(category)
+
+    for category in strap_types:
+        category.category_type = "strap"
+        categories.append(category)
+
+    # Only first 5 for homepage
+    home_categories = categories[:5]
+
+    return render(request, "home.html",{ "banners": banners , 'headlines' : headlines, "categories": home_categories})
 
 def logout_view(request):
     if request.session.keys():  

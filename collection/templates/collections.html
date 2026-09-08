@@ -169,7 +169,7 @@
                     {% if request.session.customer_id is not none %}
                         <!-- Dropdown -->
                         <div class="absolute right-0 mt-2 w-48 bg-surface-container shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
-                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'profile' %}">Profile</a>
+                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Profile</a>
                             <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Orders</a>
                             <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Wishlist</a>
                             <div class="border-t border-outline-variant my-1"></div>
@@ -210,7 +210,6 @@
         </div>
     </header>
 
-
     <!-- Mobile Menu -->
     <div class="fixed inset-0 z-[100] invisible transition-all duration-300" id="mobile-menu-drawer">
         <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300" id="mobile-menu-overlay"></div>
@@ -227,7 +226,7 @@
                 <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Contact Us</a>
                 <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Track Orders</a>
                 {% if request.session.customer_id is not none %}
-                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'profile' %}">Profile</a>
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Profile</a>
                     <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Your Orders</a>
                     <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'logout' %}">Logout</a>
                 {% endif %}
@@ -311,77 +310,79 @@
         </div>
     </div>
 
-    <main class="flex-grow pt-24 md:pt-32">
-        <!-- Hero Section -->
-        <section class="w-full mb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-            <div class="relative h-[614px] md:h-[716px] w-full rounded-lg overflow-hidden flex items-center justify-center">
-                <div class="absolute inset-0 bg-cover bg-center" data-alt="A striking close-up photograph of a luxury men's mechanical watch resting on dark, textured slate. The scene is illuminated by dramatic, high-contrast lighting that highlights the brushed steel casing, intricate dial, and sapphire crystal. The mood is sophisticated, masculine, and premium, perfectly reflecting a high-end minimalist corporate aesthetic. The color palette revolves around deep greys, pristine steel, and subtle champagne gold accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBvJX3hBV9sTZlJWZtr93Mibv0GJcVD5Bdg5CtW0_zrtppNkZDLk3wzq9t79mvbKBbq_-plr3P_jJqvsNMFZFjn4lUv3YatapGBk8EIdUp8DJVc0jsA9aMlU_WIAXTt9_LHj3CaVPRQKGCPwurXc0hOPq5UTuikRFiOJ_-X2X_zNp8XexkSKv6eSbt6IKdFFmfXchnij3h6zD2McYctLIWtx9rymyBLJmfSY2CcP8YVWijN5U2v8Orb')"></div>
-                <div class="absolute inset-0 bg-tertiary/30 mix-blend-multiply"></div>
-                <div class="relative z-10 text-center text-on-tertiary">
-                    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 drop-shadow-lg">Men's Collection</h1>
-                    <p class="font-body-lg text-body-lg max-w-2xl mx-auto drop-shadow-md">Precision engineering meets timeless elegance.</p>
-                </div>
+    <main class="flex-grow">
+        <!-- 3. Header Section (Directly mirroring the reference layout) -->
+        <section class="pt-16 pb-12 md:pt-24 md:pb-16 text-center px-6">
+            <div class="max-w-3xl mx-auto space-y-4">
+                <h1 class="font-display-lg md:text-display-lg text-display-lg-mobile text-primary tracking-tight font-normal">
+                    Collections
+                 </h1>
+                <!-- <p class="font-body-md text-body-md text-secondary max-w-xl mx-auto leading-relaxed">
+                        Explore the six foundational pillars of Phoenix Haute Horlogerie, engineered with unyielding mechanical rigor and aesthetic purity.
+                    </p> -->
             </div>
         </section>
 
-        <!-- Product Gallery Grid -->
-        <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-section-gap">
-            <div class="flex justify-between items-center mb-stack-lg border-b border-surface-container pb-4">
-                <span class="font-label-caps text-label-caps text-secondary">Showing {{ products.paginator.count }} Timepieces</span>
-                <button class="flex items-center gap-2 font-label-caps text-label-caps text-primary hover:text-secondary transition-colors">
-                                    Sort By <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
-                </button>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-gutter gap-y-16">
-                {% for product in products %}
-                    <!-- Product Card 1 -->
-                    <div class="group flex flex-col">
-                        <div class="relative aspect-[4/5] bg-surface-container-low rounded-lg overflow-hidden mb-stack-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
-                            {% if product.primary_image %}
-                                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A pristine, studio-lit photograph of a minimalist silver men's dress watch with a dark blue sunburst dial and black leather strap, isolated on a soft off-white background. The lighting is soft and diffuse, creating elegant reflections on the polished bezel. High-end product photography style." 
-                                src="{{ product.primary_image.image.url }}"/>
-                            {% endif %}
-                            <!-- <div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded font-label-caps text-label-caps text-primary">New</div> -->
+        <!-- 4. Collections Grid (Exact visual syntax: 3 columns, rounded card, centered floating pill badge) -->
+        <section class="max-w-container-max mx-auto px-6 md:px-16 pb-20" id="collections-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {% for category in categories %}
+                    <!-- Collection Card 1: Grand Complications -->
+                    {% if category.category_type == "watch" %}
+                        <a class="group relative block card-zoom overflow-hidden rounded-xl bg-surface-container-low transition-all duration-300" 
+                        href="{% url 'watch-type-products' category.slug %}">
+                    {% else %}
+                        <a class="group relative block card-zoom overflow-hidden rounded-xl bg-surface-container-low transition-all duration-300" 
+                        href="{% url 'strap_type_products' category.slug %}">
+                    {% endif %}
+                        <div class="aspect-[4/5] w-full overflow-hidden bg-surface-container">
+                            <img class="w-full h-full object-cover transition-transform duration-700 ease-out" data-alt="A macro studio photograph of an ultra-luxurious openworked tourbillon watch movement set in a platinum case. The dial exposes intricately beveled gears, rubies, and hand-finished bridges under soft museum diffuse lighting. The background is a velvety rich charcoal grey with warm ambient highlights on the polished precious metal. High-end horology art style."
+                             src="{{ category.image.url }}"/>
                         </div>
-
-                        <div class="text-center">
-                            <h3 class="font-headline-md text-headline-md text-primary mb-1">{{ product.name }}</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant mb-2">{{ product.watch_type}} • {{ product.strap_type}}</p>
-                            <p class="font-body-lg text-body-lg text-primary">RS. {{ product.price }}</p>
+                        <!-- Floating Pill/Badge at bottom center -->
+                        <div class="absolute inset-x-0 bottom-6 md:bottom-8 flex justify-center px-4 pointer-events-none">
+                            <div class="pointer-events-auto bg-surface-container-lowest/95 backdrop-blur-md px-8 py-3.5 rounded-lg badge-shadow border border-surface-container-high transition-all duration-300 group-hover:scale-105 group-hover:bg-surface-container-lowest">
+                                <span class="font-label-caps text-label-caps uppercase tracking-widest text-primary font-semibold block text-center">
+                                        {{ category.name }}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 {% endfor %}
+
             </div>
 
-            <!-- Pagination -->
-            {% if products.has_other_pages %}
-                <div class="mt-section-gap flex justify-center items-center gap-stack-md font-body-md text-body-md">
-                    {% if products.has_previous %}
-                        <a href="?page={{ products.previous_page_number }}" class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors">
-                            <span class="material-symbols-outlined text-sm">
-                                arrow_back
+            <!-- 5. Minimalist Centered Pagination (Directly mirroring the reference structure: [1] [2] [3] [4] [>]) -->
+            {% if categories.has_other_pages %}
+                <div class="mt-16 flex items-center justify-center gap-2">
+                    {% if categories.has_previous %}
+                        <a href="?page={{ categories.previous_page_number }}" aria-label="Previous Page"
+                            class="w-10 h-10 flex items-center justify-center bg-surface-container-lowest text-on-surface border border-surface-container-high hover:border-primary rounded-lg">
+                            <span class="material-symbols-outlined text-[16px]">
+                                chevron_left
                             </span>
                         </a>
                     {% endif %}
 
-                    {% for num in products.paginator.page_range %}
-                        {% if products.number == num %}
-                            <a href="?page={{ num }}" class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-on-primary transition-colors">
+                    {% for num in categories.paginator.page_range %}
+                        {% if categories.number == num %}   
+                            <a href="?page={{ num }}" aria-current="page"
+                                class="w-10 h-10 flex items-center justify-center bg-primary text-on-primary font-label-caps text-label-caps font-semibold rounded-lg shadow-sm">
                                 {{ num }}
                             </a>
                         {% else %}
-                            <a href="?page={{ num }}" class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors">
+                            <a href="?page={{ num }}"
+                                class="w-10 h-10 flex items-center justify-center bg-surface-container-lowest text-on-surface border border-surface-container-high hover:border-primary font-label-caps text-label-caps transition-colors duration-150 rounded-lg">
                                 {{ num }}
                             </a>
                         {% endif %}
                     {% endfor %}
 
-                    {% if products.has_next %}
-                        <a href="?page={{ products.next_page_number }}" class="flex items-center gap-2 text-primary hover:text-secondary transition-colors ml-4 font-label-caps text-label-caps">
-                            Next
-                            <span class="material-symbols-outlined text-sm">
-                                arrow_forward
+                    {% if categories.has_next %}
+                        <a href="?page={{ categories.next_page_number }}" aria-label="Next Page"
+                            class="w-10 h-10 flex items-center justify-center bg-surface-container-lowest text-on-surface border border-surface-container-high hover:border-primary rounded-lg">
+                            <span class="material-symbols-outlined text-[16px]">
+                                chevron_right
                             </span>
                         </a>
                     {% endif %}
@@ -390,9 +391,69 @@
         </section>
     </main>
 
+    <!-- Footer -->
+    <footer class="w-full rounded-none bg-surface-container dark:bg-surface-container mt-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-section-gap w-full max-w-container-max mx-auto">
+            <!-- Brand Column -->
+            <div class="flex flex-col">
+                <a class="font-headline-lg text-headline-lg text-primary dark:text-on-primary-fixed mb-stack-md" href="/">
+                    Phoenix
+                </a>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-stack-md max-w-xs">
+                    Crafting timeless precision since 1994. Elevate your everyday with uncompromising quality.
+                </p>
+                <div class="flex gap-4 mt-auto">
+                    <!-- Social Icons (Placeholders using generic icons) -->
+                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera_alt</span></a>
+                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">play_arrow</span></a>
+                </div>
+            </div>
 
+            <!-- Links Column 1 -->
+            <div class="flex flex-col">
+                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">THE BRAND</h4>
+                <div class="flex flex-col gap-stack-sm">
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">About Us</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Collections</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Boutiques</a>
+                </div>
+            </div>
 
-<script>
+            <!-- Links Column 2 -->
+            <div class="flex flex-col">
+                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">LEGAL</h4>
+                <div class="flex flex-col gap-stack-sm">
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Privacy Policy</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Shipping &amp; Returns</a>
+                </div>
+            </div>
+
+            <!-- Contact Column -->
+            <div class="flex flex-col">
+                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">SUPPORT</h4>
+                <div class="flex flex-col gap-stack-sm">
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Contact Us</a>
+                    <p class="font-body-md text-body-md text-on-surface-variant mt-2">
+                                    1-800-PHOENIX<br/>
+                                    support@phoenix.com
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Bottom Bar -->
+        <div class="border-t border-outline-variant px-margin-desktop py-stack-md flex justify-between items-center w-full max-w-container-max mx-auto flex-col md:flex-row gap-4">
+            <p class="font-body-md text-body-md text-on-surface-variant text-sm">
+                        © 2024 Phoenix. All rights reserved.
+            </p>
+            <!-- Payment Methods Placeholder -->
+            <div class="flex gap-2 text-outline">
+                <span class="material-symbols-outlined text-[32px]">credit_card</span>
+                <span class="material-symbols-outlined text-[32px]">account_balance_wallet</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
     (function() {
         const openBtn = document.getElementById('open-mobile-menu');
         const closeBtn = document.getElementById('close-mobile-menu');
@@ -454,66 +515,4 @@
     
 </script>
 
-
-<!-- Footer -->
-    <footer class="w-full rounded-none bg-surface-container dark:bg-surface-container mt-auto">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-section-gap w-full max-w-container-max mx-auto">
-            <!-- Brand Column -->
-            <div class="flex flex-col">
-                <a class="font-headline-lg text-headline-lg text-primary dark:text-on-primary-fixed mb-stack-md" href="/">
-                    Phoenix
-                </a>
-                <p class="font-body-md text-body-md text-on-surface-variant mb-stack-md max-w-xs">
-                    Crafting timeless precision since 1994. Elevate your everyday with uncompromising quality.
-                </p>
-                <div class="flex gap-4 mt-auto">
-                    <!-- Social Icons (Placeholders using generic icons) -->
-                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera_alt</span></a>
-                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">play_arrow</span></a>
-                </div>
-            </div>
-
-            <!-- Links Column 1 -->
-            <div class="flex flex-col">
-                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">THE BRAND</h4>
-                <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">About Us</a>
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Collections</a>
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Boutiques</a>
-                </div>
-            </div>
-
-            <!-- Links Column 2 -->
-            <div class="flex flex-col">
-                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">LEGAL</h4>
-                <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Privacy Policy</a>
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Shipping &amp; Returns</a>
-                </div>
-            </div>
-
-            <!-- Contact Column -->
-            <div class="flex flex-col">
-                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">SUPPORT</h4>
-                <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Contact Us</a>
-                    <p class="font-body-md text-body-md text-on-surface-variant mt-2">
-                                    1-800-PHOENIX<br/>
-                                    support@phoenix.com
-                    </p>
-                </div>
-            </div>
-        </div>
-        <!-- Bottom Bar -->
-        <div class="border-t border-outline-variant px-margin-desktop py-stack-md flex justify-between items-center w-full max-w-container-max mx-auto flex-col md:flex-row gap-4">
-            <p class="font-body-md text-body-md text-on-surface-variant text-sm">
-                        © 2024 Phoenix. All rights reserved.
-            </p>
-            <!-- Payment Methods Placeholder -->
-            <div class="flex gap-2 text-outline">
-                <span class="material-symbols-outlined text-[32px]">credit_card</span>
-                <span class="material-symbols-outlined text-[32px]">account_balance_wallet</span>
-            </div>
-        </div>
-    </footer>
 </body></html>
