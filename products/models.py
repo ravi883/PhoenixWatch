@@ -44,9 +44,10 @@ class Products(BaseModel):
     category = models.ForeignKey(Categories, on_delete=models.PROTECT, related_name="products")
     watch_type = models.ForeignKey(WatchType, on_delete=models.PROTECT, related_name="products")
     strap_type = models.ForeignKey(StrapType, on_delete=models.PROTECT, related_name="products")
-    # actual_price = models.DecimalField(max_digits=10, decimal_places=2)
+    actual_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
+    slug = models.SlugField(max_length=220,unique=True, null=True, blank=True)
     color = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
 

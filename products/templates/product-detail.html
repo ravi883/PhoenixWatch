@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phoenix - Timeless Precision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+{% include "includes/common-script.html" %}
+<style>
+        :root {
+            --primary-color: #000000;
+            --surface-color: #fcf9f8;
+            --text-color: #1b1c1c;
+        }
+        
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 0;
+            white-space: nowrap;
+        }
+        .ticker {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 80vh;
+        }
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            background-size: cover;
+            background-position: center;
+        }
+        .carousel-slide.active {
+            opacity: 1;
+            z-index: 10;
+        }
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            z-index: 11;
+        }
+        .carousel-content {
+            position: absolute;
+            bottom: 20%;
+            left: 5%;
+            z-index: 12;
+            color: white;
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .group:hover .zoom-img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased" style="font-family: 'Inter', sans-serif;">
+    <!-- TopNavBar -->
+    {% include "includes/header.html" %}
+
+    <!-- Mobile Menu -->
+    {% include "includes/mobile-menu.html" %}
+    
+    <!-- Cart Drawer -->
+    {% include "includes/cart-drawer.html" %}
+
+    <!-- MAIN PRODUCT SECTION: Left Image Canvas & Right Allocation Configurator -->
+    <section class="max-w-screen-2xl mx-auto px-4 sm:px-8 pb-20 pt-4" id="product-view" style="padding-top: 50px;">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-16 items-start" style="padding-top: 80px;">
+            
+            <!-- LEFT: Interactive Gallery & Micro-Inspect Zoom Canvas (7 Cols) -->
+            <div class="lg:col-span-7 flex flex-col space-y-6">
+                <!-- Main Hero Watch Display with Zoom Capability -->
+                <div class="relative bg-[#fafafa] border border-[#e5e7eb] rounded-xl overflow-hidden group shadow-sm">
+                    <!-- Badges & Precision Tags -->
+
+                    <!-- Manual Zoom / Inspect Controls Overlay -->
+                    <div class="absolute top-5 right-5 z-20 flex items-center bg-white/95 border border-[#e5e7eb] rounded-lg p-1 shadow-sm space-x-1">
+                        <button class="p-1.5 hover:text-black text-[#4b5563] transition-colors" id="zoom-in-btn" title="Zoom in">
+                            <span class="material-symbols-outlined text-lg" data-icon="zoom_in">zoom_in</span>
+                        </button>
+                        <button class="p-1.5 hover:text-black text-[#4b5563] transition-colors" id="zoom-out-btn" title="Zoom out">
+                            <span class="material-symbols-outlined text-lg" data-icon="zoom_out">zoom_out</span>
+                        </button>
+                        <button class="p-1.5 hover:text-black text-[#4b5563] transition-colors" id="zoom-reset-btn" title="Reset View">
+                            <span class="material-symbols-outlined text-lg" data-icon="restart_alt">restart_alt</span>
+                        </button>
+                        <button class="p-1.5 hover:text-black text-[#4b5563] transition-colors" id="fullscreen-inspect-btn" title="Macro Fullscreen">
+                            <span class="material-symbols-outlined text-lg" data-icon="fullscreen">fullscreen</span>
+                        </button>
+                    </div>
+
+                    <!-- Big Zoomable Image Viewport -->
+                    <div class="zoom-container w-full aspect-square cursor-crosshair flex items-center justify-center p-6 md:p-12 bg-white" id="zoom-viewport">
+                        <img alt="{{product.name}}" class="zoom-image w-full h-full object-contain select-none transition-transform duration-100 ease-out" id="main-product-image" 
+                        src="{{ product.primary_image.image.url}}"/>
+                    </div>
+                </div>
+
+                <!-- Thumbnails Selector Row -->
+                <div class="grid grid-cols-4 gap-3 sm:gap-4">
+                    {% for image in product.images.all %}
+                        <!-- Thumbnail 1: Exhibition Caseback (Active default) -->
+                        <button class="thumb-btn border-2 border-black bg-white rounded-lg p-2 transition-all flex flex-col items-center group relative overflow-hidden shadow-sm" data-desc="Sapphire caseback with 22k gold rotor &amp; Geneva wave finishing" data-label="Exhibition Sapphire Caseback" data-src="{{image.image.url}}">
+                            <div class="w-full h-full aspect-square rounded overflow-hidden bg-[#f3f4f6]">
+                                <img alt="{{product.name}}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                src="{{image.image.url}}" />
+                            </div>
+                            <!-- <span class="text-[10px] font-mono uppercase tracking-wider text-[#0a0a0a] font-semibold mt-2 truncate w-full text-center">Movement</span> -->
+                        </button>
+                    {% endfor %}
+                </div>
+
+            
+                <div class="p-4 bg-[#fafafa] flex items-center justify-between text-xs">
+                    <!-- <div class="flex items-center space-x-3">
+                        <span class="material-symbols-outlined text-black text-2xl" data-icon="verified">verified</span>
+                        <div>
+                            <p class="font-semibold text-[#0a0a0a]">Manufacture Geneva Hallmark</p>
+                            <p class="text-[#4b5563]">Each component hand-beveled and verified under 10x binocular inspection.</p>
+                        </div>
+                    </div>
+                    <a class="text-black hover:underline font-mono text-[11px] whitespace-nowrap ml-4 font-semibold" href="#specifications">Full Specs ↓</a> -->
+                </div>
+            </div>
+
+            <!-- RIGHT: Watch Description, Horological Configuration & Acquisition (5 Cols) -->
+            <div class="lg:col-span-5 flex flex-col space-y-6">
+                <!-- Title & Reference Header -->
+                <div class="border-b border-[#e5e7eb] pb-6">
+                    <div class="flex items-center justify-between text-xs font-mono text-[#4b5563] mb-2">
+                        <!-- <span>REF. PX-9042-TOURBILLON</span> -->
+                        <span class="text-emerald-700 font-semibold flex items-center gap-1">
+                        <span class="material-symbols-outlined text-xs" data-icon="lock_clock">lock_clock</span>
+                                        Available
+                        </span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl font-display font-extrabold tracking-tight text-[#0a0a0a] leading-tight">
+                        {{product.name}}
+                    </h1>
+
+                    <!-- <p class="text-sm font-mono text-[#6b7280] mt-1">CALIBRE PX-992 CO-AXIAL MONOPUSHER</p> -->
+                    <div class="mt-4 flex items-baseline space-x-4">
+                        <span class="text-3xl font-display font-bold text-[#0a0a0a]">₹ {{product.price}}</span>
+                        <!-- <span class="text-xs font-mono text-[#4b5563]">USD / Incl. Duties &amp; Swiss Vault Transport</span> -->
+                    </div>
+                </div>
+
+                <!-- Rich Horological Narrative -->
+                <p class="text-sm text-[#374151] leading-relaxed font-body">
+                    An uncompromising testament to Haute Horlogerie. Housing the ultra-slender hand-wound Calibre PX-992, the Sovereign incorporates a floating 60-second flying tourbillon cage weighing merely 0.28 grams, integrated with a column-wheel lateral clutch chronograph mechanism. Precision-milled from certified ethical 18K solid rose gold and obsidian titanium.
+                </p>
+
+                <!-- Configurator 1: Dial Finishing Selector -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center text-xs font-mono">
+                        <span class="text-[#0a0a0a] uppercase tracking-wider font-semibold">Dial &amp; Finishing Option</span>
+                        <span class="text-black font-semibold" id="selected-dial-name">Emerald Grand Feu &amp; Gold</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <button class="dial-option-btn border-2 border-black bg-white rounded-lg p-3 text-left transition-all relative overflow-hidden shadow-sm" data-name="Emerald Grand Feu &amp; Gold" data-theme="emerald">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded-full bg-[#065f46] border border-[#e5e7eb]"></span>
+                                <span class="text-xs font-semibold text-[#0a0a0a] truncate">Emerald Gold</span>
+                            </div>
+                            <p class="text-[10px] text-[#4b5563] font-mono mt-1">Sunburst Flinqué</p>
+                        </button>
+
+                        <button class="dial-option-btn border border-[#e5e7eb] hover:border-black bg-white rounded-lg p-3 text-left transition-all relative overflow-hidden shadow-sm" data-name="Matte Obsidian &amp; Platinum" data-theme="obsidian">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded-full bg-[#18181b] border border-[#e5e7eb]"></span>
+                                <span class="text-xs font-medium text-[#4b5563] truncate">Matte Obsidian</span>
+                            </div>
+                            <p class="text-[10px] text-[#6b7280] font-mono mt-1">Brushed Ruthenium</p>
+                        </button>
+                        <button class="dial-option-btn border border-[#e5e7eb] hover:border-black bg-white rounded-lg p-3 text-left transition-all relative overflow-hidden shadow-sm" data-name="Celestial Blue Aventurine" data-theme="celestial">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded-full bg-[#1e1b4b] border border-[#e5e7eb]"></span>
+                                <span class="text-xs font-medium text-[#4b5563] truncate">Celestial Blue</span>
+                            </div>
+                            <p class="text-[10px] text-[#6b7280] font-mono mt-1">Aventurine Glass</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Configurator 2: Case Diameter & Material -->
+                <!-- <div class="space-y-3">
+                <div class="flex justify-between items-center text-xs font-mono">
+                <span class="text-[#0a0a0a] uppercase tracking-wider font-semibold">Case Dimension</span>
+                <span class="text-[#4b5563] font-medium">Height: 11.8mm</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                <label class="cursor-pointer border-2 border-black bg-white rounded-lg p-3 flex justify-between items-center case-radio-label shadow-sm">
+                <div class="flex flex-col">
+                <span class="text-xs font-bold text-[#0a0a0a]">40.5 mm</span>
+                <span class="text-[10px] font-mono text-[#4b5563]">Classic Collector Proportion</span>
+                </div>
+                <input checked="" class="text-black focus:ring-black h-4 w-4 bg-white border-[#d1d5db]" name="case_size" type="radio" value="40.5"/>
+                </label>
+                <label class="cursor-pointer border border-[#e5e7eb] hover:border-black bg-white rounded-lg p-3 flex justify-between items-center case-radio-label shadow-sm">
+                <div class="flex flex-col">
+                <span class="text-xs font-medium text-[#0a0a0a]">42.0 mm</span>
+                <span class="text-[10px] font-mono text-[#4b5563]">Grand Presence Stature</span>
+                </div>
+                <input class="text-black focus:ring-black h-4 w-4 bg-white border-[#d1d5db]" name="case_size" type="radio" value="42.0"/>
+                </label>
+                </div>
+                </div> -->
+
+                <!-- Configurator 3: Hand-Stitched Horological Strap -->
+                <!-- <div class="space-y-2">
+<div class="flex justify-between items-center text-xs font-mono">
+<span class="text-[#0a0a0a] uppercase tracking-wider font-semibold">Strap &amp; Buckle</span>
+<span class="text-[#6b7280]" id="selected-strap-label">Mississippiensis Alligator / Deployant</span>
+</div>
+<select class="w-full bg-white border border-[#e5e7eb] rounded-lg px-4 py-2.5 text-xs text-[#0a0a0a] focus:border-black focus:ring-1 focus:ring-black shadow-sm" id="strap-selector">
+<option value="alligator-black">Matte Black Semi-Gloss Alligator (Hand-Sewn Waxed Thread)</option>
+<option value="alligator-navy">Midnight Navy Alligator with Rose Gold Saddle Stitch</option>
+<option value="calf-espresso">Espresso Horween Shell Cordovan Leather</option>
+<option value="bracelet-gold">18K Solid Rose Gold Integrated Mesh Bracelet (+$16,200)</option>
+</select>
+</div> -->
+
+                <!-- Quantity Stepper & Acquisition Action CTA -->
+                <div class="pt-4 border-t border-[#e5e7eb] space-y-4">
+                    <div class="flex items-center space-x-4">
+                        <!-- Stepper -->
+                        <div class="flex items-center bg-white border border-[#e5e7eb] rounded-lg p-1 shadow-sm">
+                            <button aria-label="Decrease quantity" class="w-8 h-8 flex items-center justify-center text-[#4b5563] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded text-sm transition-colors" id="qty-minus">
+                                -
+                            </button>
+                            <span class="w-10 text-center font-mono text-xs font-semibold text-[#0a0a0a]" id="qty-display">01</span>
+                            <button aria-label="Increase quantity" class="w-8 h-8 flex items-center justify-center text-[#4b5563] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded text-sm transition-colors" id="qty-plus">
+                                            +
+                            </button>
+                        </div>
+
+                        <!-- Main Add to Bag Button -->
+                        <button class="flex-1 bg-black hover:bg-neutral-800 text-white font-bold py-3.5 px-6 rounded-lg text-sm tracking-tight transition-all duration-200 flex items-center justify-center space-x-2 shadow-md active:scale-[0.99]" id="add-to-bag-btn">
+                            <span class="material-symbols-outlined text-lg" data-icon="shopping_bag">shopping_bag</span>
+                            <span>Add to cart</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Trust & Authenticity Badges -->
+                <div class="grid grid-cols-3 gap-2 pt-4 border-t border-[#e5e7eb] text-[11px] font-mono text-[#4b5563]">
+                    <div class="flex flex-col items-center text-center p-2 rounded-lg bg-[#fafafa] border border-[#f3f4f6]">
+                        <span class="material-symbols-outlined text-black mb-1 text-base" data-icon="verified_user">verified_user</span>
+                        <span>10-Yr Guarantee</span>
+                    </div>
+
+                    <div class="flex flex-col items-center text-center p-2 rounded-lg bg-[#fafafa] border border-[#f3f4f6]">
+                        <span class="material-symbols-outlined text-black mb-1 text-base" data-icon="flight_takeoff">flight_takeoff</span>
+                        <span>Armored Courier</span>
+                    </div>
+                    <!-- <div class="flex flex-col items-center text-center p-2 rounded-lg bg-[#fafafa] border border-[#f3f4f6]">
+                        <span class="material-symbols-outlined text-black mb-1 text-base" data-icon="token">token</span>
+                        <span>NFT Ledger Deed</span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!-- TECHNICAL SPECIFICATIONS BENTO GRID -->
+
+
+    <!-- CUSTOMER REVIEWS & COLLECTOR ARCHIVES (Vertical Timeline Layout) -->
+    <section class="max-w-screen-2xl mx-auto px-4 sm:px-8 py-20 bg-white">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-[#e5e7eb]">
+            <div>
+                <!-- <span class="text-xs font-mono uppercase tracking-widest text-[#4b5563] font-semibold">Collector Testimonials</span> -->
+                <h2 class="text-2xl sm:text-3xl font-display font-bold text-[#0a0a0a] mt-1">Customer Reviews</h2>
+            </div>
+            <!-- Filters & Action Button -->
+            <div class="flex flex-wrap items-center gap-2 mt-4 md:mt-0">
+                <button class="review-filter-btn active bg-black text-white font-medium text-xs px-3.5 py-1.5 rounded-full transition-colors shadow-sm" data-filter="all">
+                        All Reviews (34)
+                </button>
+                <button class="review-filter-btn bg-white hover:bg-[#fafafa] text-[#4b5563] hover:text-[#0a0a0a] text-xs px-3.5 py-1.5 rounded-full border border-[#e5e7eb] transition-colors" data-filter="photos">
+                        With Collector Photos (12)
+                </button>
+                <button class="review-filter-btn bg-white hover:bg-[#fafafa] text-[#4b5563] hover:text-[#0a0a0a] text-xs px-3.5 py-1.5 rounded-full border border-[#e5e7eb] transition-colors" data-filter="five-star">
+                        5 Stars Only (31)
+                </button>
+                <button class="bg-white border border-black hover:bg-neutral-50 text-black text-xs font-mono px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-sm font-semibold" id="write-review-btn">
+                    <span class="material-symbols-outlined text-xs" data-icon="edit_note">edit_note</span>
+                    <span>Submit Archival Entry</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Vertical Timeline Structure -->
+        <div class="relative pl-6 md:pl-10 space-y-12 before:content-[''] before:absolute before:left-2 md:before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-[#e5e7eb]">
+            <!-- Timeline Item 1: Featuring Photo Verification -->
+            <div class="review-item relative group" data-category="photos five-star">
+                <!-- Timeline Node Point -->
+                <div class="absolute -left-[30px] md:-left-[46px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-black group-hover:scale-125 transition-transform shadow-sm">
+                </div>
+                <div class="bg-white border border-[#e5e7eb] rounded-xl p-6 sm:p-8 hover:border-black transition-colors shadow-sm">
+                    <!-- Reviewer Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-[#f3f4f6] border border-[#e5e7eb] flex items-center justify-center font-bold text-xs font-mono text-black">
+                                    HL
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <h4 class="text-sm font-semibold text-[#0a0a0a]">Henri Laurent</h4>
+                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
+                                        <span class="material-symbols-outlined text-[10px]" data-icon="verified">verified</span> Verified Collector (No. 01/10)
+                                    </span>
+                                </div>
+                                <p class="text-xs text-[#4b5563] font-mono mt-0.5">Acquired November 2023 • Geneva Atelier Delivery</p>
+                            </div>
+                        </div>
+                        <!-- Rating -->
+                        <div class="flex items-center space-x-1 text-black">
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                        </div>
+                    </div>
+
+                    <!-- Review Text Content -->
+                    <h5 class="text-base font-semibold text-[#0a0a0a] mb-2">The depth of the Geneva stripes and balance wheel finishes defy modern machine horology.</h5>
+                    <p class="text-sm text-[#374151] leading-relaxed mb-6 font-body">
+                                "Having collected timepieces from Patek Philippe, Lange &amp; Söhne, and Vacheron for over twenty years, I anticipated the Sovereign with high expectations. The column-wheel actuation produces an acoustic signature that is pure silk. Under 20x magnification, the inner anglage angles show no tooling marks whatsoever. A crowning masterpiece of independent Swiss horology."
+                    </p>
+                    <!-- Verified Wrist Shots & Movement Thumbnails -->
+                    <div>
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-[#6b7280] block mb-2">Collector Verification Photos:</span>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-20 h-20 rounded-lg overflow-hidden border border-[#e5e7eb] bg-[#fafafa] cursor-pointer hover:border-black transition-colors shadow-sm">
+                                <img alt="Customer wrist check profile view" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1UBjLNCenZ_fJ_GbU_X3-_srcuDgpemTW6z9u7FKfmgCs8e9bfukedv1v1yWcjwb-UfpDuifJSRclMC6nkosdqqgeWSV6xzD-cIHy5iFopgjrAlXGv_nYEu117vh5iSD3huXcI-RVW5pl565alL1IUw1QfUGN3vOv3MoidqoQOKSK4ih5cPbn6L9zyi0IObO210jlFiYv2FibaSoALiy3UR7sy3P-l2FTaoKkiALX_u0Bf_H6YRU3EDpiM"/>
+                            </div>
+                            <div class="w-20 h-20 rounded-lg overflow-hidden border border-[#e5e7eb] bg-[#fafafa] cursor-pointer hover:border-black transition-colors shadow-sm">
+                                <img alt="Movement verification photo" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1WOF-necL0kY7p79hVnAgWCn9m50n0l7jz40tWCLQDtx5hX1lT5Nr_O5H-IGflm5J1qsIN5JivhsjCW8YbxNL0yVdBCnm6slruLVtY0AlZpXDKOdpIXJycSm0ZAjoKZ2uEnsvv-5ZSqajK5xNk-Jf8l0s2bn3Sk4WolCHp2le6dmSAKmihj_IKhbcrLhllK4Fmnv0xQ3gE-VWdUXZAPYd2XaSUQqLY82eXSbHfl0Y_EqOeBirrMYkmK3qc"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2: Focus on Monopusher Complication -->
+            <div class="review-item relative group" data-category="five-star">
+                <!-- Timeline Node Point -->
+                <div class="absolute -left-[30px] md:-left-[46px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-[#9ca3af] group-hover:border-black group-hover:scale-125 transition-transform shadow-sm">
+
+                </div>
+                <div class="bg-white border border-[#e5e7eb] rounded-xl p-6 sm:p-8 hover:border-black transition-colors shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-[#f3f4f6] border border-[#e5e7eb] flex items-center justify-center font-bold text-xs font-mono text-black">
+                                VM
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <h4 class="text-sm font-semibold text-[#0a0a0a]">Dr. Viktor Meyer</h4>
+                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
+                                        <span class="material-symbols-outlined text-[10px]" data-icon="verified">verified</span> Verified Collector (No. 02/10)
+                                    </span>
+                                </div>
+                                <p class="text-xs text-[#4b5563] font-mono mt-0.5">Acquired January 2024 • Zürich Private Salon</p>
+                            </div>
+                        </div>
+                        <!-- Rating -->
+                        <div class="flex items-center space-x-1 text-black">
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                        </div>
+                    </div>
+
+                    <h5 class="text-base font-semibold text-[#0a0a0a] mb-2">Unmatched presence on the wrist with sublime tourbillon kinetics.</h5>
+                    <p class="text-sm text-[#374151] leading-relaxed font-body">
+                                "The weight distribution of the 18K solid gold case is remarkably balanced against the alligator deployant clasp. The tourbillon cage's gentle 60-second rotation provides a hypnotic spectacle during desk work and evening functions alike. Phoenix's concierge liaison escorted the delivery right to our residence in Küsnacht."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3: Chronometer Precision In High Altitude -->
+            <div class="review-item relative group" data-category="photos five-star">
+                <!-- Timeline Node Point -->
+                <div class="absolute -left-[30px] md:-left-[46px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-black group-hover:scale-125 transition-transform shadow-sm"></div>
+                <div class="bg-white border border-[#e5e7eb] rounded-xl p-6 sm:p-8 hover:border-black transition-colors shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-[#f3f4f6] border border-[#e5e7eb] flex items-center justify-center font-bold text-xs font-mono text-black">
+                            SC
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <h4 class="text-sm font-semibold text-[#0a0a0a]">Sir Charles Sterling</h4>
+                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
+                                        <span class="material-symbols-outlined text-[10px]" data-icon="verified">verified</span> Verified Collector (No. 03/10)
+                                    </span>
+                                </div>
+                                <p class="text-xs text-[#4b5563] font-mono mt-0.5">Acquired March 2024 • London Mayfair Gallery</p>
+                            </div>
+                        </div>
+
+                        <!-- Rating -->
+                        <div class="flex items-center space-x-1 text-black">
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
+                        </div>
+                    </div>
+
+                    <h5 class="text-base font-semibold text-[#0a0a0a] mb-2">Tested chronometric deviation: +0.6 seconds over 14 consecutive days.</h5>
+                    <p class="text-sm text-[#374151] leading-relaxed mb-6 font-body">
+                                "The escapement regulation is simply uncanny. Tested against atomic time references during transatlantic flights, the temperature compensation curve proved virtually flat. The hand-engraved rotor visible via the rear sapphire crystal is an art installation in miniature."
+                    </p>
+                    <div>
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-[#6b7280] block mb-2">Collector Verification Photos:</span>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-20 h-20 rounded-lg overflow-hidden border border-[#e5e7eb] bg-[#fafafa] cursor-pointer hover:border-black transition-colors shadow-sm">
+                                <img alt="Caseback inspection verification" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1XAItZ0oGTPjvrgpnzJtBGhF82J8OsBgZ8I8K9Jqz2AfI7FDrt_uqW6bAE4_usXX5J_-0vNABimlu_Dq45usjTBlatq8TcehgoNl8c79ib9W7RVTE6P-PAbUhaK3RZSmOEwp1CaMTJE6x52coHx-4j3N1arRAL2P8PdCEsbDp7n01WpoCt3FAGT5DHFmXmDgPYRrsVG2XhKrWh_ofHh-aZbc8tuiDIOJX1lgjSasCEBbAQDzetgoPYKXPw"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECOMMENDED FOR YOU (Curated Complementary Timepieces Grid) -->
+    <section class="border-t border-[#e5e7eb] bg-[#fafafa] py-20" id="collections">
+        <div class="max-w-screen-2xl mx-auto px-4 sm:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <!-- <span class="text-xs font-mono uppercase tracking-widest text-[#4b5563] font-semibold">Atelier Curations</span> -->
+                    <h2 class="text-2xl sm:text-3xl font-display font-bold text-[#0a0a0a] mt-1">RECOMMENDED FOR YOU</h2>
+                </div>
+                <a class="text-xs font-mono text-[#4b5563] hover:text-black transition-colors flex items-center space-x-1 mt-3 md:mt-0 font-semibold" href="{% url 'all-collection-view' %}">
+                    <span style="font-family: Arial, Helvetica, sans-serif">Explore More Products</span>
+                    <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- 4-Card Luxury Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Recommendation 1 -->
+                <div class="bg-white border border-[#e5e7eb] rounded-xl p-5 flex flex-col justify-between hover:border-black transition-all duration-300 group shadow-sm">
+                    <div>
+                        <div class="w-full aspect-square rounded-lg overflow-hidden bg-[#f3f4f6] mb-4 relative">
+                            <img alt="Aethelgard Perpetual Calendar" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial studio portrait of an ultra luxury perpetual calendar dress watch with dark aventurine dial, rose gold case, moonphase complication, and midnight alligator strap under dramatic contrast lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDmxXQcXekFDPVSDs9hzk9-fiQS5qGa9HHxZ-z3ppvBX7aAFBbE7XimO3wOsGD-AgoFv0taOcx0-SOFq1tqjSHOfmPn5_Rzc6jrT5znpnMkWSmLm6bnx5j2Ng6AMmPOT6jpAMk23JyuNio530C87Q15Txn0WtjO0fPEoHBQgzkGqOOJ3MSKJH2StMXmTGtCQ8cQK5NBuoqxfkRBmxuUewzfkXOf46AwrNTilaJVrqXH58psS3yIfej"/>
+                            <!-- <span class="absolute top-3 left-3 bg-white/95 text-[#0a0a0a] font-mono text-[10px] px-2 py-0.5 rounded border border-[#e5e7eb] shadow-sm font-semibold">
+                                CAL. PX-810
+                            </span> -->
+                        </div>
+                        <!-- <span class="text-[11px] font-mono text-[#6b7280] uppercase tracking-wider">Perpetual Calendar</span> -->
+                        <h3 class="text-base font-display font-bold text-[#0a0a0a] mt-1 group-hover:text-neutral-700 transition-colors">
+                                    The Aethelgard Moonphase
+                        </h3>
+                        <!-- <p class="text-xs text-[#4b5563] line-clamp-2 mt-1">
+                            Aventurine dial with spherical gold moonphase accurate to 122 years.
+                        </p> -->
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#e5e7eb] flex items-center justify-between">
+                        <div>
+                            <!-- <span class="text-[10px] font-mono text-[#6b7280] block">ACQUISITION</span> -->
+                            <span class="text-sm font-display font-bold text-[#0a0a0a]">$74,000</span>
+                        </div>
+                        <button class="bg-black hover:bg-neutral-800 text-white text-xs font-mono px-3 py-1.5 rounded transition-colors shadow-sm" onclick="quickAcquire('The Aethelgard Moonphase', '$74,000')">
+                            Add to cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- INLINE CLIENT INTERACTIVITY SCRIPT -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 2. Main Product Image & Zoom Logic
+      const mainImage = document.getElementById('main-product-image');
+      const zoomViewport = document.getElementById('zoom-viewport');
+      const currentViewLabel = document.getElementById('current-view-label');
+      const thumbButtons = document.querySelectorAll('.thumb-btn');
+
+      let currentScale = 1;
+      let isHovering = false;
+
+      // Thumbnail Click Handlers
+      thumbButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const newSrc = btn.getAttribute('data-src');
+          const newLabel = btn.getAttribute('data-label');
+          
+          if (newSrc && mainImage) {
+            mainImage.src = newSrc;
+          }
+          if (newLabel && currentViewLabel) {
+            currentViewLabel.textContent = newLabel;
+          }
+
+          // Active thumbnail ring styling
+          thumbButtons.forEach(b => {
+            b.classList.remove('border-black', 'border-2');
+            b.classList.add('border', 'border-[#e5e7eb]');
+          });
+          btn.classList.remove('border-[#e5e7eb]', 'border');
+          btn.classList.add('border-black', 'border-2');
+
+          // Reset zoom level on image switch
+          currentScale = 1;
+          mainImage.style.transform = 'scale(1)';
+        });
+      });
+
+      // Desktop Hover Cursor-Tracking Zoom
+      if (zoomViewport && mainImage) {
+        zoomViewport.addEventListener('mouseenter', () => {
+          isHovering = true;
+          if (currentScale === 1) {
+            mainImage.style.transform = 'scale(2.2)';
+          }
+        });
+
+        zoomViewport.addEventListener('mousemove', (e) => {
+          const rect = zoomViewport.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          mainImage.style.transformOrigin = `${x}% ${y}%`;
+        });
+
+        zoomViewport.addEventListener('mouseleave', () => {
+          isHovering = false;
+          mainImage.style.transform = `scale(${currentScale})`;
+          mainImage.style.transformOrigin = 'center center';
+        });
+
+        // Mobile tap to zoom toggle
+        zoomViewport.addEventListener('click', () => {
+          if (window.innerWidth < 768) {
+            currentScale = currentScale === 1 ? 2.0 : 1;
+            mainImage.style.transform = `scale(${currentScale})`;
+          }
+        });
+      }
+
+      // Manual Zoom In / Out Buttons
+      const zoomInBtn = document.getElementById('zoom-in-btn');
+      const zoomOutBtn = document.getElementById('zoom-out-btn');
+      const zoomResetBtn = document.getElementById('zoom-reset-btn');
+      const fullscreenBtn = document.getElementById('fullscreen-inspect-btn');
+
+      if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', () => {
+          currentScale = Math.min(currentScale + 0.5, 3.5);
+          mainImage.style.transform = `scale(${currentScale})`;
+          showToast('Macro Zoom', `Magnification set to ${currentScale.toFixed(1)}x optical equivalent.`);
+        });
+      }
+
+      if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', () => {
+          currentScale = Math.max(currentScale - 0.5, 1);
+          mainImage.style.transform = `scale(${currentScale})`;
+        });
+      }
+
+      if (zoomResetBtn) {
+        zoomResetBtn.addEventListener('click', () => {
+          currentScale = 1;
+          mainImage.style.transform = 'scale(1)';
+          mainImage.style.transformOrigin = 'center center';
+        });
+      }
+
+      if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', () => {
+          if (zoomViewport.requestFullscreen) {
+            zoomViewport.requestFullscreen();
+          } else if (zoomViewport.webkitRequestFullscreen) {
+            zoomViewport.webkitRequestFullscreen();
+          }
+        });
+      }
+
+      // 5. Quantity Stepper
+      const qtyMinus = document.getElementById('qty-minus');
+      const qtyPlus = document.getElementById('qty-plus');
+      const qtyDisplay = document.getElementById('qty-display');
+      let qty = 1;
+
+      if (qtyMinus && qtyPlus && qtyDisplay) {
+        qtyMinus.addEventListener('click', () => {
+          if (qty > 1) {
+            qty--;
+            qtyDisplay.textContent = qty.toString().padStart(2, '0');
+          }
+        });
+
+        qtyPlus.addEventListener('click', () => {
+          if (qty < 5) {
+            qty++;
+            qtyDisplay.textContent = qty.toString().padStart(2, '0');
+          } else {
+            showToast('Allocation Limit', 'Strict maximum of 03 pieces per collector family.');
+          }
+        });
+      }
+
+      // 6. Add to Bag / Acquisition
+      const addBtn = document.getElementById('add-to-bag-btn');
+      const badge = document.getElementById('cart-count-badge');
+      console.log("badge:- ",badge)
+      let cartCount = 0;
+      
+      if (addBtn) {
+          addBtn.addEventListener('click', () => {
+              cartCount += qty;
+              console.log("cart_count", cartCount)
+          if (badge) badge.textContent = cartCount;
+          showToast('Allocation Confirmed', `The Sovereign Tourbillon (Qty: ${qty}) placed in your private vault.`);
+        });
+      }
+
+      // 9. Review Filtering Mechanism
+      const filterBtns = document.querySelectorAll('.review-filter-btn');
+      const reviewItems = document.querySelectorAll('.review-item');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-black', 'text-white', 'active');
+            b.classList.add('bg-white', 'text-[#4b5563]', 'border', 'border-[#e5e7eb]');
+          });
+          btn.classList.remove('bg-white', 'text-[#4b5563]', 'border', 'border-[#e5e7eb]');
+          btn.classList.add('bg-black', 'text-white', 'active');
+
+          const filter = btn.getAttribute('data-filter');
+          reviewItems.forEach(item => {
+            if (filter === 'all') {
+              item.style.display = 'block';
+            } else if (filter === 'photos' && item.getAttribute('data-category').includes('photos')) {
+              item.style.display = 'block';
+            } else if (filter === 'five-star' && item.getAttribute('data-category').includes('five-star')) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+
+    });
+
+    // Toast Notification System
+    function showToast(title, message) {
+      const toast = document.getElementById('toast');
+      const toastTitle = document.getElementById('toast-title');
+      const toastMsg = document.getElementById('toast-message');
+      const closeBtn = document.getElementById('close-toast');
+
+      if (!toast) return;
+
+      if (toastTitle) toastTitle.textContent = title;
+      if (toastMsg) toastMsg.textContent = message;
+
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+
+      const hideTimeout = setTimeout(() => {
+        hideToast();
+      }, 4500);
+
+      if (closeBtn) {
+        closeBtn.onclick = () => {
+          clearTimeout(hideTimeout);
+          hideToast();
+        };
+      }
+    }
+
+    function hideToast() {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+    }
+
+    // Quick Acquire Helper for Recommended Watches
+    function quickAcquire(watchName, price) {
+      const badge = document.getElementById('cart-count-badge');
+      if (badge) {
+        let val = parseInt(badge.textContent || '0', 10);
+        badge.textContent = val + 1;
+      }
+      showToast(`${watchName} Added`, `Allocation draft generated at ${price}.`);
+    }
+
+
+
+  </script>
+    
+    <!-- Footer -->
+    {% include "includes/footer.html" %}
+
+</body></html>
