@@ -28,7 +28,7 @@
     </style>
 </head>
 
-<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased" style="font-family: 'Inter', sans-serif;">
     <!-- TopNavBar -->
     {% include "includes/header.html" %}
 
@@ -64,21 +64,23 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-gutter gap-y-16">
                 {% for product in products %}
                     <!-- Product Card 1 -->
-                    <div class="group flex flex-col">
-                        <div class="relative aspect-[4/5] bg-surface-container-low rounded-lg overflow-hidden mb-stack-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
-                            {% if product.primary_image %}
-                                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="{{ product.name }}" 
-                                src="{{ product.primary_image.image.url }}"/>
-                            {% endif %}
-                            <!-- <div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded font-label-caps text-label-caps text-primary">New</div> -->
-                        </div>
+                    <a href="{% url 'product-detail' product.slug %}">
+                        <div class="group flex flex-col">
+                            <div class="relative aspect-[4/5] bg-surface-container-low rounded-lg overflow-hidden mb-stack-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+                                {% if product.primary_image %}
+                                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="{{ product.name }}" 
+                                    src="{{ product.primary_image.image.url }}"/>
+                                {% endif %}
+                                <!-- <div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded font-label-caps text-label-caps text-primary">New</div> -->
+                            </div>
 
-                        <div class="text-center">
-                            <h3 class="font-headline-md text-headline-md text-primary mb-1">{{ product.name }}</h3>
-                            <p class="font-body-md text-body-md text-on-surface-variant mb-2">{{ product.watch_type}} • {{ product.strap_type}}</p>
-                            <p class="font-body-lg text-body-lg text-primary">RS. {{ product.price }}</p>
+                            <div class="text-center">
+                                <h3 class="font-headline-md text-headline-md text-primary mb-1">{{ product.name }}</h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant mb-2">{{ product.watch_type}} • {{ product.strap_type}}</p>
+                                <p class="font-body-lg text-body-lg text-primary">RS. {{ product.price }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 {% endfor %}
             </div>
 

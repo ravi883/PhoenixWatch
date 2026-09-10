@@ -175,37 +175,38 @@
             <h2 class="font-headline-lg text-headline-lg text-primary text-center mb-stack-lg">Best Sellers</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-x-gutter gap-y-stack-lg">
                 {% for best_seller in best_sellers %}
-                <!-- Product Card 1 -->
-                <div class="group flex flex-col">
-                    <div class="relative w-full aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-stack-md flex items-center justify-center">
-                        <img class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
-                        data-alt="{{best_seller.name}}" 
-                        src="{{ best_seller.primary_image.image.url}}">
+                    <!-- Product Card 1 -->
+                    <div class="group flex flex-col">
+                        <div class="relative w-full aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-stack-md flex items-center justify-center">
+                                <a href="{% url 'product-detail' best_seller.slug %}">
+                                    <img class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
+                                    data-alt="{{best_seller.name}}" 
+                                    src="{{ best_seller.primary_image.image.url}}">
+                                </a>
+                                <!-- Quick Add -->
+                                <div class="absolute bottom-0 left-0 w-full p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                                    <button class="w-full bg-primary/90 backdrop-blur text-on-primary font-label-caps text-label-caps py-3 rounded hover:bg-primary transition-colors" id="add-to-bag-btn">
+                                        ADD TO CART
+                                    </button>
+                                </div>
+                            </div>
 
-                        <!-- Quick Add -->
-                        <div class="absolute bottom-0 left-0 w-full p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-primary/90 backdrop-blur text-on-primary font-label-caps text-label-caps py-3 rounded hover:bg-primary transition-colors">
-                                                        ADD TO CART
-                            </button>
+                            <div class="flex flex-col gap-1">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-body-md font-semibold text-primary">{{ best_seller.name}}</h4>
+                                    <span class="font-body-md text-primary">{{ best_seller.price}}</span>
+                                </div>
+                                <p class="font-body-md text-sm text-secondary">{{ best_seller.strap_type}}</p>
+                                <!-- <div class="flex items-center gap-1 mt-1">
+                                    <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span class="material-symbols-outlined text-[14px] text-outline">star</span>
+                                    <span class="font-label-caps text-[10px] text-secondary ml-1">(42)</span>
+                                </div> -->
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="flex flex-col gap-1">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-body-md font-semibold text-primary">{{ best_seller.name}}</h4>
-                            <span class="font-body-md text-primary">{{ best_seller.price}}</span>
-                        </div>
-                        <p class="font-body-md text-sm text-secondary">{{ best_seller.strap_type}}</p>
-                        <!-- <div class="flex items-center gap-1 mt-1">
-                            <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span class="material-symbols-outlined text-[14px] text-outline">star</span>
-                            <span class="font-label-caps text-[10px] text-secondary ml-1">(42)</span>
-                        </div> -->
-                    </div>
-                </div>
                 {% endfor %}
                 
             </div>
