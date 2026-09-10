@@ -1,0 +1,173 @@
+<div class="fixed inset-0 z-[100] invisible transition-all duration-300" id="cart-drawer">
+        <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300" id="cart-overlay"></div>
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-surface p-6 translate-x-full transition-transform duration-300 shadow-lg flex flex-col" id="cart-content">
+            <div class="flex justify-between items-center mb-8 border-b border-outline-variant pb-4">
+                <h2 class="font-headline-md text-headline-md text-primary">Shopping Cart (2)</h2>
+                <button class="p-2 text-primary hover:bg-surface-variant rounded-full transition-colors" id="close-cart">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="flex-grow overflow-y-auto hide-scrollbar flex flex-col gap-6">
+
+                <!-- Cart Items -->
+                <div class="flex gap-4">
+                    <div class="w-24 h-24 bg-surface-container rounded-lg flex items-center justify-center p-2">
+                        <img alt="Ocean Master 300" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx5QkFF03bMf2Mj6Pgk3qJHbrLDdGSAFzhT6737FdhaC11gukTg2cmrm3DWBXUFmiXevJAcmMfeIE1gONtcC5GF6U9kswVgoV-u19T7jzljwRfkyfAHsCc3S8Si08xTqvHKZybsCyPotKUBKsYLt4S9LDjy07ysuBG43WtY2w-CnslruBtC1vwHlM_EBhsASl1uHFROCZaf_ICIprjAPXqQO99XK1z-C42KxUei0i2TYzENB7wNQ6x"/>
+                    </div>
+
+                    <div class="flex flex-col flex-grow">
+                        <div class="flex justify-between">
+                            <h4 class="font-body-md font-semibold text-primary">Ocean Master 300</h4>
+                            <span class="font-body-md text-primary">$1,250</span>
+                        </div>
+                        <p class="font-body-md text-sm text-secondary mb-2">Steel Strap</p>
+                        <div class="cart-item flex items-center gap-4 mt-auto">
+                            <div class="quantity-control flex items-center border border-outline rounded">
+                                <button type="button" class="quantity-minus px-2 py-1 text-primary hover:bg-surface-variant">-</button>
+                                    <span class="quantity px-2 font-body-md">1</span>
+                                <button type="button" class="quantity-plus px-2 py-1 text-primary hover:bg-surface-variant">+</button>
+                            </div>
+                            <button class="text-sm text-secondary hover:text-error underline underline-offset-2">Remove</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="flex gap-4">
+                    <div class="w-24 h-24 bg-surface-container rounded-lg flex items-center justify-center p-2">
+                        <img alt="Aura Rose" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqvF7R9by3zLRJxGbvLC7xveb-zwf0-rIJW3Zzd0D74HCJrUmTVGo0ljSyQvlaVP5D8o4pbzoPzYFI24--ySVMDlXjj68k3CQhWV4EDJMPMEpcywsEi74jQaCL-PVTP7FC8giCYB_bUDO4KK4w0VinEuK4rSvjnF-FUNmTg2V2BKDqkg85XT6aK8esPP3RKWXk_4qTK8H2C43SWu-3PXKZRKn2AJQDTOK5zQPDOCedRPVrgbQq5Aha"/>
+                    </div>
+
+                    <div class="flex flex-col flex-grow">
+                        <div class="flex justify-between">
+                            <h4 class="font-body-md font-semibold text-primary">Aura Rose</h4>
+                            <span class="font-body-md text-primary">$850</span>
+                        </div>
+                        <p class="font-body-md text-sm text-secondary mb-2">Mesh Bracelet</p>
+                        <div class="flex items-center gap-4 mt-auto">
+                            <div class="flex items-center border border-outline rounded">
+                                <button class="px-2 py-1 text-primary hover:bg-surface-variant">-</button>
+                                <span class="px-2 font-body-md">1</span>
+                                <button class="px-2 py-1 text-primary hover:bg-surface-variant">+</button>
+                            </div>
+                            <button class="text-sm text-secondary hover:text-error underline underline-offset-2">Remove</button>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="pt-6 border-t border-outline-variant mt-auto">
+                <div class="flex justify-between mb-4">
+                    <span class="font-body-md text-secondary">Subtotal</span>
+                    <span class="font-body-md font-semibold text-primary">$2,100</span>
+                </div>
+                <a href="{% url 'checkout' %}">
+                <button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-4 rounded hover:bg-primary/90 transition-colors">
+                    CHECKOUT
+                </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const quantityControls = document.querySelectorAll(".quantity-control");
+    
+    quantityControls.forEach(function (control) {
+
+        const minusButton = control.querySelector(".quantity-minus");
+        const plusButton = control.querySelector(".quantity-plus");
+        const quantityValue = control.querySelector(".quantity");
+
+        const MIN_QUANTITY = 1;
+        const MAX_QUANTITY = 5;
+
+        plusButton.addEventListener("click", function () {
+
+            let quantity = parseInt(quantityValue.textContent);
+
+            if (quantity < MAX_QUANTITY) {
+                quantity++;
+                quantityValue.textContent = quantity;
+            }
+
+        });
+
+        minusButton.addEventListener("click", function () {
+
+            let quantity = parseInt(quantityValue.textContent);
+
+            if (quantity > MIN_QUANTITY) {
+                quantity--;
+                quantityValue.textContent = quantity;
+            }
+
+        });
+
+    });
+
+});
+</script>
+
+<script>
+(function() {
+    const openBtn = document.getElementById('open-mobile-menu');
+    const closeBtn = document.getElementById('close-mobile-menu');
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const content = document.getElementById('mobile-menu-content');
+
+    function openMenu() {
+        drawer.classList.remove('invisible');
+        setTimeout(() => {
+            overlay.classList.add('opacity-100');
+            content.classList.remove('-translate-x-full');
+        }, 10);
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        overlay.classList.remove('opacity-100');
+        content.classList.add('-translate-x-full');
+        setTimeout(() => {
+            drawer.classList.add('invisible');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    if (openBtn) openBtn.addEventListener('click', openMenu);
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    if (overlay) overlay.addEventListener('click', closeMenu);
+    
+    
+    const cartBtns = document.querySelectorAll('.cart-toggle-btn');
+    const closeCartBtn = document.getElementById('close-cart');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartContent = document.getElementById('cart-content');
+
+    function openCart() {
+        cartDrawer.classList.remove('invisible');
+        setTimeout(() => {
+            cartOverlay.classList.add('opacity-100');
+            cartContent.classList.remove('translate-x-full');
+        }, 10);
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+        cartOverlay.classList.remove('opacity-100');
+        cartContent.classList.add('translate-x-full');
+        setTimeout(() => {
+            cartDrawer.classList.add('invisible');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    cartBtns.forEach(btn => btn.addEventListener('click', openCart));
+    if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
+    if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+})();
+    
+</script>

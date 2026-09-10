@@ -1,0 +1,27 @@
+    <div class="fixed inset-0 z-[100] invisible transition-all duration-300" id="mobile-menu-drawer">
+        <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300" id="mobile-menu-overlay"></div>
+        <div class="absolute left-0 top-0 h-full w-3/4 max-w-xs bg-surface p-6 -translate-x-full transition-transform duration-300 shadow-lg" id="mobile-menu-content">
+            <div class="flex justify-between items-center mb-8">
+                <span class="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary">Phoenix</span>
+                <button class="p-2 text-primary" id="close-mobile-menu">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <nav class="flex flex-col gap-6">
+                <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'men-collection' %}">Men's</a>
+                <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Women's</a>
+                <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Contact Us</a>
+                <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Track Orders</a>
+                {% if request.session.customer_id is not none %}
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Profile</a>
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Your Orders</a>
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'logout' %}">Logout</a>
+                {% endif %}
+                {% if request.session.customer_id is none %}
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'login' %}">Login/Signup</a>
+                {% endif %}
+            </nav>
+
+        </div>
+    </div>
+

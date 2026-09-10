@@ -9,99 +9,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "secondary-container": "#dfe0e0",
-                        "error": "#ba1a1a",
-                        "background": "#fcf9f8",
-                        "on-tertiary-fixed": "#1d1b1a",
-                        "on-background": "#1b1c1c",
-                        "surface-container": "#f0eded",
-                        "on-surface": "#1b1c1c",
-                        "primary": "#000000",
-                        "on-primary-fixed-variant": "#474646",
-                        "surface-variant": "#e4e2e1",
-                        "tertiary": "#000000",
-                        "surface-container-low": "#f6f3f2",
-                        "on-primary": "#ffffff",
-                        "on-tertiary-fixed-variant": "#484645",
-                        "secondary-fixed-dim": "#c6c6c7",
-                        "surface-tint": "#5f5e5e",
-                        "on-tertiary": "#ffffff",
-                        "surface": "#fcf9f8",
-                        "on-primary-container": "#858383",
-                        "on-secondary-fixed": "#1a1c1c",
-                        "on-surface-variant": "#444748",
-                        "tertiary-fixed-dim": "#cac6c3",
-                        "inverse-surface": "#303030",
-                        "primary-fixed-dim": "#c9c6c5",
-                        "surface-dim": "#dcd9d9",
-                        "tertiary-container": "#1d1b1a",
-                        "on-error-container": "#93000a",
-                        "inverse-primary": "#c9c6c5",
-                        "on-error": "#ffffff",
-                        "surface-bright": "#fcf9f8",
-                        "primary-container": "#1c1b1b",
-                        "outline": "#747878",
-                        "outline-variant": "#c4c7c7",
-                        "secondary": "#5d5f5f",
-                        "tertiary-fixed": "#e6e1df",
-                        "on-secondary-container": "#616363",
-                        "inverse-on-surface": "#f3f0ef",
-                        "primary-fixed": "#e5e2e1",
-                        "secondary-fixed": "#e2e2e2",
-                        "on-tertiary-container": "#868381",
-                        "surface-container-highest": "#e4e2e1",
-                        "on-secondary": "#ffffff",
-                        "on-primary-fixed": "#1c1b1b",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary-fixed-variant": "#454747",
-                        "surface-container-high": "#eae7e7",
-                        "error-container": "#ffdad6"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "container-max": "1440px",
-                        "stack-lg": "32px",
-                        "stack-sm": "8px",
-                        "unit": "4px",
-                        "gutter": "24px",
-                        "margin-mobile": "20px",
-                        "margin-desktop": "64px",
-                        "section-gap": "120px",
-                        "stack-md": "16px"
-                    },
-                    "fontFamily": {
-                        "body-md": ["Inter"],
-                        "headline-lg": ["Playfair Display"],
-                        "display-lg": ["Playfair Display"],
-                        "body-lg": ["Inter"],
-                        "headline-md": ["Playfair Display"],
-                        "label-caps": ["Inter"],
-                        "display-lg-mobile": ["Playfair Display"]
-                    },
-                    "fontSize": {
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
-                        "display-lg": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
-                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
-                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600" }],
-                        "display-lg-mobile": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
-                    }
-                }
-            }
-        }
-    </script>
+{% include "includes/common-script.html" %}
 <style>
         :root {
             --primary-color: #000000;
@@ -177,76 +85,15 @@
 
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
     <!-- TopNavBar -->
-    <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md shadow-sm transition-all duration-200 ease-in-out hover:opacity-100 opacity-95">
-        <div class="flex justify-between items-center w-full px-margin-desktop py-stack-md max-w-container-max mx-auto hidden lg:flex">
-            <!-- Brand -->
-            <a class="font-display-lg text-display-lg tracking-tighter text-primary dark:text-on-primary-fixed" href="/">
-                Phoenix
-            </a>
+    {% include "includes/header.html" %}
 
-            <!-- Desktop Nav -->
-            <nav class="flex gap-stack-lg">
-                <a class="font-label-caps text-label-caps text-secondary dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-on-primary-fixed transition-colors duration-300" href="{% url 'men-collection' %}">Men's</a>
-                <a class="font-label-caps text-label-caps text-secondary dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-on-primary-fixed transition-colors duration-300" href="#">Women's</a>
-                <a class="font-label-caps text-label-caps text-secondary dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-on-primary-fixed transition-colors duration-300" href="#">Contact Us</a>
-                <a class="font-label-caps text-label-caps text-secondary dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-on-primary-fixed transition-colors duration-300" href="#">Track Orders</a>
-            </nav>
+    <!-- Mobile Menu -->
+    {% include "includes/mobile-menu.html" %}
+    
+    <!-- Cart Drawer -->
+    {% include "includes/cart-drawer.html" %}
 
-            <!-- Actions -->
-            <div class="flex items-center gap-stack-sm text-primary dark:text-on-primary-fixed">
-                <button aria-label="Search" class="p-2 hover:opacity-80 transition-opacity">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
-                </button>
-
-                <div class="relative group">
-                    <button aria-label="Account" class="p-2 hover:opacity-80 transition-opacity flex items-center">
-                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
-                    </button>
-                    
-                    {% if request.session.customer_id is not none %}
-                        <!-- Dropdown -->
-                        <div class="absolute right-0 mt-2 w-48 bg-surface-container shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
-                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'profile' %}">Profile</a>
-                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Orders</a>
-                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Wishlist</a>
-                            <div class="border-t border-outline-variant my-1"></div>
-                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'logout' %}">Logout</a>
-                            
-                        </div>
-                    {% endif %}
-                    {% if request.session.customer_id is none %}
-                        <div class="absolute right-0 mt-2 w-48 bg-surface-container shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
-                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'login' %}">Login/Signup</a>
-                            
-                        </div>
-                    {% endif %}
-
-                </div>
-
-                <button aria-label="Cart" class="p-2 hover:opacity-80 transition-opacity relative cart-toggle-btn">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_bag</span>
-                    <span class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Header (Simplified) -->
-        <div class="flex justify-between items-center w-full px-margin-mobile py-stack-md lg:hidden">
-            <button aria-label="Menu" class="p-2 text-primary" id="open-mobile-menu">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-
-            <a class="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary" href="/">
-                Phoenix
-            </a>
-
-            <button aria-label="Cart" class="p-2 text-primary relative cart-toggle-btn">
-                <span class="material-symbols-outlined">shopping_bag</span>
-                <span class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
-            </button>
-        </div>
-    </header>
-
+    
     <main class="flex-grow pt-[88px] lg:pt-[104px]"> 
         <!-- News Ticker -->
         {% if headlines %}
@@ -267,13 +114,13 @@
                 <!-- Slide 1 -->
 
                 {% for banner in banners %}
-                    <div class="carousel-slide active" data-alt="A high-end, professional product photograph of a luxury mechanical watch with a black leather strap and gold casing. Minimalist composition, dramatic lighting with soft gold highlights, dark atmospheric background. Shot for a premium e-commerce website. 8k resolution, cinematic quality." style="background-image: url('{{banner.image.url}}');">
+                    <div class="carousel-slide active" data-alt="" style="background-image: url('{{banner.image.url}}');">
                         <div class="carousel-overlay"></div>
                         <div class="carousel-content max-w-2xl px-margin-mobile md:px-margin-desktop">
                             <h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-stack-md text-on-primary">{{ banner.title }}</h2>
                             <p class="font-body-lg text-body-lg mb-stack-lg text-surface-variant max-w-lg">{{banner.subtitle }}</p>
                             {% if banner.button_text %}
-                                <a class="inline-flex items-center justify-center bg-on-primary text-primary font-label-caps text-label-caps px-8 py-4 rounded hover:bg-surface-variant transition-colors" href="#">
+                                <a class="inline-flex items-center justify-center bg-on-primary text-primary font-label-caps text-label-caps px-8 py-4 rounded hover:bg-surface-variant transition-colors" href="{% url banner.button_url  %}">
                                         {{banner.button_text}}
                                 </a>
                             {% endif %}
@@ -312,7 +159,7 @@
                         class="group flex flex-col items-center min-w-[150px] md:min-w-0">
                     {% endif %}
                             <div class="w-32 h-32 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-surface-container mb-stack-sm overflow-hidden border border-transparent group-hover:border-outline-variant transition-all flex items-center justify-center relative">
-                                <img class="w-full h-full object-contain object-cover rounded-full zoom-img transition-transform duration-500" data-alt="A meticulously crafted analog watch face hovering in a clean, brightly lit, minimalist white studio space. Soft, diffused lighting accentuates the crisp hour markers and sweeping second hand. The aesthetic is extremely modern, pristine, and sophisticated, reflecting a high-end light-mode e-commerce feel."
+                                <img class="w-full h-full object-contain object-cover rounded-full zoom-img transition-transform duration-500" data-alt=""
                                 src="{{ category.image.url}}"/>
                             </div>
                             <span class="font-label-caps text-label-caps text-primary group-hover:text-secondary transition-colors text-center">{{ category.name|title }}</span>
@@ -327,16 +174,13 @@
         <section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
             <h2 class="font-headline-lg text-headline-lg text-primary text-center mb-stack-lg">Best Sellers</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-x-gutter gap-y-stack-lg">
+                {% for best_seller in best_sellers %}
                 <!-- Product Card 1 -->
                 <div class="group flex flex-col">
                     <div class="relative w-full aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-stack-md flex items-center justify-center">
-                        <img class="w-4/5 h-4/5 object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="A clean, isolated product shot of a silver men's watch with a deep blue dial, presented straightforwardly against a pure, light gray background. Soft, even studio lighting eliminates harsh shadows, highlighting the metallic finish and clear glass face. Designed for an elegant, minimalist e-commerce grid." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx5QkFF03bMf2Mj6Pgk3qJHbrLDdGSAFzhT6737FdhaC11gukTg2cmrm3DWBXUFmiXevJAcmMfeIE1gONtcC5GF6U9kswVgoV-u19T7jzljwRfkyfAHsCc3S8Si08xTqvHKZybsCyPotKUBKsYLt4S9LDjy07ysuBG43WtY2w-CnslruBtC1vwHlM_EBhsASl1uHFROCZaf_ICIprjAPXqQO99XK1z-C42KxUei0i2TYzENB7wNQ6x"/>
-                        <!-- Actions -->
-                        <div class="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button aria-label="Add to Wishlist" class="bg-surface rounded-full p-2 shadow-sm text-secondary hover:text-primary">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
+                        <img class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
+                        data-alt="{{best_seller.name}}" 
+                        src="{{ best_seller.primary_image.image.url}}">
 
                         <!-- Quick Add -->
                         <div class="absolute bottom-0 left-0 w-full p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
@@ -348,101 +192,22 @@
 
                     <div class="flex flex-col gap-1">
                         <div class="flex justify-between items-start">
-                            <h4 class="font-body-md font-semibold text-primary">Ocean Master 300</h4>
-                            <span class="font-body-md text-primary">$1,250</span>
+                            <h4 class="font-body-md font-semibold text-primary">{{ best_seller.name}}</h4>
+                            <span class="font-body-md text-primary">{{ best_seller.price}}</span>
                         </div>
-                        <p class="font-body-md text-sm text-secondary">Steel Strap</p>
-                        <div class="flex items-center gap-1 mt-1">
+                        <p class="font-body-md text-sm text-secondary">{{ best_seller.strap_type}}</p>
+                        <!-- <div class="flex items-center gap-1 mt-1">
                             <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
                             <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
                             <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
                             <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
                             <span class="material-symbols-outlined text-[14px] text-outline">star</span>
                             <span class="font-label-caps text-[10px] text-secondary ml-1">(42)</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-
-                <!-- Product Card 2 -->
-                <div class="group flex flex-col">
-                    <div class="relative w-full aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-stack-md flex items-center justify-center">
-                        <img class="w-4/5 h-4/5 object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="A sophisticated women's watch with a minimalist white face and a slender rose-gold mesh band, shot straight-on against a subtle off-white background. The lighting is soft and flattering, creating a high-key, airy mood that communicates delicate luxury and modern minimalist design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqvF7R9by3zLRJxGbvLC7xveb-zwf0-rIJW3Zzd0D74HCJrUmTVGo0ljSyQvlaVP5D8o4pbzoPzYFI24--ySVMDlXjj68k3CQhWV4EDJMPMEpcywsEi74jQaCL-PVTP7FC8giCYB_bUDO4KK4w0VinEuK4rSvjnF-FUNmTg2V2BKDqkg85XT6aK8esPP3RKWXk_4qTK8H2C43SWu-3PXKZRKn2AJQDTOK5zQPDOCedRPVrgbQq5Aha"/>
-                        <div class="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button aria-label="Add to Wishlist" class="bg-surface rounded-full p-2 shadow-sm text-secondary hover:text-primary">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="absolute bottom-0 left-0 w-full p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-primary/90 backdrop-blur text-on-primary font-label-caps text-label-caps py-3 rounded hover:bg-primary transition-colors">
-                                ADD TO CART
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-body-md font-semibold text-primary">Aura Rose</h4>
-                            <span class="font-body-md text-primary">$850</span>
-                        </div>
-                        <p class="font-body-md text-sm text-secondary">Mesh Bracelet</p>
-                    </div>
-                </div>
-
-                <!-- Product Card 3 -->
-                <div class="group flex flex-col">
-                    <div class="relative w-full aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-stack-md flex items-center justify-center">
-                        <img class="w-4/5 h-4/5 object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="An elegant dress watch featuring a stark black dial and a premium black leather strap, displayed prominently on a very light, almost white background. Crisp, directional studio lighting defines the edges of the watch case and the texture of the leather, creating a sharp, modern, high-contrast look appropriate for a clean UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhfWCGR0LWlRtQhHvH75dZiRkh6PiTd0WcHZl3QNcpn-tYEQbs3zsPz0VFVh8dqCHQIiuGnI9-49PzMVCDO48KP9xoa8e62Nd2vRerve2B5s43BmEbECWDgzrvgG3bvg4-dkkyWfou2rpvIH3CyyvIDSBhPSzOhYIagu8adRzmQxM8VgYCE6oP24PJAW-KAZm75F-nAdb6JW33SuxylpTj97H6vtxQPnStAwtwWsXRx4rriobNr5f6"/>
-                        <div class="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button aria-label="Add to Wishlist" class="bg-surface rounded-full p-2 shadow-sm text-secondary hover:text-primary">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="absolute bottom-0 left-0 w-full p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-primary/90 backdrop-blur text-on-primary font-label-caps text-label-caps py-3 rounded hover:bg-primary transition-colors">
-                                                ADD TO CART
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-body-md font-semibold text-primary">Midnight Classic</h4>
-                            <span class="font-body-md text-primary">$920</span>
-                        </div>
-                        <p class="font-body-md text-sm text-secondary">Leather Strap</p>
-                    </div>
-                </div>
-
-                <!-- Product Card 4 -->
-                <div class="group flex flex-col">
-                    <div class="relative w-full aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-stack-md flex items-center justify-center">
-                        <div class="absolute top-2 left-2 z-10">
-                            <span class="inline-block px-2 py-1 bg-surface text-primary font-label-caps text-[10px] rounded shadow-sm">NEW</span>
-                        </div>
-                        <img class="w-4/5 h-4/5 object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="A rugged, matte-black tactical sports watch with a durable rubber strap, shot against a clean, light gray surface. Even though the watch is dark, the surrounding environment is bright and flooded with even light, ensuring the product pops while maintaining the overall light-mode aesthetic of the webpage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoPKriqwACRGEWRUXVrx-Dopa9dS9LyHNDXhQ8YJk3jzdri3AdfamwZQiJbZbl0ZIHMzK1W1ZDQMw4Jwcqz_2sgrHfVMRpbq4a4V58GCCmXnpfz2li1S7e9l9Ps88uNajC9M4fZEsv5BY608P9jMqevgXoRP_3SX41YxKvnHuowMHbD5qI1F543E9gVUo-QBRUU_MpTBe23umVCwECUpZvkFdEcDOk_xw2dza3-27fDzLCspRYCc2X"/>
-                        <div class="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button aria-label="Add to Wishlist" class="bg-surface rounded-full p-2 shadow-sm text-secondary hover:text-primary">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="absolute bottom-0 left-0 w-full p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-primary/90 backdrop-blur text-on-primary font-label-caps text-label-caps py-3 rounded hover:bg-primary transition-colors">
-                                               ADD TO CART
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-body-md font-semibold text-primary">Stealth Pro</h4>
-                            <span class="font-body-md text-primary">$1,100</span>
-                        </div>
-                        <p class="font-body-md text-sm text-secondary">Rubber Strap</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex justify-center mt-stack-lg">
-                <button class="px-8 py-3 border border-outline text-primary font-label-caps text-label-caps rounded hover:bg-surface-container transition-colors">
-                    VIEW ALL BEST SELLERS
-                </button>
+                {% endfor %}
+                
             </div>
         </section>
 
@@ -450,7 +215,7 @@
         <section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter h-auto md:h-[600px]">
                 <div class="relative group overflow-hidden rounded-lg h-[400px] md:h-full cursor-pointer">
-                    <img class="absolute inset-0 w-full h-full object-cover zoom-img transition-transform duration-700" data-alt="A stylish lifestyle photograph of a confident man wearing a tailored suit, adjusting his cuffs to reveal a luxurious Phoenix watch. The setting is a bright, modern architectural space with large windows and soft, natural daylight. The mood is aspirational, professional, and sophisticated, perfectly aligned with a premium light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0JO1Z43OLy6KnzLX2RjomTBiMPmJ8IhzpaxqjwwkaK5t08r-ssA-ExdTf4GOj7XWlbf0TI-L3DcpdxXSV9UXOsK_o6BzPsDMP-zYFJDbgpGHIP8_61h4gkFxJVAhw4kJWcOp_XcWtz9IvQvykGMbNJ9thEyhEj3Q7spqu5_qTnQe6g8r1fNA6WmVOh-bDgWYaQ7GoixpHkj3ufOB4UohgTZE9ia802JPj9wxUN1pdVx1GxaXQa3Lu"/>
+                    <img class="absolute inset-0 w-full h-full object-cover zoom-img transition-transform duration-700" data-alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0JO1Z43OLy6KnzLX2RjomTBiMPmJ8IhzpaxqjwwkaK5t08r-ssA-ExdTf4GOj7XWlbf0TI-L3DcpdxXSV9UXOsK_o6BzPsDMP-zYFJDbgpGHIP8_61h4gkFxJVAhw4kJWcOp_XcWtz9IvQvykGMbNJ9thEyhEj3Q7spqu5_qTnQe6g8r1fNA6WmVOh-bDgWYaQ7GoixpHkj3ufOB4UohgTZE9ia802JPj9wxUN1pdVx1GxaXQa3Lu"/>
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <h3 class="font-headline-lg text-headline-lg text-on-primary mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">MEN</h3>
@@ -459,7 +224,7 @@
                 </div>
 
                 <div class="relative group overflow-hidden rounded-lg h-[400px] md:h-full cursor-pointer">
-                    <img class="absolute inset-0 w-full h-full object-cover zoom-img transition-transform duration-700" data-alt="An elegant lifestyle portrait of a sophisticated woman holding a cup of coffee in a bright, minimalist cafe. Her wrist features a delicate, minimalist Phoenix watch. Sunlight filters softly through sheer curtains, creating a bright, airy, high-key image that evokes modern femininity and refined taste within a light-mode layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAMWc2gtynbsmAeaujUA5UQwy0lrDjPToMajSLduLzKg99YX12JOTv468TQ5zTDKodHyflbtdZBeAsE3VrIWIBHwvV9cicaRM6SOzyVXil96hVXVMjm1ud_xPV7vD0zYxw-ubSfDorfrVoabXo2wbwlclCZNEPAX6xITJNBK52wpNy_4DBXthOC3lnhDTlTweu-KPWziR3RsKy2ZqX5yCBBlgNdYewws9JHIQQ2aRQQnbEoQDeuUmz"/>
+                    <img class="absolute inset-0 w-full h-full object-cover zoom-img transition-transform duration-700" data-alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAMWc2gtynbsmAeaujUA5UQwy0lrDjPToMajSLduLzKg99YX12JOTv468TQ5zTDKodHyflbtdZBeAsE3VrIWIBHwvV9cicaRM6SOzyVXil96hVXVMjm1ud_xPV7vD0zYxw-ubSfDorfrVoabXo2wbwlclCZNEPAX6xITJNBK52wpNy_4DBXthOC3lnhDTlTweu-KPWziR3RsKy2ZqX5yCBBlgNdYewws9JHIQQ2aRQQnbEoQDeuUmz"/>
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <h3 class="font-headline-lg text-headline-lg text-on-primary mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">WOMEN</h3>
@@ -468,7 +233,7 @@
                 </div>
 
                 <div class="relative group overflow-hidden rounded-lg h-[400px] md:h-full cursor-pointer">
-                    <img class="absolute inset-0 w-full h-full object-cover zoom-img transition-transform duration-700" data-alt="A bright, playful lifestyle shot of a child's hand interacting with a colorful, durable, yet cleanly designed watch. The background is a crisp white or soft pastel setting, maintaining the premium brand feel while introducing a younger, energetic element. The lighting is soft, even, and highly professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdb53nZoZn1YcMKdFsO6-1k80x8RYAnyEbgUZDuvCHxnO69Q3Z7PGUYOR51AJgDdHuVodd2imFknaio5ZaBrqPjgFtub25-yNyy3wAS_CopTcJ37Rf01SyDeFt_f0ZsCePxnYrNGI0mpAcimCQSnvE0IHzZSWa0umsExXdZKRDaxU2mF9VpJfXqSRz6rAcH3z4P0L0a1WokIpPxiqEg21FCbR9HxF6XaTpTSFUoMs7XTgofMb7L_Bb"/>
+                    <img class="absolute inset-0 w-full h-full object-cover zoom-img transition-transform duration-700" data-alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdb53nZoZn1YcMKdFsO6-1k80x8RYAnyEbgUZDuvCHxnO69Q3Z7PGUYOR51AJgDdHuVodd2imFknaio5ZaBrqPjgFtub25-yNyy3wAS_CopTcJ37Rf01SyDeFt_f0ZsCePxnYrNGI0mpAcimCQSnvE0IHzZSWa0umsExXdZKRDaxU2mF9VpJfXqSRz6rAcH3z4P0L0a1WokIpPxiqEg21FCbR9HxF6XaTpTSFUoMs7XTgofMb7L_Bb"/>
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <h3 class="font-headline-lg text-headline-lg text-on-primary mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">KIDS</h3>
@@ -479,68 +244,9 @@
         </section>
     </main>
 
-
     <!-- Footer -->
-    <footer class="w-full rounded-none bg-surface-container dark:bg-surface-container mt-auto">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-section-gap w-full max-w-container-max mx-auto">
-            <!-- Brand Column -->
-            <div class="flex flex-col">
-                <a class="font-headline-lg text-headline-lg text-primary dark:text-on-primary-fixed mb-stack-md" href="/">
-                    Phoenix
-                </a>
-                <p class="font-body-md text-body-md text-on-surface-variant mb-stack-md max-w-xs">
-                    Crafting timeless precision since 1994. Elevate your everyday with uncompromising quality.
-                </p>
-                <div class="flex gap-4 mt-auto">
-                    <!-- Social Icons (Placeholders using generic icons) -->
-                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera_alt</span></a>
-                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">play_arrow</span></a>
-                </div>
-            </div>
+    {% include "includes/footer.html" %}
 
-            <!-- Links Column 1 -->
-            <div class="flex flex-col">
-                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">THE BRAND</h4>
-                <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">About Us</a>
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Collections</a>
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Boutiques</a>
-                </div>
-            </div>
-
-            <!-- Links Column 2 -->
-            <div class="flex flex-col">
-                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">LEGAL</h4>
-                <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Privacy Policy</a>
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Shipping &amp; Returns</a>
-                </div>
-            </div>
-
-            <!-- Contact Column -->
-            <div class="flex flex-col">
-                <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">SUPPORT</h4>
-                <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Contact Us</a>
-                    <p class="font-body-md text-body-md text-on-surface-variant mt-2">
-                                    1-800-PHOENIX<br/>
-                                    support@phoenix.com
-                    </p>
-                </div>
-            </div>
-        </div>
-        <!-- Bottom Bar -->
-        <div class="border-t border-outline-variant px-margin-desktop py-stack-md flex justify-between items-center w-full max-w-container-max mx-auto flex-col md:flex-row gap-4">
-            <p class="font-body-md text-body-md text-on-surface-variant text-sm">
-                        © 2024 Phoenix. All rights reserved.
-            </p>
-            <!-- Payment Methods Placeholder -->
-            <div class="flex gap-2 text-outline">
-                <span class="material-symbols-outlined text-[32px]">credit_card</span>
-                <span class="material-symbols-outlined text-[32px]">account_balance_wallet</span>
-            </div>
-        </div>
-    </footer>
     <!-- Simple Carousel Script -->
     <script>
         let currentSlide = 0;
@@ -548,7 +254,7 @@
         const dots = document.querySelectorAll('#carouselDots button');
         const totalSlides = slides.length;
         let slideInterval;
-
+        
         function updateCarousel() {
             slides.forEach((slide, index) => {
                 if (index === currentSlide) {
@@ -605,208 +311,5 @@
           if (touchendX > touchstartX + 50) moveCarousel(-1); // Swiped right
         }
     </script>
-
-    <!-- Mobile Menu -->
-    <div class="fixed inset-0 z-[100] invisible transition-all duration-300" id="mobile-menu-drawer">
-        <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300" id="mobile-menu-overlay"></div>
-        <div class="absolute left-0 top-0 h-full w-3/4 max-w-xs bg-surface p-6 -translate-x-full transition-transform duration-300 shadow-lg" id="mobile-menu-content">
-            <div class="flex justify-between items-center mb-8">
-                <span class="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary">Phoenix</span>
-                <button class="p-2 text-primary" id="close-mobile-menu">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <nav class="flex flex-col gap-6">
-                <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'men-collection' %}">Men's</a>
-                <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Women's</a>
-                <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Contact Us</a>
-                <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Track Orders</a>
-                {% if request.session.customer_id is not none %}
-                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Profile</a>
-                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Your Orders</a>
-                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'logout' %}">Logout</a>
-                {% endif %}
-                {% if request.session.customer_id is none %}
-                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'login' %}">Login/Signup</a>
-                {% endif %}
-            </nav>
-
-        </div>
-    </div>
-
-    <!-- Cart Drawer -->
-    <div class="fixed inset-0 z-[100] invisible transition-all duration-300" id="cart-drawer">
-        <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300" id="cart-overlay"></div>
-        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-surface p-6 translate-x-full transition-transform duration-300 shadow-lg flex flex-col" id="cart-content">
-            <div class="flex justify-between items-center mb-8 border-b border-outline-variant pb-4">
-                <h2 class="font-headline-md text-headline-md text-primary">Shopping Cart (2)</h2>
-                <button class="p-2 text-primary hover:bg-surface-variant rounded-full transition-colors" id="close-cart">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="flex-grow overflow-y-auto hide-scrollbar flex flex-col gap-6">
-
-                <!-- Cart Items -->
-                <div class="flex gap-4">
-                    <div class="w-24 h-24 bg-surface-container rounded-lg flex items-center justify-center p-2">
-                        <img alt="Ocean Master 300" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx5QkFF03bMf2Mj6Pgk3qJHbrLDdGSAFzhT6737FdhaC11gukTg2cmrm3DWBXUFmiXevJAcmMfeIE1gONtcC5GF6U9kswVgoV-u19T7jzljwRfkyfAHsCc3S8Si08xTqvHKZybsCyPotKUBKsYLt4S9LDjy07ysuBG43WtY2w-CnslruBtC1vwHlM_EBhsASl1uHFROCZaf_ICIprjAPXqQO99XK1z-C42KxUei0i2TYzENB7wNQ6x"/>
-                    </div>
-
-                    <div class="flex flex-col flex-grow">
-                        <div class="flex justify-between">
-                            <h4 class="font-body-md font-semibold text-primary">Ocean Master 300</h4>
-                            <span class="font-body-md text-primary">$1,250</span>
-                        </div>
-                        <p class="font-body-md text-sm text-secondary mb-2">Steel Strap</p>
-                        <div class="cart-item flex items-center gap-4 mt-auto">
-                            <div class="quantity-control flex items-center border border-outline rounded">
-                                <button type="button" class="quantity-minus px-2 py-1 text-primary hover:bg-surface-variant">-</button>
-                                    <span class="quantity px-2 font-body-md">1</span>
-                                <button type="button" class="quantity-plus px-2 py-1 text-primary hover:bg-surface-variant">+</button>
-                            </div>
-                            <button class="text-sm text-secondary hover:text-error underline underline-offset-2">Remove</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- <div class="flex gap-4">
-                    <div class="w-24 h-24 bg-surface-container rounded-lg flex items-center justify-center p-2">
-                        <img alt="Aura Rose" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqvF7R9by3zLRJxGbvLC7xveb-zwf0-rIJW3Zzd0D74HCJrUmTVGo0ljSyQvlaVP5D8o4pbzoPzYFI24--ySVMDlXjj68k3CQhWV4EDJMPMEpcywsEi74jQaCL-PVTP7FC8giCYB_bUDO4KK4w0VinEuK4rSvjnF-FUNmTg2V2BKDqkg85XT6aK8esPP3RKWXk_4qTK8H2C43SWu-3PXKZRKn2AJQDTOK5zQPDOCedRPVrgbQq5Aha"/>
-                    </div>
-
-                    <div class="flex flex-col flex-grow">
-                        <div class="flex justify-between">
-                            <h4 class="font-body-md font-semibold text-primary">Aura Rose</h4>
-                            <span class="font-body-md text-primary">$850</span>
-                        </div>
-                        <p class="font-body-md text-sm text-secondary mb-2">Mesh Bracelet</p>
-                        <div class="flex items-center gap-4 mt-auto">
-                            <div class="flex items-center border border-outline rounded">
-                                <button class="px-2 py-1 text-primary hover:bg-surface-variant">-</button>
-                                <span class="px-2 font-body-md">1</span>
-                                <button class="px-2 py-1 text-primary hover:bg-surface-variant">+</button>
-                            </div>
-                            <button class="text-sm text-secondary hover:text-error underline underline-offset-2">Remove</button>
-                        </div>
-                    </div>
-                </div> -->
-            </div>
-
-            <div class="pt-6 border-t border-outline-variant mt-auto">
-                <div class="flex justify-between mb-4">
-                    <span class="font-body-md text-secondary">Subtotal</span>
-                    <span class="font-body-md font-semibold text-primary">$2,100</span>
-                </div>
-                <a href="{% url 'checkout' %}">
-                <button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-4 rounded hover:bg-primary/90 transition-colors">
-                    CHECKOUT
-                </button>
-                </a>
-            </div>
-        </div>
-    </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const quantityControls = document.querySelectorAll(".quantity-control");
-    
-    quantityControls.forEach(function (control) {
-
-        const minusButton = control.querySelector(".quantity-minus");
-        const plusButton = control.querySelector(".quantity-plus");
-        const quantityValue = control.querySelector(".quantity");
-
-        const MIN_QUANTITY = 1;
-        const MAX_QUANTITY = 5;
-
-        plusButton.addEventListener("click", function () {
-
-            let quantity = parseInt(quantityValue.textContent);
-
-            if (quantity < MAX_QUANTITY) {
-                quantity++;
-                quantityValue.textContent = quantity;
-            }
-
-        });
-
-        minusButton.addEventListener("click", function () {
-
-            let quantity = parseInt(quantityValue.textContent);
-
-            if (quantity > MIN_QUANTITY) {
-                quantity--;
-                quantityValue.textContent = quantity;
-            }
-
-        });
-
-    });
-
-});
-</script>
-
-<script>
-    (function() {
-        const openBtn = document.getElementById('open-mobile-menu');
-        const closeBtn = document.getElementById('close-mobile-menu');
-        const drawer = document.getElementById('mobile-menu-drawer');
-        const overlay = document.getElementById('mobile-menu-overlay');
-        const content = document.getElementById('mobile-menu-content');
-
-        function openMenu() {
-            drawer.classList.remove('invisible');
-            setTimeout(() => {
-                overlay.classList.add('opacity-100');
-                content.classList.remove('-translate-x-full');
-            }, 10);
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMenu() {
-            overlay.classList.remove('opacity-100');
-            content.classList.add('-translate-x-full');
-            setTimeout(() => {
-                drawer.classList.add('invisible');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
-        if (openBtn) openBtn.addEventListener('click', openMenu);
-        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-        if (overlay) overlay.addEventListener('click', closeMenu);
-        
-        
-        const cartBtns = document.querySelectorAll('.cart-toggle-btn');
-        const closeCartBtn = document.getElementById('close-cart');
-        const cartDrawer = document.getElementById('cart-drawer');
-        const cartOverlay = document.getElementById('cart-overlay');
-        const cartContent = document.getElementById('cart-content');
-
-        function openCart() {
-            cartDrawer.classList.remove('invisible');
-            setTimeout(() => {
-                cartOverlay.classList.add('opacity-100');
-                cartContent.classList.remove('translate-x-full');
-            }, 10);
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeCart() {
-            cartOverlay.classList.remove('opacity-100');
-            cartContent.classList.add('translate-x-full');
-            setTimeout(() => {
-                cartDrawer.classList.add('invisible');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
-        cartBtns.forEach(btn => btn.addEventListener('click', openCart));
-        if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
-        if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
-    })();
-    
-</script>
 
 </body></html>

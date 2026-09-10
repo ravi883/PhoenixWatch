@@ -1,0 +1,69 @@
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md shadow-sm transition-all duration-200 ease-in-out hover:opacity-100 opacity-95">
+        <div class="flex justify-between items-center w-full px-margin-desktop py-stack-md max-w-container-max mx-auto hidden lg:flex">
+            <!-- Brand -->
+            <a class="font-display-lg text-display-lg tracking-tighter text-primary dark:text-on-primary-fixed" href="/">
+                Phoenix
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="flex gap-stack-lg">
+                <a class="font-label-caps text-label-caps text-secondary dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-on-primary-fixed transition-colors duration-300" href="{% url 'men-collection' %}">Men's</a>
+                <a class="font-label-caps text-label-caps text-secondary dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-on-primary-fixed transition-colors duration-300" href="#">Women's</a>
+                <a class="font-label-caps text-label-caps text-secondary dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-on-primary-fixed transition-colors duration-300" href="#">Contact Us</a>
+                <a class="font-label-caps text-label-caps text-secondary dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-on-primary-fixed transition-colors duration-300" href="#">Track Orders</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-stack-sm text-primary dark:text-on-primary-fixed">
+                <button aria-label="Search" class="p-2 hover:opacity-80 transition-opacity">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+                </button>
+
+                <div class="relative group">
+                    <button aria-label="Account" class="p-2 hover:opacity-80 transition-opacity flex items-center">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+                    </button>
+                    
+                    {% if request.session.customer_id is not none %}
+                        <!-- Dropdown -->
+                        <div class="absolute right-0 mt-2 w-48 bg-surface-container shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
+                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'profile' %}">Profile</a>
+                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Orders</a>
+                            <!-- <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="#">Wishlist</a> -->
+                            <div class="border-t border-outline-variant my-1"></div>
+                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'logout' %}">Logout</a>
+                            
+                        </div>
+                    {% endif %}
+                    {% if request.session.customer_id is none %}
+                        <div class="absolute right-0 mt-2 w-48 bg-surface-container shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
+                            <a class="block px-4 py-2 font-body-md text-on-surface hover:bg-surface-variant" href="{% url 'login' %}">Login/Signup</a>
+                            
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <button aria-label="Cart" class="p-2 hover:opacity-80 transition-opacity relative cart-toggle-btn">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_bag</span>
+                    <span class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Header (Simplified) -->
+        <div class="flex justify-between items-center w-full px-margin-mobile py-stack-md lg:hidden">
+            <button aria-label="Menu" class="p-2 text-primary" id="open-mobile-menu">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+
+            <a class="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary" href="/">
+                Phoenix
+            </a>
+
+            <button aria-label="Cart" class="p-2 text-primary relative cart-toggle-btn">
+                <span class="material-symbols-outlined">shopping_bag</span>
+                <span class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
+            </button>
+        </div>
+    </header>
