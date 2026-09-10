@@ -64,7 +64,7 @@ ROOT_URLCONF = 'phoenixwatch.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR /"phoenixwatch"/ "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

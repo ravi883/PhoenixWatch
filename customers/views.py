@@ -42,6 +42,10 @@ def home_view(request):
     watch_types = WatchType.objects.filter(is_active=True).order_by("created_at")
     strap_types = StrapType.objects.filter(is_active=True).order_by('created_at')
 
+    best_sellers = Products.objects.filter(
+        is_active=True
+    ).order_by('-updated_at')[:4].prefetch_related("images")
+
     categories = []
     
     for category in watch_types:
@@ -55,7 +59,7 @@ def home_view(request):
     # Only first 5 for homepage
     home_categories = categories[:5]
 
-    return render(request, "home.html",{ "banners": banners , 'headlines' : headlines, "categories": home_categories})
+    return render(request, "home.html",{ "banners": banners , 'headlines' : headlines, "categories": home_categories,"best_sellers": best_sellers,})
 
 def logout_view(request):
     if request.session.keys():  
