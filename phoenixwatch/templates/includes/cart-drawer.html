@@ -1,66 +1,32 @@
 {% csrf_token %}
-<div class="fixed inset-0 z-[100] invisible transition-all duration-300" id="cart-drawer">
-        <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300" id="cart-overlay"></div>
-        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-surface p-6 translate-x-full transition-transform duration-300 shadow-lg flex flex-col" id="cart-content">
-            <div class="flex justify-between items-center mb-8 border-b border-outline-variant pb-4">
-                <h2 class="font-headline-md text-headline-md text-primary">Shopping Cart</h2>
-                <button class="p-2 text-primary hover:bg-surface-variant rounded-full transition-colors" id="close-cart">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div id="cart-drawer-items" class="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-6">
-                
-                {% include 'cart-drawer-items.html' %}
-                
-            </div>
 
-            <!-- <div class="pt-6 border-t border-outline-variant mt-auto"> -->
+<div id="cart-drawer" class="fixed inset-0 z-[100] invisible transition-all duration-300">
+    <!-- Overlay -->
+    <div id="cart-overlay" class="absolute inset-0 z-[100] bg-black/40 opacity-0 transition-opacity duration-300"></div>
 
-            
+    <!-- Cart Content -->
+    <div id="cart-content" class="absolute right-0 top-0 z-[101] h-full w-full max-w-md bg-surface p-6 translate-x-full transition-transform duration-300 shadow-lg flex flex-col">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8 border-b border-outline-variant pb-4" >
+            <h2 class="font-headline-md text-headline-md text-primary">
+                Shopping Cart
+            </h2>
+
+            <button type="button" id="close-cart" class="p-2 text-primary hover:bg-surface-variant rounded-full transition-colors">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </button>
         </div>
+
+
+        <!-- Cart Items -->
+        <div id="cart-drawer-items" class="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-6" >
+            {% include 'cart-drawer-items.html' %}
+        </div>
+    </div>
 </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const quantityControls = document.querySelectorAll(".quantity-control");
-    
-    quantityControls.forEach(function (control) {
-
-        const minusButton = control.querySelector(".quantity-minus");
-        const plusButton = control.querySelector(".quantity-plus");
-        const quantityValue = control.querySelector(".quantity");
-
-        const MIN_QUANTITY = 1;
-        const MAX_QUANTITY = 5;
-
-        plusButton.addEventListener("click", function () {
-
-            let quantity = parseInt(quantityValue.textContent);
-
-            if (quantity < MAX_QUANTITY) {
-                quantity++;
-                quantityValue.textContent = quantity;
-            }
-
-        });
-
-        minusButton.addEventListener("click", function () {
-
-            let quantity = parseInt(quantityValue.textContent);
-
-            if (quantity > MIN_QUANTITY) {
-                quantity--;
-                quantityValue.textContent = quantity;
-            }
-
-        });
-
-    });
-
-});
-</script>
-
 <script>
 (function() {
     const openBtn = document.getElementById('open-mobile-menu');

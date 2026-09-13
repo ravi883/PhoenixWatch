@@ -75,13 +75,9 @@ def add_to_cart(request, product_id):
     # -----------------------------------
 
     if not created:
-
-        new_quantity = (
-            cart_item.quantity + quantity
-        )
+        new_quantity = ( cart_item.quantity + quantity)
 
         if new_quantity > product.stock:
-
             return JsonResponse({
                 "success": False,
                 "message": (
@@ -110,14 +106,12 @@ def add_to_cart(request, product_id):
         "subtotal": str(cart.subtotal),
     })
 
-
 # =========================================================
 # UPDATE QUANTITY
 # =========================================================
 
 @require_POST
 def update_cart_item(request, item_id):
-    print("item:",item_id)
     cart = get_or_create_cart(request)
 
     cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
