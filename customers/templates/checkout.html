@@ -1,3 +1,4 @@
+{% load_static %}
 <!DOCTYPE html>
 
 <html class="light" lang="en"><head>
@@ -10,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="{% static 'js/cart1.js' %}"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -170,7 +172,7 @@
             </a>
             <a class="font-headline-md text-headline-md text-primary tracking-tight" href="{% url 'home' %}">Phoenix</a>
             <!-- Empty div to balance flex layout -->
-             <a href="{% url 'cart' %}">
+             <a href=#>
                 <button aria-label="Cart" class="p-2 hover:opacity-80 transition-opacity relative cart-toggle-btn">
                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_bag</span>
                     <span class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>

@@ -10,7 +10,7 @@ def product_detail_view(request, slug):
         slug=slug,
         is_active=True
     )
-    print("product: ",product)
+
     return render(
         request,
         "product-detail.html",

@@ -1,0 +1,83 @@
+{% csrf_token %}
+{% if cart_items %}
+    <div class="flex flex-col gap-6">
+    {% for item in cart_items %}
+        <!-- Cart Items -->
+        <div id="cart-item-{{ item.id }}" class="cart-item flex gap-4">
+            <a href="{% url 'product-detail' item.product.slug %}">
+            <div class="w-24 h-24 bg-surface-container rounded-lg flex items-center justify-center p-2">
+                <img alt="{{ item.product.primary_image.alt_text|default:item.product.name }}" class="w-full h-full object-contain mix-blend-multiply" 
+                src="{{item.product.primary_image.image.url}}"/>
+            </div>
+            </a>
+            <div class="flex flex-col flex-grow">
+                <div class="flex justify-between">
+                    <h4 class="font-body-md font-semibold text-primary">{{item.product.name}}</h4>
+                    <span class="font-body-md text-primary">₹ {{item.product.price}}</span>
+                </div>
+                <p class="font-body-md text-sm text-secondary mb-2">{{item.product.strap_type}}</p>
+                <div class="cart-item flex items-center gap-4 mt-auto">
+                    <div class="quantity-control flex items-center border border-outline rounded">
+                        <button type="button" data-item-id="{{ item.id }}" class="quantity-minus px-2 py-1 text-primary hover:bg-surface-variant">-</button>
+                            <span class="quantity px-2 font-body-md">{{item.quantity}}</span>
+                        <button type="button" data-item-id="{{ item.id }}" class="quantity-plus px-2 py-1 text-primary hover:bg-surface-variant">+</button>
+                    </div>
+                    <button type="button" data-item-id="{{ item.id }}" class="remove-cart-item text-sm text-secondary hover:text-error underline underline-offset-2">Remove</button>
+                </div>
+            </div>
+        </div>
+    
+    {% endfor %}
+    </div>
+<!-- SUBTOTAL + CHECKOUT -->
+    <div class="pt-6 mt-auto">
+
+        <div class="flex justify-between mb-4">
+
+            <span class="font-body-md text-secondary">
+                Subtotal
+            </span>
+
+            <span id="cart-subtotal"
+                  class="font-body-md font-semibold text-primary">
+                ₹ {{ cart.subtotal }}
+            </span>
+
+        </div>
+
+        <a href="{% url 'checkout' %}">
+            <button
+                id="checkout-button"
+                type="button"
+                class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-4 rounded hover:bg-primary/90 transition-colors">
+                CHECKOUT
+            </button>
+        </a>
+
+    </div>
+
+{% else %}
+
+    <!-- EMPTY CART -->
+
+    <div class="flex-1 flex items-center justify-center">
+
+        <div class="text-center px-6 w-full">
+
+            <p class="text-secondary mb-6">
+                Your cart is empty.
+            </p>
+
+            <a href="{% url 'home' %}">
+                <button
+                    type="button"
+                    class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-4 rounded hover:bg-primary/90 transition-colors">
+                    RETURN TO SHOP
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+{% endif %}

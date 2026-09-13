@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 
 <html class="light" lang="en"><head>
@@ -10,6 +11,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
 {% include "includes/common-script.html" %}
+<script src="{% static 'js/cart1.js' %}"></script>
 
 <style>
         :root {
@@ -88,45 +90,49 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
             <!-- Cart Items (Left Column) -->
             <div class="lg:col-span-8 flex flex-col gap-stack-md">
+                {% if cart_items %}
                 <!-- Single Item Card -->
-                <div class="flex flex-col sm:flex-row gap-gutter p-stack-md bg-surface-container-lowest rounded-lg shadow-[4px_4px_12px_rgba(0,0,0,0.04)] relative">
-                    <!-- Product Image -->
-                    <div class="w-full sm:w-48 h-64 sm:h-48 rounded-lg overflow-hidden flex-shrink-0 bg-[#F5F5F5]">
-                        <img alt="Close-up macro shot of an elegant watch face, gold hour markers, intricate mechanical details. Luxury watch photography, soft bokeh, sophisticated lighting, premium aesthetic. Dark background." class="w-full h-full object-cover mix-blend-multiply" src="https://lh3.googleusercontent.com/aida/AEtjO1WT_Kr7Odz2KMvzIx5A1RVffXHQAtUw12w5UA8uT-10pw5Sz8ho3DZTtOvQu8IVVpnaiPEyw9liRnJFA8KKgn7ZIC0NGsTQ1Bpx0C7EKAGDA5VPrgLkeVK89jlsJpUBlFr4ZFPqtu55wgEOXFRdFOsgqnxaAjmOwo9evD8ajKKFNc4PmnSFdAZz8yvuNnpkMCEyMszutwDlvoBq38UG0t0srWKI3FgsXgiYJ1Jup_Gwp9YyuvrfuKDvPw"/>
-                    </div>
-                    <!-- Product Details -->
-                    <div class="flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start">
+                    {% for cart in cart_items %}
+                        <div class="flex flex-col sm:flex-row gap-gutter p-stack-md bg-surface-container-lowest rounded-lg shadow-[4px_4px_12px_rgba(0,0,0,0.04)] relative">
+                            <!-- Product Image -->
+                            <div class="w-full sm:w-48 h-64 sm:h-48 rounded-lg overflow-hidden flex-shrink-0 bg-[#F5F5F5]">
+                                <img alt="Close-up macro shot of an elegant watch face, gold hour markers, intricate mechanical details. Luxury watch photography, soft bokeh, sophisticated lighting, premium aesthetic. Dark background." class="w-full h-full object-cover mix-blend-multiply" src="https://lh3.googleusercontent.com/aida/AEtjO1WT_Kr7Odz2KMvzIx5A1RVffXHQAtUw12w5UA8uT-10pw5Sz8ho3DZTtOvQu8IVVpnaiPEyw9liRnJFA8KKgn7ZIC0NGsTQ1Bpx0C7EKAGDA5VPrgLkeVK89jlsJpUBlFr4ZFPqtu55wgEOXFRdFOsgqnxaAjmOwo9evD8ajKKFNc4PmnSFdAZz8yvuNnpkMCEyMszutwDlvoBq38UG0t0srWKI3FgsXgiYJ1Jup_Gwp9YyuvrfuKDvPw"/>
+                            </div>
+                            <!-- Product Details -->
+                            <div class="flex-grow flex flex-col justify-between">
                                 <div>
-                                    <h2 class="font-headline-md text-headline-md text-primary mb-unit">Chronova Royale</h2>
-                                    <p class="font-body-md text-body-md text-on-surface-variant mb-unit">Obsidian Black / Gold</p>
-                                    <p class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm">Ref. 48392-CR</p>
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h2 class="font-headline-md text-headline-md text-primary mb-unit">{{cart.product.name}}</h2>
+                                            <p class="font-body-md text-body-md text-on-surface-variant mb-unit">Obsidian Black / Gold</p>
+                                            <p class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm">Ref. 48392-CR</p>
+                                        </div>
+                                        <button aria-label="Remove item" class="text-outline hover:text-error transition-colors p-2 rounded-full hover:bg-surface-container">
+                                            <span class="material-symbols-outlined">close</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <button aria-label="Remove item" class="text-outline hover:text-error transition-colors p-2 rounded-full hover:bg-surface-container">
-                                    <span class="material-symbols-outlined">close</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-end mt-stack-md">
-                            <!-- Quantity Selector -->
-                            <div class="flex items-center border border-outline-variant rounded">
-                                <button aria-label="Decrease quantity" class="p-2 text-on-surface hover:bg-surface-container transition-colors">
-                                    <span class="material-symbols-outlined text-sm">remove</span>
-                                </button>
-                                <span class="px-4 font-body-md text-body-md font-semibold">1</span>
-                                <button aria-label="Increase quantity" class="p-2 text-on-surface hover:bg-surface-container transition-colors">
-                                    <span class="material-symbols-outlined text-sm">add</span>
-                                </button>
-                            </div>
+                                <div class="flex justify-between items-end mt-stack-md">
+                                    <!-- Quantity Selector -->
+                                    <div class="flex items-center border border-outline-variant rounded">
+                                        <button aria-label="Decrease quantity" class="p-2 text-on-surface hover:bg-surface-container transition-colors">
+                                            <span class="material-symbols-outlined text-sm">remove</span>
+                                        </button>
+                                        <span class="px-4 font-body-md text-body-md font-semibold">1</span>
+                                        <button aria-label="Increase quantity" class="p-2 text-on-surface hover:bg-surface-container transition-colors">
+                                            <span class="material-symbols-outlined text-sm">add</span>
+                                        </button>
+                                    </div>
 
-                            <!-- Price -->
-                            <div class="text-right">
-                                <p class="font-headline-md text-headline-md text-primary">$24,500.00</p>
+                                    <!-- Price -->
+                                    <div class="text-right">
+                                        <p class="font-headline-md text-headline-md text-primary">$24,500.00</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    {% endfor %}
+                {% endif %}
             </div>
 
             <!-- Order Summary (Right Column, Sticky) -->

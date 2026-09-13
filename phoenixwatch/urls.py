@@ -24,11 +24,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('',home_view, name='home'),
     path('checkout/', checkout_view, name='checkout'),
-    path('cart/', cart_view, name='cart'),
+    # path('cart/', cart_view, name='cart'),
     path('admin/', admin.site.urls),
     path('customers/', include('customers.urls')),
     path('collections/', include('collection.urls')),
-    path('product/', include('products.urls'))
+    path('product/', include('products.urls')),
+    path("cart/", include("cart.urls")),
 ]
 
 if settings.DEBUG:
