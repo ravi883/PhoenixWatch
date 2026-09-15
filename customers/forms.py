@@ -264,7 +264,12 @@ class ProfileUpdateForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
-            "phone_number"
+            "phone_number",
+            "address",
+            "city",
+            "state",
+            "country",
+            "pincode"
         ]
 
     def __init__(self, *args, **kwargs):
@@ -393,18 +398,34 @@ class ProfileUpdateForm(forms.ModelForm):
                     "This phone number is already registered."
                 )
 
+        if "address" in changed_fields:
+        
+            address = cleaned_data.get("address","").strip()
+            if not address:
+                self.add_error(
+                    "address",
+                    "Address is required."
+                )
+
+            elif len(address) < 5:
+                self.add_error(
+                    "address",
+                    "Address must contain at least 5 characters."
+                )
+
         if "city" in changed_fields:
 
             city = cleaned_data.get("city", "").strip()
 
             if not city:
+                print("city:",city)
                 self.add_error(
                     "city",
                     "City is required."
                 )
 
             elif not re.fullmatch(
-                r"[A-Za-z ]+",
+                r"[A-Za-z]+(?: [A-Za-z]+)*",
                 city
             ):
                 self.add_error(
@@ -423,7 +444,7 @@ class ProfileUpdateForm(forms.ModelForm):
                 )
 
             elif not re.fullmatch(
-                r"[A-Za-z ]+",
+                r"[A-Za-z]+(?: [A-Za-z]+)*",
                 state
             ):
                 self.add_error(
@@ -442,7 +463,7 @@ class ProfileUpdateForm(forms.ModelForm):
                 )
 
             elif not re.fullmatch(
-                r"[A-Za-z ]+",
+                r"[A-Za-z]+(?: [A-Za-z]+)*",
                 country
             ):
                 self.add_error(
