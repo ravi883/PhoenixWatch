@@ -186,15 +186,15 @@
                                 {% endfor %}
                             </div>
 
-                            <!-- <div class="flex flex-col gap-unit">
-                                <label class="font-label-caps text-label-caps text-secondary" for="state">state</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="state" name="state" type="text" value="{{ customer.country}}">
-                                {% for error in form.state.errors %}
+                            <div class="flex flex-col gap-unit">
+                                <label class="font-label-caps text-label-caps text-secondary" for="Country">Country</label>
+                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 font-body-md text-primary transition-colors" id="country" name="country" type="text" value="{% if customer.country %}{{ customer.country}} {% endif%}">
+                                {% for error in form.country.errors %}
                                     <p class="text-red-500 text-sm mt-1">
                                         {{ error }}
                                     </p>
                                 {% endfor %}
-                            </div> -->
+                            </div>
 
                             <div class="md:col-span-2 pt-stack-sm flex justify-end">
                                 <button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-caps text-label-caps hover:opacity-90 transition-opacity" type="submit">
