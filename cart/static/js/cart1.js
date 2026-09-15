@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cartOverlay = document.getElementById("cart-overlay");
     const cartContent = document.getElementById("cart-content");
     const cartItemsContainer = document.getElementById("cart-drawer-items");
+    const cartPageItemsContainer = document.getElementById("cart-page-items");
     const cartCounter = document.getElementById("cart-counter");
 
     // =========================================================
@@ -123,7 +124,31 @@ document.addEventListener("DOMContentLoaded", function () {
         subtotalElement.textContent = "₹ " + subtotal;
     }
 
+    function updateTotal(itemId,total) {
+        console.log(itemId)
+        const totalElements = document.getElementById(`cart-total-${itemId}`);
+        if (totalElements) {
+             totalElements.textContent = "₹ " + total;
+        }
+    }
 
+    function updateCartSummary(subtotal,  advance_amount, remaining_amount) {
+        const subtotalElement = document.getElementById("cart-subtotal");
+        const advanceElement = document.getElementById("advance-payment");
+        const remainingElement = document.getElementById("remaining-payment");
+
+        if (subtotalElement) {
+            subtotalElement.textContent = "₹ " + subtotal;
+        }
+
+        if (advanceElement) {
+            advanceElement.textContent = "₹ " + advance_amount;
+        }
+
+        if (remainingElement) {
+            remainingElement.textContent = "₹ " + remaining_amount;
+        }
+    }
     // =========================================================
     // UPDATE QUANTITY
     // =========================================================
@@ -155,7 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Update quantity
             if (quantityElement) {
                 quantityElement.textContent = data.quantity;
-
             }
 
             // Update counter
@@ -163,6 +187,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Update subtotal
             updateSubtotal(data.subtotal);
+
+            updateTotal(data.id, data.line_total);
+
+            updateCartSummary(data.subtotal, data.advance_amount, data.remaining_amount)
 
         } catch (error) {
 
@@ -224,7 +252,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // Update subtotal
             updateSubtotal(data.subtotal);
 
+            updateTotal(data.id, data.total);
 
+            updateCartSummary(data.subtotal, data.advance_amount, data.remaining_amount)
             // Check if cart is empty
             checkEmptyCart();
 
@@ -389,6 +419,58 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
+    if (cartPageItemsContainer) {
+    cartPageItemsContainer.addEventListener("click", async function (event) {
+
+        const plusButton = event.target.closest(".quantity-plus");
+
+        if (plusButton) {
+            event.preventDefault();
+
+            const itemId = plusButton.dataset.itemId;
+            const quantityControl = plusButton.closest(".quantity-control");
+            const quantityElement = quantityControl.querySelector(".quantity");
+            let currentQuantity = parseInt(quantityElement.textContent.trim());
+            const newQuantity = currentQuantity + 1;
+
+            await updateCartQuantity(itemId, newQuantity, quantityElement);
+            return;
+        }
+
+
+        const minusButton = event.target.closest(".quantity-minus");
+
+        if (minusButton) {
+            event.preventDefault();
+
+            const itemId = minusButton.dataset.itemId;
+            const quantityControl = minusButton.closest(".quantity-control");
+            const quantityElement = quantityControl.querySelector(".quantity");
+            let currentQuantity = parseInt(quantityElement.textContent.trim());
+
+            if (currentQuantity <= 1) {
+                return;
+            }
+            const newQuantity = currentQuantity - 1;
+            await updateCartQuantity(itemId, newQuantity, quantityElement);
+
+            return;
+        }
+
+
+        const removeButton = event.target.closest(".remove-cart-item");
+
+        if (removeButton) {
+            event.preventDefault();
+            const itemId = removeButton.dataset.itemId;
+            const itemElement = removeButton.closest(".cart-item");
+
+            await removeCartItem(itemId, itemElement);
+            return;
+        }
+
+    });
+}
     async function loadCartDrawer() {
 
     const drawerItems = document.getElementById("cart-drawer-items");

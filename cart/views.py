@@ -6,6 +6,7 @@ from products.models import Products
 
 from .models import CartItem
 from .utils import get_or_create_cart
+from decimal import Decimal,ROUND_HALF_UP
 
 
 # =========================================================
@@ -17,14 +18,20 @@ def cart_view(request):
     cart = get_or_create_cart(request)
 
     cart_items = (cart.items.select_related("product").prefetch_related("product__images"))
+    advance_amount = (cart.subtotal * Decimal("0.20")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    remaining_amount = (cart.subtotal - advance_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
     context = {
         "cart": cart,
         "cart_items": cart_items,
+        "subtotal": str(cart.subtotal),
+        "advance_amount": str(advance_amount),
+        "remaining_amount": str(remaining_amount),
     }
 
     return render(
         request,
-        "customers/templates/cart.html",
+        "cart.html",
         context
     )
 
@@ -150,16 +157,21 @@ def update_cart_item(request, item_id):
     #     "subtotal": str(cart.subtotal),
     #     "cart_count": cart.total_items,
     # })
-
+    advance_amount = (cart.subtotal * Decimal("0.20")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    remaining_amount = (cart.subtotal - advance_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    
 
     return JsonResponse({
         "success": True,
+        "id":cart_item.id,
         "quantity": cart_item.quantity,
         "line_total": str(
             cart_item.line_total
         ),
         "cart_count": cart.total_items,
         "subtotal": str(cart.subtotal),
+        "advance_amount": str(advance_amount),
+        "remaining_amount": str(remaining_amount),
     })
 
 
@@ -192,12 +204,17 @@ def remove_cart_item(request, item_id):
     # Delete item
     item.delete()
 
+    advance_amount = (cart.subtotal * Decimal("0.20")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    remaining_amount = (cart.subtotal - advance_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
     # Return updated cart information
     return JsonResponse({
         "success": True,
         "message": "Item removed successfully.",
         "cart_count": cart.total_items,
         "subtotal": str(cart.subtotal),
+        "advance_amount": str(advance_amount),
+        "remaining_amount": str(remaining_amount),
     })
 
 # =========================================================
@@ -235,7 +252,6 @@ def cart_drawer_view(request):
     cart = get_or_create_cart(request)
 
     cart_items = cart.items.select_related("product").prefetch_related("product__images")
-    print("cart:-",cart_items)
     return render(
         request,
         "cart-drawer-items.html",

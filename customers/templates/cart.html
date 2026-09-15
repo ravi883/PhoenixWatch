@@ -1,4 +1,5 @@
 {% load static %}
+{% csrf_token %}
 <!DOCTYPE html>
 
 <html class="light" lang="en"><head>
@@ -11,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
 {% include "includes/common-script.html" %}
-<script src="{% static 'js/cart1.js' %}"></script>
+<!-- <script src="{% static 'js/cart1.js' %}"></script> -->
 
 <style>
         :root {
@@ -89,14 +90,14 @@
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
             <!-- Cart Items (Left Column) -->
-            <div class="lg:col-span-8 flex flex-col gap-stack-md">
+            <div id="cart-page-items" class="lg:col-span-8 flex flex-col gap-stack-md">
                 {% if cart_items %}
                 <!-- Single Item Card -->
                     {% for cart in cart_items %}
-                        <div class="flex flex-col sm:flex-row gap-gutter p-stack-md bg-surface-container-lowest rounded-lg shadow-[4px_4px_12px_rgba(0,0,0,0.04)] relative">
+                        <div id="cart-item-{{ cart.id }}" class="cart-item flex flex-col sm:flex-row gap-gutter p-stack-md bg-surface-container-lowest rounded-lg shadow-[4px_4px_12px_rgba(0,0,0,0.04)] relative">
                             <!-- Product Image -->
                             <div class="w-full sm:w-48 h-64 sm:h-48 rounded-lg overflow-hidden flex-shrink-0 bg-[#F5F5F5]">
-                                <img alt="Close-up macro shot of an elegant watch face, gold hour markers, intricate mechanical details. Luxury watch photography, soft bokeh, sophisticated lighting, premium aesthetic. Dark background." class="w-full h-full object-cover mix-blend-multiply" src="https://lh3.googleusercontent.com/aida/AEtjO1WT_Kr7Odz2KMvzIx5A1RVffXHQAtUw12w5UA8uT-10pw5Sz8ho3DZTtOvQu8IVVpnaiPEyw9liRnJFA8KKgn7ZIC0NGsTQ1Bpx0C7EKAGDA5VPrgLkeVK89jlsJpUBlFr4ZFPqtu55wgEOXFRdFOsgqnxaAjmOwo9evD8ajKKFNc4PmnSFdAZz8yvuNnpkMCEyMszutwDlvoBq38UG0t0srWKI3FgsXgiYJ1Jup_Gwp9YyuvrfuKDvPw"/>
+                                <img alt="{{ cart.product.primary_image.alt_text|default:cart.product.name }}" class="w-full h-full object-cover mix-blend-multiply" src="{{cart.product.primary_image.image.url}}"/>
                             </div>
                             <!-- Product Details -->
                             <div class="flex-grow flex flex-col justify-between">
@@ -104,10 +105,10 @@
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <h2 class="font-headline-md text-headline-md text-primary mb-unit">{{cart.product.name}}</h2>
-                                            <p class="font-body-md text-body-md text-on-surface-variant mb-unit">Obsidian Black / Gold</p>
-                                            <p class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm">Ref. 48392-CR</p>
+                                            <p class="font-body-md text-body-md text-on-surface-variant mb-unit">{{cart.product.color}} / {{cart.product.strap_type}}</p>
+                                            <p class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm">₹ {{cart.product.price}}</p>
                                         </div>
-                                        <button aria-label="Remove item" class="text-outline hover:text-error transition-colors p-2 rounded-full hover:bg-surface-container">
+                                        <button type="button" data-item-id="{{ cart.id }}" aria-label="Remove item" class="remove-cart-item text-outline hover:text-error transition-colors p-2 rounded-full hover:bg-surface-container">
                                             <span class="material-symbols-outlined">close</span>
                                         </button>
                                     </div>
@@ -115,18 +116,16 @@
                                 <div class="flex justify-between items-end mt-stack-md">
                                     <!-- Quantity Selector -->
                                     <div class="flex items-center border border-outline-variant rounded">
-                                        <button aria-label="Decrease quantity" class="p-2 text-on-surface hover:bg-surface-container transition-colors">
-                                            <span class="material-symbols-outlined text-sm">remove</span>
-                                        </button>
-                                        <span class="px-4 font-body-md text-body-md font-semibold">1</span>
-                                        <button aria-label="Increase quantity" class="p-2 text-on-surface hover:bg-surface-container transition-colors">
-                                            <span class="material-symbols-outlined text-sm">add</span>
-                                        </button>
+                                        <div class="quantity-control flex items-center border border-outline rounded">
+                                            <button type="button" data-item-id="{{ cart.id }}" class="quantity-minus px-2 py-1 text-primary hover:bg-surface-variant">-</button>
+                                                <span class="quantity px-2 font-body-md">{{cart.quantity}}</span>
+                                            <button type="button" data-item-id="{{ cart.id }}" class="quantity-plus px-2 py-1 text-primary hover:bg-surface-variant">+</button>
+                                         </div>
                                     </div>
 
                                     <!-- Price -->
-                                    <div class="text-right">
-                                        <p class="font-headline-md text-headline-md text-primary">$24,500.00</p>
+                                    <div class="text-right" style="font-family: 'Inter', sans-serif;">
+                                        <p id="cart-total-{{cart.id}}" data-item-id="{{ cart.id }}" class="cart-total font-headline-md text-headline-md text-primary">₹ {{cart.line_total}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -141,28 +140,34 @@
                     <h3 class="font-headline-md text-headline-md text-primary mb-stack-md border-b border-surface-dim pb-stack-sm">Order Summary</h3>
                     <div class="flex flex-col gap-stack-sm mb-stack-md">
                         <div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
-                            <span>Subtotal</span>
-                            <span>$24,500.00</span>
+                            <span >Advance Payment (20%) </span>
+                            <span id="advance-payment">₹ {{advance_amount}}</span>
+                        </div>
+                        <div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+                            <span>Pay on Delivery(COD) </span>
+                            <span id="remaining-payment">₹ {{remaining_amount}}</span>
                         </div>
                         <div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
                             <span>Shipping</span>
                             <span class="uppercase font-label-caps text-label-caps tracking-widest text-[#B39359]">Free</span>
                         </div>
-                        <div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
-                            <span>Taxes</span>
-                            <span>Calculated at checkout</span>
-                        </div>
+                        <!-- <div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+                            <span>Subtotal</span>
+                            <span id="cart-subtotal">₹ {{subtotal}}</span>
+                        </div> -->
                     </div>
                     <div class="border-t border-surface-dim pt-stack-md mb-stack-lg">
                         <div class="flex justify-between items-end">
-                            <span class="font-headline-md text-headline-md text-primary">Total</span>
-                            <span class="font-headline-lg text-headline-lg text-primary">$24,500.00</span>
+                            <span  class="flex justify-between font-body-md text-body-md text-on-surface-variant text-primary">Total </span>
+                            <span id="cart-subtotal" class="flex justify-between font-body-md text-body-md text-on-surface-variant text-primary">₹ {{subtotal}}</span>
                         </div>
                     </div>
+                    <a href="{% url 'checkout' %}">
                     <button class="w-full py-4 bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-widest rounded-lg hover:bg-primary-container hover:shadow-lg transition-all mb-stack-md flex items-center justify-center gap-2">
                         Proceed to Checkout
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </button>
+                    </a>
 
                     <div class="flex items-center justify-center gap-2 text-on-surface-variant font-body-md text-xs">
                         <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0;">lock</span>
@@ -175,5 +180,5 @@
 
     <!-- Footer -->
     {% include "includes/footer.html" %}
-
+<script src="{% static 'js/cart1.js' %}"></script>
 </body></html>
