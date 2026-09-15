@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from customers.views import home_view, checkout_view, cart_view
+from customers.views import home_view, checkout_view
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,11 +24,11 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('',home_view, name='home'),
     path('checkout/', checkout_view, name='checkout'),
-    path('cart/', cart_view, name='cart'),
     path('admin/', admin.site.urls),
     path('customers/', include('customers.urls')),
     path('collections/', include('collection.urls')),
-    path('product/', include('products.urls'))
+    path('product/', include('products.urls')),
+    path("cart/", include("cart.urls")),
 ]
 
 if settings.DEBUG:

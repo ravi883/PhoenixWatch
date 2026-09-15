@@ -1,3 +1,4 @@
+{% csrf_token %}
 <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md shadow-sm transition-all duration-200 ease-in-out hover:opacity-100 opacity-95">
         <div class="flex justify-between items-center w-full px-margin-desktop py-stack-md max-w-container-max mx-auto hidden lg:flex">
             <!-- Brand -->
@@ -46,7 +47,7 @@
 
                 <button aria-label="Cart" class="p-2 hover:opacity-80 transition-opacity relative cart-toggle-btn">
                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_bag</span>
-                    <span id="cart-count-badge" class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">0</span>
+                    <span id="cart-counter" class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">{{cart_count}}</span>
                 </button>
             </div>
         </div>
@@ -63,7 +64,7 @@
 
             <button aria-label="Cart" class="p-2 text-primary relative cart-toggle-btn">
                 <span class="material-symbols-outlined">shopping_bag</span>
-                <span id="cart-count-badge" class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">0</span>
+                <span id="cart-counter" class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">{{cart_count}}</span>
             </button>
         </div>
     </header>

@@ -8,6 +8,8 @@ from .models import Customer
 from banners.models import Banner, Headline
 from products.models import *
 from itertools import chain
+from cart.models import *
+from decimal import Decimal, ROUND_HALF_UP
 
 def signup(request):
     if request.method == "POST":
@@ -162,7 +164,50 @@ def forgot_password_view(request):
     return render(request, "forgot_password.html")
 
 def checkout_view(request):
-    return render(request, "checkout.html")
+    ## GET Customer
+    customer_id = request.session.get("customer_id")
+    if not customer_id:
+        messages.warning(request, "Please login before proceeding to checkout.")
+        return redirect("login")
+
+    try:
+        customer = Customer.objects.get(id=customer_id)
+    except Customer.DoesNotExist:
+        request.session.pop("customer_id", None)
+        messages.error(request, "Customer account not found.")
+        return redirect("login")
+
+    ##GET Cart
+    cart = Cart.objects.filter(customer=customer).first()
+    if not cart:
+        messages.warning(request,"Your cart is empty.")
+        return redirect("cart")
+
+    ##GET Cart Items
+    cart_items = (CartItem.objects.filter(cart=cart).select_related("product","product__category","product__watch_type","product__strap_type"))
+    if not cart_items.exists():
+        messages.warning(request, "Your cart is empty.")
+        return redirect("cart")
+
+    ##CALCULATE SUBTOTAL 
+    subtotal = Decimal("0.00")
+
+    for item in cart_items:
+        item.item_total = (item.product.price * item.quantity)
+        subtotal += item.item_total
+
+    advance_amount = (cart.subtotal * Decimal("0.20")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    remaining_amount = (cart.subtotal - advance_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    context = {
+        "customer": customer,
+        "cart": cart,
+        "cart_items": cart_items,
+        "subtotal": subtotal,
+        "advance_amount": str(advance_amount),
+        "remaining_amount": str(remaining_amount),
+    }
+    return render(request, "checkout.html", context)
 
 def cart_view(request):
     return render(request, "cart.html")
