@@ -76,6 +76,7 @@ class OrderPaymentDetail(BaseModel):
         PENDING = "pending", "Pending"
         ADVANCE_PENDING = "advance_pending", "Advance Pending"
         PARTIALLY_PAID = "partially_paid", "Partially Paid"
+        PRE_PAID = "pre_paid", "Pre Paid"
         PAID = "paid", "Paid"
         FAILED = "failed", "Failed"
         REFUNDED = "refunded", "Refunded"

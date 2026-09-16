@@ -164,6 +164,21 @@
         }
     </style>
 
+<script>
+    setTimeout(function () {
+        const messages = document.querySelectorAll(".message-alert");
+
+        messages.forEach(function (message) {
+            message.style.transition = "opacity 0.5s ease";
+            message.style.opacity = "0";
+
+            setTimeout(function () {
+                message.remove();
+            }, 500);
+        });
+    }, 3000);
+</script>
+
 </head>
 <body class="antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-primary selection:text-on-primary">
     <!-- Top Navigation (Simplified for Checkout) -->
@@ -192,9 +207,17 @@
         <form method="POST" action="{% url 'create-order' %}" id="checkout-form" novalidate>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:gap-[64px] items-start">
                 {% csrf_token%}
+                
                 <!-- Left Column: Forms -->
                 <div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-stack-lg">
                     <h3 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary">Checkout</h3>
+                    {% if messages %}
+                        {% for message in messages %}
+                                <div class="mb-4 p-3 rounded bg-green-100 text-green-700 message-alert">
+                                    {{ message }}
+                                </div>
+                        {% endfor %}
+                    {% endif %}
                     <!-- Section 1: Contact -->
                     <section class="bg-surface-container-lowest p-stack-lg rounded-lg ambient-shadow">
                         <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md">1. Contact Information</h2>
