@@ -189,7 +189,7 @@
 
     <!-- Main Content -->
     <main class="flex-grow pt-[100px] pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
-        <form method="POST" action="{% url 'checkout' %}" id="checkout-form" novalidate>
+        <form method="POST" action="{% url 'create-order' %}" id="checkout-form" novalidate>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:gap-[64px] items-start">
                 {% csrf_token%}
                 <!-- Left Column: Forms -->
@@ -202,7 +202,7 @@
                             <div>
                                 <label class="sr-only" for="email">Email Address</label>
                                 <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant"
-                                value="{{ customer.email|default:'' }}" id="email" placeholder="Email Address" type="email"/>
+                                value="{{ customer.email|default:'' }}" id="email" placeholder="Email Address" type="email" readonly/>
                             </div>
                         </div>
                     </section>
@@ -272,39 +272,48 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
                                 <div class="md:col-span-1">
                                     <label class="sr-only" for="billingFirstName">First Name</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingFirstName" placeholder="First Name" type="text"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingFirstName"
+                                    name="billing_first_name" placeholder="First Name" type="text"/>
                                 </div>
                                 <div class="md:col-span-1">
                                     <label class="sr-only" for="billingLastName">Last Name</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingLastName" placeholder="Last Name" type="text"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingLastName" 
+                                    name="billing_last_name" placeholder="Last Name" type="text"/>
                                 </div>
                                 <div class="md:col-span-1">
                                     <label class="sr-only" for="billingPhone">Phone Number</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingPhone" placeholder="Phone Number" type="tel"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingPhone"
+                                    name="billing_phone_number" placeholder="Phone Number" type="tel"/>
                                 </div>
                                 <div class="md:col-span-1">
                                     <label class="sr-only" for="billingEmail">Email Address</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingEmail" placeholder="Email Address" type="email"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingEmail"
+                                    name="billing_email" placeholder="Email Address" type="email"/>
                                 </div>
                                 <div class="md:col-span-2">
                                     <label class="sr-only" for="billingAddress">Street Address</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingAddress" placeholder="Street Address" type="text"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingAddress"
+                                    name="billing_address" placeholder="Street Address" type="text"/>
                                 </div>
                                 <div class="md:col-span-1">
                                     <label class="sr-only" for="billingCity">City</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingCity" placeholder="City" type="text"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingCity"
+                                    name="billing_city" placeholder="City" type="text"/>
                                 </div>
                                 <div class="md:col-span-1">
                                     <label class="sr-only" for="billingState">State</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingState" placeholder="State" type="text"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingState"
+                                    name="billing_state" placeholder="State" type="text"/>
                                 </div>
                                 <div class="md:col-span-1">
                                     <label class="sr-only" for="billingPincode">Pincode (Postal Code)</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingPincode" placeholder="Pincode (Postal Code)" type="text"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingPincode"
+                                    name="billing_pincode" placeholder="Pincode (Postal Code)" type="text"/>
                                 </div>
                                 <div class="md:col-span-1">
                                     <label class="sr-only" for="billingCountry">Country</label>
-                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingCountry" placeholder="Country" type="text"/>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingCountry"
+                                    name="billing_country" placeholder="Country" type="text"/>
                                 </div>
                             </div>
                         </div>
@@ -336,11 +345,17 @@
                         </div>
                     </section>
 
-                    <div class="flex justify-end mt-4">
-                        <button type="submit" class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-colors w-full tracking-wider">
-                            Pay Now
+                    <div class="md:col-span-2 flex flex-col md:flex-row gap-4 justify-end">
+                        <button type="submit" value="prepaid"
+                         class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-colors w-full tracking-wider">
+                            Order Now - Get Surprise Gift On PrePaid Orders
+                        </button>
+                        <button type="submit" value="pay_now"
+                         class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-colors w-full tracking-wider">
+                            Pay Now (20% Advance to Confirm Your Orders)
                         </button>
                     </div>
+                    
                 </div>
 
                 <!-- Right Column: Order Summary (Sticky) -->
