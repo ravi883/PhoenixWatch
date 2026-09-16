@@ -81,7 +81,7 @@ def create_order_view(request):
     # ----------------------------------------------------------
     # DELIVERY DETAILS
     # ----------------------------------------------------------
-    shipping_first_name = request.POST.get("shipping_first_name", "").strip()
+    shipping_first_name = request.POST.get("shipping_first_name ", "").strip()
     shipping_last_name = request.POST.get("shipping_last_name","").strip()
     shipping_phone = request.POST.get("shipping_phone", "").strip()
     shipping_address  = request.POST.get("shipping_address","").strip()
@@ -136,6 +136,22 @@ def create_order_view(request):
         messages.error(request,"Invalid billing option.")
         return redirect("checkout")
 
+    if not customer.address:
+        customer.address = shipping_address
+
+    if not customer.city:
+        customer.city = shipping_city
+
+    if not customer.state:
+        customer.state = shipping_state
+
+    if not customer.country:
+        customer.country = shipping_country
+
+    if not customer.pincode:
+        customer.pincode = shipping_pincode
+
+    customer.save()
     # ----------------------------------------------------------
     # CREATE ORDER
     # ----------------------------------------------------------

@@ -107,6 +107,9 @@ class OrderAdmin(admin.ModelAdmin):
         "customer",
         "status",
         "total_amount",
+        "advance_amount_display",
+        "remaining_amount_display",
+        "payment_status_display",
         "created_at",
     )
 
@@ -140,6 +143,24 @@ class OrderAdmin(admin.ModelAdmin):
         OrderDeliveryDetailsInline,
         OrderPaymentDetailsInline,
     )
+
+    @admin.display(description="Advance Amount")
+    def advance_amount_display(self, obj):
+        if hasattr(obj, "payment_details"):
+            return obj.payment_details.advance_amount
+        return "-"
+
+    @admin.display(description="Remaining Amount")
+    def remaining_amount_display(self, obj):
+        if hasattr(obj, "payment_details"):
+            return obj.payment_details.remaining_amount
+        return "-"
+
+    @admin.display(description="Payment Status")
+    def payment_status_display(self, obj):
+        if hasattr(obj, "payment_details"):
+            return obj.payment_details.status
+        return "-"
 
 
 @admin.register(OrderItem)
