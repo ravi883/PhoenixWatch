@@ -96,6 +96,9 @@ class OrderPaymentDetailsInline(admin.StackedInline):
     readonly_fields = (
         "created_at",
         "updated_at",
+        "total_amount",
+        "advance_amount",
+        "remaining_amount",
     )
 
 
@@ -113,6 +116,15 @@ class OrderAdmin(admin.ModelAdmin):
         "created_at",
     )
 
+    fields = (
+        "order_id",
+        "customer",
+        "total_amount",
+        "status",
+        "created_at",
+        "updated_at",
+    )
+
     list_filter = (
         "status",
         "created_at",
@@ -127,8 +139,7 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = (
         "customer",
         "order_id",
-        # "sub_total",
-        # "total_amount",
+        "total_amount",
         "created_at",
         "updated_at",
     )
@@ -186,31 +197,6 @@ class OrderItemAdmin(admin.ModelAdmin):
         "created_at",
     )
 
-
-@admin.register(OrderStatus)
-class OrderStatusAdmin(admin.ModelAdmin):
-
-    list_display = (
-        "order",
-        "status",
-        "note",
-        "created_at",
-    )
-
-    list_filter = (
-        "status",
-        "created_at",
-    )
-
-    search_fields = (
-        "order__order_id",
-    )
-
-    readonly_fields = (
-        "created_at",
-    )
-
-
 @admin.register(OrderDeliveryDetail)
 class OrderDeliveryDetailsAdmin(admin.ModelAdmin):
 
@@ -231,6 +217,10 @@ class OrderDeliveryDetailsAdmin(admin.ModelAdmin):
         "phone_number",
         "city",
         "pincode",
+    )
+
+    readonly_fields=(
+        "order_id",
     )
 
 
@@ -256,6 +246,10 @@ class OrderBillingDetailsAdmin(admin.ModelAdmin):
         "pincode",
     )
 
+    readonly_fields=(
+        "order_id",
+    )
+
 
 @admin.register(OrderPaymentDetail)
 class OrderPaymentDetailsAdmin(admin.ModelAdmin):
@@ -268,6 +262,20 @@ class OrderPaymentDetailsAdmin(admin.ModelAdmin):
         "status",
         "payment_method",
         "created_at",
+    )
+
+    fields= (
+        "order_id",
+        "created_at",
+        "updated_at",
+        "total_amount",
+        "advance_amount",
+        "remaining_amount",
+        "status",
+        "payment_method",
+        "razorpay_order_id",
+        "razorpay_payment_id",
+        "razorpay_signature",
     )
 
     list_filter = (
@@ -283,6 +291,13 @@ class OrderPaymentDetailsAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = (
+        "order_id",
         "created_at",
         "updated_at",
+        "total_amount",
+        "advance_amount",
+        "remaining_amount",
+        "razorpay_order_id",
+        "razorpay_payment_id",
+        "razorpay_signature",
     )

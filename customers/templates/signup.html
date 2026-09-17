@@ -51,127 +51,112 @@
 </head>
 
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
-<!-- TopNavBar (Web) -->
-<nav class="hidden md:flex bg-surface/80 backdrop-blur-md fixed top-0 w-full z-50 bg-surface-container-lowest/10 shadow-sm transition-all duration-500 ease-in-out flex justify-between items-center px-margin-desktop py-6 max-w-container-max mx-auto">
-<div class="flex items-center gap-8">
-<a class="font-display-lg text-headline-md tracking-widest text-primary" href="#" >PHOENIX</a>
-</div>
-<!-- <div class="flex items-center gap-8">
-<a class="font-label-caps text-label-caps text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-primary transition-colors duration-300" href="#">Collections</a>
-<a class="font-label-caps text-label-caps text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-primary transition-colors duration-300" href="#">Men</a>
-<a class="font-label-caps text-label-caps text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-primary transition-colors duration-300" href="#">Women</a>
-<a class="font-label-caps text-label-caps text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-primary transition-colors duration-300" href="#">Heritage</a>
-</div> -->
-<!-- <div class="flex items-center gap-6 text-primary dark:text-on-primary">
-<button class="hover:opacity-70 transition-opacity duration-300"><span class="material-symbols-outlined" data-icon="search">search</span></button>
-<button class="hover:opacity-70 transition-opacity duration-300"><span class="material-symbols-outlined" data-icon="person">person</span></button>
-<button class="hover:opacity-70 transition-opacity duration-300"><span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span></button>
-</div> -->
-</nav>
-<!-- SideNavBar (Mobile) Shell - Simplified for Sign Up -->
-<nav class="md:hidden flex items-center justify-between p-margin-mobile bg-surface z-50 relative border-b border-surface-variant">
-<a class="font-display-lg-mobile text-headline-lg-mobile text-primary" href="#">PHOENIX</a>
-<button class="text-primary"><span class="material-symbols-outlined" data-icon="menu">menu</span></button>
-</nav>
-<!-- Main Content Area -->
-<main class="flex-grow flex flex-col md:flex-row pt-0 md:pt-[104px]"> <!-- Padding top to account for fixed nav on desktop -->
-<!-- Left Side: Image -->
-<section class="w-full md:w-1/2 h-[40vh] md:h-auto relative bg-surface-container">
-<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCX1JFTtHLU1WcreCeQQyXUCTKcuN3HZLk6-7bp8iwKd49SivMhtaR7JZ10mVMptVW__kQ_LDPEfR0s3iT-gppADqjvbvVd8FgC8d12_1jseo2pP314QKaixgeJqHBiTb7OKcQNN3BEAJ6HzMef4zzYizWe5bEfcmpX3UR_pvSXTonsC1iRFxizxw3IXxPTwdDZj8jFg79gwZssnREdv64Dyv0YepbsfMXfKkVwXe8LGFm_7RU7XLLU');"></div>
-<!-- Optional subtle gradient overlay to ensure the luxury feel -->
-<div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
-</section>
-<!-- Right Side: Form -->
-<section class="w-full md:w-1/2 flex items-center justify-center p-margin-mobile md:p-margin-desktop bg-surface">
-<div class="w-full max-w-[480px]">
-<div class="mb-stack-lg">
-<h1 class="font-display-lg text-headline-lg md:text-display-lg text-primary mb-stack-sm">Begin Your Journey</h1>
-<p class="font-body-md text-body-md text-on-surface-variant">Create an account to access exclusive collections and priority client services.</p>
-</div>
-<form class="flex flex-col gap-stack-md" method="POST" novalidate>
-{% csrf_token %}
+    <!-- TopNavBar (Web) -->
+    <nav class="hidden md:flex bg-surface/80 backdrop-blur-md fixed top-0 w-full z-50 bg-surface-container-lowest/10 shadow-sm transition-all duration-500 ease-in-out flex justify-between items-center px-margin-desktop py-6 max-w-container-max mx-auto">
+        <div class="flex items-center gap-8">
+            <a class="font-display-lg text-headline-md tracking-widest text-primary" href="#" >PHOENIX</a>
+        </div>
+    </nav>
 
-<!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md"> -->
-<div style="padding-bottom: 10px;" 
-class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
-<label class="sr-only" for="firstName">First Name</label>
-<input class="minimal-input" id="firstName" name="first_name" placeholder="First Name*" value="{% if not form.first_name.errors %}{{ form.first_name.value|default:'' }}{% endif %}" required="" type="text"/>
-</div>
-{% for error in form.first_name.errors %}
-    <div class="field-error">
-        {{ error }}
-    </div>
-{% endfor %}
+    <!-- SideNavBar (Mobile) Shell - Simplified for Sign Up -->
+    <nav class="md:hidden flex items-center justify-between p-margin-mobile bg-surface z-50 relative border-b border-surface-variant">
+        <a class="font-display-lg-mobile text-headline-lg-mobile text-primary" href="#">PHOENIX</a>
+    </nav>
 
-<div style="padding-bottom: 10px;"
-class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
-<label class="sr-only" for="lastName">Last Name</label>
-<input class="minimal-input" id="lastName" name="last_name" placeholder="Last Name*" value="{% if not form.last_name.errors %}{{ form.last_name.value|default:'' }}{% endif %}" required="" type="text"/>
-</div>
-{% for error in form.last_name.errors %}
-    <div class="field-error">
-        {{ error }}
-    </div>
-{% endfor %}
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col md:flex-row pt-0 md:pt-[104px]"> <!-- Padding top to account for fixed nav on desktop -->
+        <!-- Left Side: Image -->
+        <section class="w-full md:w-1/2 h-[40vh] md:h-auto relative bg-surface-container">
+            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCX1JFTtHLU1WcreCeQQyXUCTKcuN3HZLk6-7bp8iwKd49SivMhtaR7JZ10mVMptVW__kQ_LDPEfR0s3iT-gppADqjvbvVd8FgC8d12_1jseo2pP314QKaixgeJqHBiTb7OKcQNN3BEAJ6HzMef4zzYizWe5bEfcmpX3UR_pvSXTonsC1iRFxizxw3IXxPTwdDZj8jFg79gwZssnREdv64Dyv0YepbsfMXfKkVwXe8LGFm_7RU7XLLU');"></div>
+            <!-- Optional subtle gradient overlay to ensure the luxury feel -->
+            <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+        </section>
 
-<!-- </div> -->
-<div style="padding-bottom: 10px;"
-class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
-<label class="sr-only" for="email">Email Address</label>
-<input class="minimal-input" id="email" name="email" placeholder="Email Address*" value="{% if not form.email.errors %}{{ form.email.value|default:'' }}{% endif %}" required="" type="email"/>
+        <!-- Right Side: Form -->
+        <section class="w-full md:w-1/2 flex items-center justify-center p-margin-mobile md:p-margin-desktop bg-surface">
+            <div class="w-full max-w-[480px]">
+                <div class="mb-stack-lg">
+                    <h1 class="font-display-lg text-headline-lg md:text-display-lg text-primary mb-stack-sm">Begin Your Journey</h1>
+                    <p class="font-body-md text-body-md text-on-surface-variant">Create an account to access exclusive collections and priority client services.</p>
+                </div>
+                <form class="flex flex-col gap-stack-md" method="POST" novalidate>
+                    {% csrf_token %}
+                    <div style="padding-bottom: 10px;" 
+                        class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
+                        <label class="sr-only" for="firstName">First Name</label>
+                        <input class="minimal-input" id="firstName" name="first_name" placeholder="First Name*" value="{% if not form.first_name.errors %}{{ form.first_name.value|default:'' }}{% endif %}" required="" type="text"/>
+                    </div>
+                    {% for error in form.first_name.errors %}
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-</div>
-{% for error in form.email.errors %}
-    <div class="field-error">
-        {{ error }}
-    </div>
-{% endfor %}
+                    <div style="padding-bottom: 10px;"
+                        class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
+                            <label class="sr-only" for="lastName">Last Name</label>
+                            <input class="minimal-input" id="lastName" name="last_name" placeholder="Last Name*" value="{% if not form.last_name.errors %}{{ form.last_name.value|default:'' }}{% endif %}" required="" type="text"/>
+                    </div>
+                    {% for error in form.last_name.errors %}
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-<div style="padding-bottom: 10px;"
-class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
-<label class="sr-only" for="phone">Phone Number</label>
-<input class="minimal-input" id="phone" name="phone_number"  placeholder="Phone Number*" value="{% if not form.phone_number.errors %}{{ form.phone_number.value|default:'' }}{% endif %}" type="tel"/>
+                    <div style="padding-bottom: 10px;"
+                        class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
+                        <label class="sr-only" for="email">Email Address</label>
+                        <input class="minimal-input" id="email" name="email" placeholder="Email Address*" value="{% if not form.email.errors %}{{ form.email.value|default:'' }}{% endif %}" required="" type="email"/>
+                    </div>
+                    {% for error in form.email.errors %}
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-</div>
-{% for error in form.phone_number.errors %}
-    <div class="field-error">
-        {{ error }}
-    </div>
-{% endfor %}
+                    <div style="padding-bottom: 10px;"
+                        class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
+                        <label class="sr-only" for="phone">Phone Number</label>
+                        <input class="minimal-input" id="phone" name="phone_number"  placeholder="Phone Number(987....)" value="{% if not form.phone_number.errors %}{{ form.phone_number.value|default:'' }}{% endif %}" type="tel"/>
+                    </div>
+                    {% for error in form.phone_number.errors %}
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-<div style="padding-bottom: 10px;"
-class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
-<label class="sr-only" for="password">Password</label>
-<input class="minimal-input" id="password" name="password"  placeholder="Password*" required="" type="password"/>
+                    <div style="padding-bottom: 10px;"
+                    class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
+                        <label class="sr-only" for="password">Password</label>
+                        <input class="minimal-input" id="password" name="password"  placeholder="Password*" required="" type="password"/>
+                    </div>
+                    {% for error in form.password.errors %}
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-</div>
-{% for error in form.password.errors %}
-    <div class="field-error">
-        {{ error }}
-    </div>
-{% endfor %}
-
-<div class="flex items-start gap-3 mt-stack-sm">
-<div class="flex items-center h-5">
-<input class="w-4 h-4 border-outline-variant rounded text-primary focus:ring-primary focus:ring-1 bg-surface-container" id="terms" name="terms" required="" type="checkbox"/>
-</div>
-<label class="font-body-md text-[14px] leading-relaxed text-on-surface-variant" for="terms">
+                    <div class="flex items-start gap-3 mt-stack-sm">
+                        <div class="flex items-center h-5">
+                            <input class="w-4 h-4 border-outline-variant rounded text-primary focus:ring-primary focus:ring-1 bg-surface-container" id="terms" name="terms" required="" type="checkbox"/>
+                        </div>
+                        <label class="font-body-md text-[14px] leading-relaxed text-on-surface-variant" for="terms">
                             I agree to the <a class="text-primary underline underline-offset-2" href="#">Terms & Conditions</a> and <a class="text-primary underline underline-offset-2" href="#">Privacy Policy</a>.
                         </label>
-</div>
-<div class="mt-stack-lg">
-<button class="w-full bg-tertiary text-on-tertiary font-label-caps text-label-caps py-4 rounded-lg hover:bg-on-background transition-colors duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.06)]" type="submit">
-                            CREATE ACCOUNT
+                    </div>
+                    <div class="mt-stack-lg">
+                        <button class="w-full bg-tertiary text-on-tertiary font-label-caps text-label-caps py-4 rounded-lg hover:bg-on-background transition-colors duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.06)]" type="submit">
+                             CREATE ACCOUNT
                         </button>
-</div>
-<div class="text-center mt-stack-md">
-<p class="font-body-md text-[14px] text-on-surface-variant">
+                    </div>
+                    <div class="text-center mt-stack-md">
+                        <p class="font-body-md text-[14px] text-on-surface-variant">
                             Already have an account? <a class="text-primary font-medium hover:underline underline-offset-2" href="{% url 'login' %}">Sign in</a>
-</p>
-</div>
-</form>
-</div>
-</section>
-</main>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
 
 </body></html>
