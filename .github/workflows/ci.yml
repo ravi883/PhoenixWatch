@@ -55,6 +55,10 @@ jobs:
 
       # Configure database environment variables
       - name: Set database environment variables
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
         run: |
           echo "POSTGRES_DB=test_db" >> $GITHUB_ENV
           echo "POSTGRES_USER=test_user" >> $GITHUB_ENV
