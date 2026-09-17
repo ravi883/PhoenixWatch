@@ -56,15 +56,17 @@ jobs:
       # Configure database environment variables
       - name: Set database environment variables
         env:
-          POSTGRES_DB: test_db
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: test_password
+          NAME: test_db
+          USER: test_user
+          PASSWORD: test_password
+          HOST: 127.0.0.1
+          PORT: 5432
         run: |
-          echo "POSTGRES_DB=test_db" >> $GITHUB_ENV
-          echo "POSTGRES_USER=test_user" >> $GITHUB_ENV
-          echo "POSTGRES_PASSWORD=test_password" >> $GITHUB_ENV
-          echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
-          echo "DB_PORT=5432" >> $GITHUB_ENV
+          echo "NAME=$NAME" >> $GITHUB_ENV
+          echo "USER=$USER" >> $GITHUB_ENV
+          echo "PASSWORD=$PASSWORD" >> $GITHUB_ENV
+          echo "HOST=$HOST" >> $GITHUB_ENV
+          echo "PORT=$PORT" >> $GITHUB_ENV
 
       # Check Django configuration
       - name: Django system check
