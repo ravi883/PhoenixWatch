@@ -1,7 +1,7 @@
 {
   "name": "phoenixwatch",
   "version": "1.0.0",
-  "description": "\"# My Project\"",
+  "description": "My Project",
   "main": "index.js",
   "scripts": {
     "tailwind": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch",
