@@ -13,9 +13,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> -->
 <!-- Tailwind Config -->
-<script id="tailwind-config">
+<!-- <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -107,7 +107,9 @@
                 }
             }
         }
-    </script>
+    </script> -->
+
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
 <style>
     .form-group {
         margin-bottom: 20px;
@@ -122,10 +124,10 @@
 </head>
 <body class="bg-background text-on-background font-body-md antialiased flex flex-col min-h-screen">
 <!-- TopNavBar -->
-<header class="bg-surface/80 dark:bg-tertiary/80 backdrop-blur-md fixed top-0 w-full z-50 bg-surface-container-lowest/10 shadow-sm transition-all duration-500 ease-in-out">
+<header class="bg-surface/80  backdrop-blur-md fixed top-0 w-full z-50 bg-surface-container-lowest/10 shadow-sm transition-all duration-500 ease-in-out">
 <div class="flex justify-between items-center px-margin-desktop py-6 w-full max-w-container-max mx-auto">
 <!-- Left: Brand -->
-<a class="font-display-lg text-headline-md tracking-widest text-primary dark:text-on-primary hover:opacity-70 transition-opacity duration-300" href="#">
+<a class="font-display-lg text-headline-md tracking-widest text-primary hover:opacity-70 transition-opacity duration-300" href="#">
                 PHOENIX
             </a>
 <!-- Right: Actions -->
