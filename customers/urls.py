@@ -8,5 +8,6 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('profile/', profile_view, name='profile'),
     path('change-password/', change_password_view, name='change_password'),
-    path('forgot-password/', forgot_password_view, name="forgot_password")
+    path('forgot-password/', forgot_password_view, name="forgot_password"),
+    path("reset-password/<uidb64>/<token>/",reset_password, name="reset-password"),
 ]

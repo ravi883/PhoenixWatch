@@ -623,3 +623,33 @@ class ChangePasswordForm(forms.Form):
             )
 
         return confirm_password
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(required=True)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+
+        if not Customer.objects.filter(email__iexact=email).exists():
+            # Do not reveal whether an account exists.
+            # View will always show the same message.
+            return email
+        return email
+
+
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(required=True, min_length=8)
+    confirm_password = forms.CharField(required=True)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError(
+                "Passwords do not match."
+            )
+
+        return cleaned_data

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 
-from .forms import CustomerSignupForm, CustomerLoginForm, ProfileUpdateForm, ChangePasswordForm
+from .forms import CustomerSignupForm, CustomerLoginForm, ProfileUpdateForm, ChangePasswordForm, ForgotPasswordForm, ResetPasswordForm
 from django.contrib.auth.hashers import check_password, make_password
 from .models import Customer
 from banners.models import Banner, Headline
@@ -10,6 +10,15 @@ from products.models import *
 from itertools import chain
 from cart.models import *
 from decimal import Decimal, ROUND_HALF_UP
+from .tokens import customer_password_reset_token
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+
 
 def signup(request):
     if request.method == "POST":
@@ -160,8 +169,8 @@ def change_password_view(request):
         }
     )
 
-def forgot_password_view(request):
-    return render(request, "forgot_password.html")
+# def forgot_password_view(request):
+#     return render(request, "forgot_password.html")
 
 def checkout_view(request):
     ## GET Customer
@@ -211,3 +220,101 @@ def checkout_view(request):
 
 def cart_view(request):
     return render(request, "cart.html")
+
+def forgot_password_view(request):
+    if request.method == "POST":
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+
+            email = form.cleaned_data["email"]
+            customer = Customer.objects.filter(email__iexact=email).first()
+
+            # Same response whether customer exists or not.
+            if customer:
+                token = customer_password_reset_token.make_token(customer)
+
+                uid = force_bytes(customer.pk)
+                uid_encoded = urlsafe_base64_encode(uid)
+
+                reset_url = request.build_absolute_uri(
+                    reverse("reset-password",
+                        kwargs={
+                            "uidb64": uid_encoded,
+                            "token": token,
+                        },
+                    )
+                )
+                
+                expiry_minutes = 30
+                context = {
+                    "customer": customer,
+                    "reset_url": reset_url,
+                    "expiry_minutes": expiry_minutes,
+                }
+
+                subject = "Reset your PhoenixWatch password"
+
+                text_content = render_to_string("emails/password_reset.txt", context)
+
+                html_content = render_to_string("emails/password_reset.html", context)
+
+                email_message = EmailMultiAlternatives(
+                    subject=subject,
+                    body=text_content,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    to=[customer.email],
+                )
+
+                email_message.attach_alternative(html_content,"text/html")
+                email_message.send(fail_silently=False)
+
+            messages.success(request,"If an account exists with that email, " "you will receive a password reset link shortly.")
+            return redirect("forgot_password")
+
+    else:
+        form = ForgotPasswordForm()
+
+    return render(
+        request,
+        "forgot_password.html",
+        {"form": form},
+    )
+
+def reset_password(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        customer = Customer.objects.get(pk=uid)
+
+    except (
+        TypeError,
+        ValueError,
+        OverflowError,
+        Customer.DoesNotExist,
+    ):
+        customer = None
+
+    if customer is None:
+        messages.error( request,"This password reset link is invalid.")
+        return redirect("forgot-password")
+
+    token_valid = customer_password_reset_token.check_token( customer, token)
+
+    if not token_valid:
+        messages.error(request,"This password reset link is invalid or has expired.")
+        return redirect("forgot-password")
+
+    if request.method == "POST":
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data["password"]
+            customer.password = make_password(new_password)
+            customer.save(update_fields=["password"])
+
+            messages.success(request, "Your password has been reset successfully. " "You can now login.")
+            return redirect("login")
+
+    else:
+        form = ResetPasswordForm()
+
+    return render(request,"reset_password.html",{ "form": form, "customer": customer},
+    )
