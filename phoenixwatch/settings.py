@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'products',
     'cart',
     'order',
+    'storages',
 ]
 
 # AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend']
@@ -153,8 +154,8 @@ STATICFILES_DIRS = [
 # }
 
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = BASE_DIR / "media"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
@@ -168,3 +169,37 @@ DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
     "noreply@myshop.com",
 )
+
+# ============================================================
+# Cloudflare R2 Storage
+# ============================================================
+
+AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
+
+AWS_STORAGE_BUCKET_NAME = os.getenv("R2_BUCKET_NAME")
+
+AWS_S3_ENDPOINT_URL = os.getenv("R2_ENDPOINT_URL")
+
+AWS_S3_REGION_NAME = "auto"
+
+AWS_DEFAULT_ACL = None
+
+AWS_QUERYSTRING_AUTH = False
+
+AWS_S3_FILE_OVERWRITE = False
+
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=31536000",
+}
+AWS_S3_CUSTOM_DOMAIN = os.getenv("R2_PUBLIC_URL")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+    },
+
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
