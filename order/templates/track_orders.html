@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phoenix - Track Order</title>
+<!-- <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+<!-- <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-primary-container": "#858383",
+                        "tertiary-fixed": "#e6e1df",
+                        "outline-variant": "#c4c7c7",
+                        "tertiary-fixed-dim": "#cac6c3",
+                        "on-tertiary-container": "#868381",
+                        "secondary-container": "#dfe0e0",
+                        "on-tertiary-fixed": "#1d1b1a",
+                        "surface-tint": "#5f5e5e",
+                        "primary": "#000000",
+                        "on-primary-fixed-variant": "#474646",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "on-surface": "#1b1c1c",
+                        "secondary": "#5d5f5f",
+                        "surface-dim": "#dcd9d9",
+                        "primary-fixed": "#e5e2e1",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "tertiary": "#000000",
+                        "surface-container-highest": "#e4e2e1",
+                        "secondary-fixed": "#e2e2e2",
+                        "outline": "#747878",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fcf9f8",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "background": "#fcf9f8",
+                        "on-surface-variant": "#444748",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "tertiary-container": "#1d1b1a",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#303030",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1c1c",
+                        "surface-container-high": "#eae7e7",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f6f3f2",
+                        "on-secondary-container": "#616363",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#c9c6c5",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fcf9f8",
+                        "surface-variant": "#e4e2e1",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-fixed-variant": "#454747",
+                        "surface-container": "#f0eded",
+                        "inverse-on-surface": "#f3f0ef"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "stack-lg": "32px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px",
+                        "section-gap": "120px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "display-lg": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script> -->
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .premium-shadow {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    {% include "includes/header.html" %}
+
+    <!-- Mobile Menu -->
+    {% include "includes/mobile-menu.html" %}
+    
+    <!-- Cart Drawer -->
+    {% include "includes/cart-drawer.html" %}
+
+    <!-- Main Content Canvas -->
+    <main class="flex-grow pt-8 pb-section-gap px-margin-mobile md:px-margin-desktop flex flex-col items-center justify-center relative w-full max-w-container-max mx-auto">
+        
+        <div class="relative z-10 w-full max-w-2xl text-center mb-section-gap mt-section-gap">
+            <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-stack-md" style="font-size: 40px;">Track Your Order</h1>
+            <p class="font-body-md text-body-md text-on-surface-variant">Enter your details below to follow the journey of your timepiece.</p>
+        </div>
+
+        <!-- Tracking Form Bento Box -->
+        <div class="relative z-10 w-full max-w-xl bg-surface-container-lowest premium-shadow rounded-lg px-8 py-10 mb-section-gap border border-surface-variant">
+            <form class="space-y-stack-lg flex flex-col items-center">
+                {% csrf_token %}
+                <div class="w-full">
+                    <label class="block font-label-caps text-label-caps text-on-surface mb-stack-sm text-left" for="order-id">Order Number</label>
+                    <input class="w-full bg-surface-container-low border-b border-outline-variant focus:border-primary text-on-surface font-body-md text-body-md p-stack-md outline-none transition-colors rounded-none" id="order-id" placeholder="e.g. ORD..." type="text"/>
+                </div>
+
+                <div class="w-full">
+                    <label class="block font-label-caps text-label-caps text-on-surface mb-stack-sm text-left" for="email">Email Address</label>
+                    <input class="w-full bg-surface-container-low border-b border-outline-variant focus:border-primary text-on-surface font-body-md text-body-md p-stack-md outline-none transition-colors rounded-none" id="email" placeholder="Enter your email" type="email"/>
+                </div>
+
+                <button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-stack-md px-margin-mobile rounded-lg hover:bg-on-primary-fixed transition-all duration-300 mt-stack-md" type="button">
+                    Track Order
+                </button>
+            </form>
+        </div>
+
+        <!-- What to Expect Section -->
+        <div class="relative z-10 w-full max-w-4xl text-center">
+            <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-lg">The Journey</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-1/4 left-1/8 right-1/8 h-px bg-outline-variant z-0 w-3/4 mx-auto" style="top: 24px;"></div>
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center bg-surface-container-low p-stack-lg rounded-lg z-10 relative">
+                    <div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center mb-stack-md border border-outline-variant">
+                        <span class="material-symbols-outlined text-primary" data-icon="inventory_2" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+                    </div>
+                    <h3 class="font-label-caps text-label-caps text-on-surface mb-stack-sm">Processing</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant text-sm text-center">Confirming details &amp; securing components.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center bg-surface-container-low p-stack-lg rounded-lg z-10 relative">
+                    <div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center mb-stack-md border border-outline-variant">
+                        <span class="material-symbols-outlined text-primary" data-icon="build" style="font-variation-settings: 'FILL' 0;">build</span>
+                    </div>
+                    <h3 class="font-label-caps text-label-caps text-on-surface mb-stack-sm">Crafting</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant text-sm text-center">Master watchmakers assembling your piece.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center bg-surface-container-low p-stack-lg rounded-lg z-10 relative">
+                    <div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center mb-stack-md border border-outline-variant">
+                        <span class="material-symbols-outlined text-primary" data-icon="verified" style="font-variation-settings: 'FILL' 0;">verified</span>
+                    </div>
+                    <h3 class="font-label-caps text-label-caps text-on-surface mb-stack-sm">Quality Control</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant text-sm text-center">Rigorous testing for absolute precision.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex flex-col items-center bg-surface-container-low p-stack-lg rounded-lg z-10 relative">
+                    <div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center mb-stack-md border border-outline-variant">
+                        <span class="material-symbols-outlined text-primary" data-icon="local_shipping" style="font-variation-settings: 'FILL' 0;">local_shipping</span>
+                    </div>
+                    <h3 class="font-label-caps text-label-caps text-on-surface mb-stack-sm">Shipping</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant text-sm text-center">Secure delivery via private courier.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+     {% include "includes/footer.html" %}
+
+<script>
+        // Simple ambient scroll effect for nav
+        // window.addEventListener('scroll', () => {
+        //     const nav = document.querySelector('nav');
+        //     if (window.scrollY > 50) {
+        //         nav.classList.add('bg-surface', 'border-b', 'border-outline-variant', 'bg-opacity-90');
+        //         nav.classList.remove('bg-transparent');
+        //     } else {
+        //         nav.classList.remove('bg-surface', 'border-b', 'border-outline-variant', 'bg-opacity-90');
+        //         nav.classList.add('bg-transparent');
+        //     }
+        // });
+    </script>
+</body></html>

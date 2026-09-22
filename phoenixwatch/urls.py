@@ -19,6 +19,7 @@ from django.urls import path, include
 from customers.views import home_view, checkout_view
 from django.conf import settings
 from django.conf.urls.static import static
+from order.views import track_order_view
 
 
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     path("cart/", include("cart.urls")),
     path("order/", include("order.urls")),
     path("reviews/", include("reviews.urls")),
+    path('track-order/', track_order_view, name="track-order")
 ]
 
 if settings.DEBUG:

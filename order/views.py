@@ -13,7 +13,8 @@ from order.models import (
 )
 from django.db import transaction
 
-
+def track_order_view(request):
+    return render(request,"track_orders.html")
 
 @transaction.atomic
 def create_order_view(request):
