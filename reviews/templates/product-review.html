@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Submit Horological Review | PHOENIX Haute Horlogerie</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-low": "#f1f3fc",
+            "on-error-container": "#93000a",
+            "on-surface-variant": "#414753",
+            "on-error": "#ffffff",
+            "surface-tint": "#005db8",
+            "surface-dim": "#d7dae3",
+            "on-background": "#181c22",
+            "surface-bright": "#f9f9ff",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#2d476f",
+            "on-tertiary-fixed-variant": "#763400",
+            "primary-fixed": "#d6e3ff",
+            "on-secondary-container": "#3f5881",
+            "on-primary-container": "#fefcff",
+            "surface-container-high": "#e6e8f1",
+            "inverse-surface": "#2d3037",
+            "on-primary": "#ffffff",
+            "on-primary-fixed-variant": "#00458d",
+            "outline-variant": "#c1c6d5",
+            "tertiary-fixed": "#ffdbc9",
+            "inverse-primary": "#aac7ff",
+            "on-tertiary-fixed": "#321200",
+            "secondary-fixed-dim": "#aec7f7",
+            "on-tertiary": "#ffffff",
+            "surface-container-highest": "#e0e2eb",
+            "surface-container": "#ebedf7",
+            "on-primary-fixed": "#001b3e",
+            "tertiary": "#964400",
+            "primary-container": "#0a73e0",
+            "primary-fixed-dim": "#aac7ff",
+            "tertiary-container": "#bd5700",
+            "primary": "#005ab4",
+            "error-container": "#ffdad6",
+            "surface-variant": "#e0e2eb",
+            "on-tertiary-container": "#fffbff",
+            "on-surface": "#181c22",
+            "background": "#f9f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed": "#001b3d",
+            "secondary-container": "#b6d0ff",
+            "secondary-fixed": "#d6e3ff",
+            "tertiary-fixed-dim": "#ffb68c",
+            "surface": "#f9f9ff",
+            "outline": "#717785",
+            "inverse-on-surface": "#eef0fa",
+            "on-secondary": "#ffffff",
+            "secondary": "#465f88"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            serif: ["Cinzel", "serif"],
+            headline: ["Inter", "sans-serif"],
+            display: ["Inter", "sans-serif"],
+            body: ["Inter", "sans-serif"],
+            label: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-1 {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .serif-title {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+
+    <body class="bg-surface text-on-surface min-h-screen flex flex-col font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+        <!-- TOP APP BAR -->
+        <header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-md text-primary dark:text-inverse-primary docked full-width top-0 fixed z-50  border-outline-variant/60 dark:border-outline-variant/30 ">
+            <div class="flex justify-between items-center w-full h-[88px] md:h-[104px] px-6 md:px-12 max-w-7xl mx-auto">
+                <!-- Brand Logo -->
+                <a class="font-headline-lg text-2xl md:text-3xl tracking-widest text-on-surface dark:text-inverse-on-surface font-semibold serif-title flex items-center gap-2" href="#">
+                    <!-- <span class="w-2.5 h-2.5 rounded-full bg-primary inline-block"></span> -->
+                        PHOENIX
+                </a>
+
+                <!-- Navigation Links -->
+                
+            </div>
+        </header>
+
+        <!-- CONTENT CANVAS -->
+        <main class="flex-grow pt-[108px] md:pt-[128px] pb-20 px-4 md:px-12 max-w-7xl mx-auto w-full"><!-- Back Link & Header -->
+            
+            {% if messages %}
+                <div id="messageContainer" class="fixed top-5 right-5 z-[9999] space-y-3">
+
+                    {% for message in messages %}
+                        <div class="message-popup flex items-center gap-3
+                                    rounded-lg bg-black text-white
+                                    px-5 py-4 shadow-xl
+                                    transition-all duration-300">
+
+                            {% if message.tags == "success" %}
+                                <span class="material-symbols-outlined text-green-400"> check_circle </span>
+                            {% elif message.tags == "error" %}
+                                <span class="material-symbols-outlined text-red-400">  error </span>
+                            {% elif message.tags == "warning" %}
+                                <span class="material-symbols-outlined text-yellow-400"> warning </span>
+                            {% endif %}
+
+                            <span class="text-sm font-medium">{{ message }}</span>
+
+                            <button type="button" onclick="this.parentElement.remove()" class="ml-2 text-white/60 hover:text-white">
+                                <span class="material-symbols-outlined text-lg">
+                                    close
+                                </span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <div class="max-w-2xl mx-auto mb-8">
+                <a class="inline-flex items-center gap-1.5 text-xs text-secondary hover:text-on-surface transition-colors mb-4" href="{% url 'product-detail' product.slug %}">
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
+                    <span>Back </span>
+                </a>
+                <h1 class="serif-title text-2xl md:text-3xl font-normal text-on-surface tracking-tight">Write a Review</h1>
+                <p class="text-xs text-secondary mt-1">Share your genuine ownership impressions with our collectors' circle.</p>
+            </div>
+
+            <!-- Centered Review Card -->
+            <div class="max-w-2xl mx-auto bg-surface-container-lowest border border-outline-variant/60 rounded-xl p-6 md:p-8 shadow-sm">
+                <!-- Compact Product Summary Snippet -->
+                <div class="flex items-center gap-4 pb-6 border-b border-outline-variant/40 mb-6">
+                    <img alt="{{product.name}}" class="w-16 h-16 rounded-lg object-cover border border-outline-variant/50"
+                     src="{{ product.primary_image.image.url}}"/>
+                    <div class="flex-grow">
+                        <span class="text-[10px] uppercase tracking-wider text-secondary font-medium block">Verified Purchase</span>
+                        <h2 class="serif-title text-base font-semibold text-on-surface">{{ product.name }}</h2>
+                        <!-- <div class="flex items-center gap-3 text-xs text-secondary mt-0.5">
+                            <span>Ref. PX-9042</span>
+                            <span>•</span>
+                            <span>Acquired Oct 2024</span>
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- Simplified Clean Form -->
+                <form class="space-y-6" id="reviewForm" method="POST" action="{% url 'add_review' product.product_id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- 1. Overall Rating -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-on-surface mb-2">
+                                Overall Rating <span class="text-error">*</span>
+                        </label>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-1 text-on-surface" id="starContainer">
+                                <button aria-label="1 star" class="star-btn text-on-surface hover:text-primary transition-colors focus:outline-none" data-star="1" type="button">
+                                    <span class="material-symbols-outlined text-2xl">star</span>
+                                </button>
+                                <button aria-label="2 stars" class="star-btn text-on-surface hover:text-primary transition-colors focus:outline-none" data-star="2" type="button">
+                                    <span class="material-symbols-outlined text-2xl">star</span>
+                                </button>
+                                <button aria-label="3 stars" class="star-btn text-on-surface hover:text-primary transition-colors focus:outline-none" data-star="3" type="button">
+                                    <span class="material-symbols-outlined text-2xl">star</span>
+                                </button>
+                                <button aria-label="4 stars" class="star-btn text-on-surface hover:text-primary transition-colors focus:outline-none" data-star="4" type="button">
+                                    <span class="material-symbols-outlined text-2xl">star</span>
+                                </button>
+                                <button aria-label="5 stars" class="star-btn text-on-surface hover:text-primary transition-colors focus:outline-none" data-star="5" type="button">
+                                    <span class="material-symbols-outlined text-2xl">star</span>
+                                </button>
+                            </div>
+                            <span class="text-xs font-medium text-secondary" id="ratingDescriptor">Select a rating</span>
+                        </div>
+                        <input type="hidden" name="rating" id="ratingInput" value="0">
+                    </div>
+
+                    <!-- 2. Headline / Title -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-on-surface mb-2" for="reviewTitle">
+                            Review Headline <span class="text-error">*</span>
+                        </label>
+                        <input class="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline rounded-lg text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                         id="title" name="title" placeholder="Summarize your review or key highlight" type="text" value=""/>
+                    </div>
+
+                    <!-- 3. Detailed Review -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-on-surface" for="reviewDescription">
+                                Detailed Feedback <span class="text-error">*</span>
+                            </label>
+                            <span class="text-[11px] text-secondary">What did you like or dislike? How does it wear?</span>
+                        </div>
+                        <textarea class="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline rounded-lg text-sm text-on-surface leading-relaxed placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" 
+                        id="description" name="description" placeholder="" rows="5">
+                            
+                        </textarea>
+                    </div>
+
+                    <!-- 4. Add Photos -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-on-surface mb-1.5">
+                                Add Photos
+                        </label>
+                        <p class="text-[11px] text-secondary mb-3">Upload high-resolution wristshots or movement details (optional, max 4 photos).</p>
+                        <div id="reviewImagePreview" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <!-- Upload Box -->
+                            <label for="reviewImages" id="uploadPhotoBox"
+                                class="border-2 border-dashed border-outline-variant hover:border-outline rounded-lg p-3 flex flex-col items-center justify-center text-center cursor-pointer bg-surface-container-low/50 hover:bg-surface-container-low transition-colors h-24">
+                                <span class="material-symbols-outlined text-secondary text-2xl mb-1">
+                                    add_photo_alternate
+                                </span>
+
+                                <span class="text-[11px] font-medium text-on-surface">
+                                    Upload
+                                </span>
+                            </label>
+
+                            <input type="file" id="reviewImages" name="review_images" multiple accept="image/jpeg,image/png,image/webp" class="hidden">
+
+                        </div>
+                    </div>
+
+                    <!-- 5. Recommendation Toggle -->
+                    <!-- <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-on-surface mb-2">
+                            Would you recommend this timepiece to others?
+                        </label>
+                        <div class="flex items-center gap-6">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input checked="" class="text-on-surface focus:ring-on-surface focus:ring-offset-0 border-outline" name="recommend" type="radio"/>
+                                <span class="text-xs text-on-surface font-medium">Yes, I recommend</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input class="text-on-surface focus:ring-on-surface focus:ring-offset-0 border-outline" name="recommend" type="radio"/>
+                                <span class="text-xs text-secondary">No</span>
+                            </label>
+                        </div>
+                    </div> -->
+
+                    <!-- 6. Reviewer Nickname -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-on-surface mb-1.5" for="reviewerName">
+                            Your Name / Display Name
+                        </label>
+                        <input class="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline rounded-lg text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" id="display_name" name="display_name" placeholder="e.g. H. Laurent or Anonymous" type="text" value=""/>
+                        <span class="text-[11px] text-secondary mt-1 block">Displayed publicly with your review badge.</span>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="pt-4 border-t border-outline-variant/40 flex items-center gap-4">
+                        <button class="px-8 py-3 bg-on-surface text-surface rounded-lg font-semibold text-xs tracking-wider uppercase transition-transform duration-200 active:scale-95 hover:opacity-90 shadow-sm" type="submit">
+                            Submit Review
+                        </button>
+                        <a class="text-xs font-medium text-secondary hover:text-on-surface transition-colors py-3 px-2" href="{% url 'product-detail' product.slug %}">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+
+        <!-- FOOTER -->
+       
+
+<!-- Micro-Interactions Script for Star Rating -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const starButtons = document.querySelectorAll('.star-btn');
+      const ratingDescriptor = document.getElementById('ratingDescriptor');
+      const ratingInput = document.getElementById("ratingInput");
+      
+      const descriptors = {
+        1: 'Needs Adjustment (1 / 5)',
+        2: 'Satisfactory (2 / 5)',
+        3: 'Very Good (3 / 5)',
+        4: 'Exceptional (4 / 5)',
+        5: 'Masterpiece (5 / 5)'
+      };
+
+      let selectedRating = 0;
+      ratingInput.value = 0;
+
+      starButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selectedRating = parseInt(btn.getAttribute('data-star'));
+
+          ratingInput.value = selectedRating;
+          
+          starButtons.forEach(b => {
+            const starIndex = parseInt(b.getAttribute('data-star'));
+            const iconSpan = b.querySelector('.material-symbols-outlined');
+            
+            if (starIndex <= selectedRating) {
+              iconSpan.classList.add('fill-1', 'text-primary');
+              iconSpan.classList.remove('text-outline-variant');
+            } else {
+              iconSpan.classList.remove('fill-1', 'text-primary');
+              iconSpan.classList.add('text-outline-variant');
+            }
+          });
+
+          if (ratingDescriptor) {
+            ratingDescriptor.textContent = descriptors[selectedRating];
+          }
+        });
+      });
+
+    const imageInput = document.getElementById("reviewImages");
+    const previewContainer = document.getElementById("reviewImagePreview");
+    const uploadPhotoBox = document.getElementById("uploadPhotoBox");
+
+    let selectedFiles = [];
+
+    imageInput.addEventListener("change", function () {
+
+        const files = Array.from(imageInput.files);
+
+        files.forEach(function (file) {
+
+            // Maximum 4
+            if (selectedFiles.length >= 4) {
+                return;
+            }
+
+            // Only images
+            if (!file.type.startsWith("image/")) {
+                return;
+            }
+
+            // Prevent duplicate
+            const duplicate = selectedFiles.some(function (existingFile) {
+
+                return (
+                    existingFile.name === file.name &&
+                    existingFile.size === file.size &&
+                    existingFile.lastModified === file.lastModified
+                );
+
+            });
+
+            if (!duplicate) {
+                selectedFiles.push(file);
+            }
+
+        });
+
+        renderPreviews();
+        updateInputFiles();
+
+    });
+
+
+    function renderPreviews() {
+
+        // Remove old previews
+        document
+            .querySelectorAll(".review-preview-item")
+            .forEach(function (item) {
+                item.remove();
+            });
+
+
+        selectedFiles.forEach(function (file, index) {
+
+            const preview = document.createElement("div");
+
+            preview.className =
+                "review-preview-item relative group rounded-lg " +
+                "overflow-hidden border border-outline-variant/60 " +
+                "h-24 bg-surface-container";
+
+
+            const img = document.createElement("img");
+            img.className = "w-full h-full object-cover";
+
+            img.alt = "Review photo " + (index + 1);
+
+            const imageURL = URL.createObjectURL(file);
+            img.src = imageURL;
+
+
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+
+            removeButton.className =
+                "absolute top-1 right-1 p-1 rounded-full " +
+                "bg-black/70 text-white hover:bg-error " +
+                "transition-colors";
+
+
+            removeButton.innerHTML = `
+                <span class="material-symbols-outlined text-xs">
+                    close
+                </span>
+            `;
+
+
+            removeButton.addEventListener("click", function () {
+
+                selectedFiles.splice(index, 1);
+
+                renderPreviews();
+                updateInputFiles();
+
+            });
+
+
+            preview.appendChild(img);
+            preview.appendChild(removeButton);
+            previewContainer.insertBefore(preview, uploadPhotoBox);
+
+        });
+
+
+        // Hide upload button after 4 images
+        if (selectedFiles.length >= 4) {
+
+            uploadPhotoBox.classList.add("hidden");
+
+        } else {
+
+            uploadPhotoBox.classList.remove("hidden");
+
+        }
+
+    }
+
+    function updateInputFiles() {
+
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(function (file) {
+            dataTransfer.items.add(file);
+
+        });
+
+        imageInput.files = dataTransfer.files;
+
+    }
+    
+    });
+  </script>
+
+
+</body></html>

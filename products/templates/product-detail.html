@@ -83,8 +83,78 @@
         .group:hover .zoom-img {
             transform: scale(1.05);
         }
+
+        .rating-breakdown {
+        width: 100%;
+    }
+
+    .rating-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        margin-bottom: 14px;
+    }
+
+    .rating-label {
+        width: 55px;
+        flex-shrink: 0;
+        font-size: 14px;
+        color: #374151;
+    }
+
+    .rating-track {
+        flex: 1;
+        width: 100%;
+        height: 10px;
+        background: #e5e7eb;
+        border-radius: 9999px;
+        overflow: hidden;
+        display: block;
+    }
+
+    .rating-fill {
+        height: 100%;
+        min-width: 0;
+        background: #000000;
+        border-radius: 9999px;
+        display: block;
+        transition: width 0.4s ease;
+    }
+
+    .rating-count {
+        width: 30px;
+        flex-shrink: 0;
+        text-align: right;
+        font-size: 14px;
+        color: #374151;
+    }
     </style>
+
 </head>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    setTimeout(function () {
+
+        document.querySelectorAll(".message-popup").forEach(function (message) {
+
+            message.style.opacity = "0";
+            message.style.transform = "translateX(20px)";
+
+            setTimeout(function () {
+                message.remove();
+            }, 300);
+
+        });
+
+    }, 4000);
+
+});
+</script>
 
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased" style="font-family: 'Inter', sans-serif;">
     <!-- TopNavBar -->
@@ -96,6 +166,8 @@
     <!-- Cart Drawer -->
     {% include "includes/cart-drawer.html" %}
     {% csrf_token %}
+
+    
     <!-- MAIN PRODUCT SECTION: Left Image Canvas & Right Allocation Configurator -->
     <section class="max-w-screen-2xl mx-auto px-4 sm:px-8 pb-20 pt-4" id="product-view" style="padding-top: 50px;">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-16 items-start" style="padding-top: 80px;">
@@ -163,8 +235,14 @@
                     <div class="flex items-center justify-between text-xs font-mono text-[#4b5563] mb-2">
                         <!-- <span>REF. PX-9042-TOURBILLON</span> -->
                         <span class="text-emerald-700 font-semibold flex items-center gap-1">
-                        <span class="material-symbols-outlined text-xs" data-icon="lock_clock">lock_clock</span>
-                                        Available
+                            {% if product.stock %}
+                                <span class="material-symbols-outlined text-xs" data-icon="lock_clock">lock_clock</span>
+                                                Available
+                                
+                            {% else %}
+                                <span class="material-symbols-outlined text-xs" data-icon="lock_clock" style="color: red;">lock_clock</span>
+                                    <p style="color: red;">Out of Stock</p>
+                            {% endif %}
                         </span>
                     </div>
 
@@ -181,11 +259,11 @@
 
                 <!-- Rich Horological Narrative -->
                 <p class="text-sm text-[#374151] leading-relaxed font-body">
-                    An uncompromising testament to Haute Horlogerie. Housing the ultra-slender hand-wound Calibre PX-992, the Sovereign incorporates a floating 60-second flying tourbillon cage weighing merely 0.28 grams, integrated with a column-wheel lateral clutch chronograph mechanism. Precision-milled from certified ethical 18K solid rose gold and obsidian titanium.
+                    {{ product.description|linebreaks }}
                 </p>
 
                 <!-- Configurator 1: Dial Finishing Selector -->
-                <div class="space-y-3">
+                <!-- <div class="space-y-3">
                     <div class="flex justify-between items-center text-xs font-mono">
                         <span class="text-[#0a0a0a] uppercase tracking-wider font-semibold">Dial &amp; Finishing Option</span>
                         <span class="text-black font-semibold" id="selected-dial-name">Emerald Grand Feu &amp; Gold</span>
@@ -214,7 +292,7 @@
                             <p class="text-[10px] text-[#6b7280] font-mono mt-1">Aventurine Glass</p>
                         </button>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Configurator 2: Case Diameter & Material -->
                 <!-- <div class="space-y-3">
@@ -282,191 +360,308 @@
                 <div class="grid grid-cols-3 gap-2 pt-4 border-t border-[#e5e7eb] text-[11px] font-mono text-[#4b5563]">
                     <div class="flex flex-col items-center text-center p-2 rounded-lg bg-[#fafafa] border border-[#f3f4f6]">
                         <span class="material-symbols-outlined text-black mb-1 text-base" data-icon="verified_user">verified_user</span>
-                        <span>10-Yr Guarantee</span>
+                        <span>Free Delivery</span>
                     </div>
 
                     <div class="flex flex-col items-center text-center p-2 rounded-lg bg-[#fafafa] border border-[#f3f4f6]">
                         <span class="material-symbols-outlined text-black mb-1 text-base" data-icon="flight_takeoff">flight_takeoff</span>
                         <span>Armored Courier</span>
                     </div>
-                    <!-- <div class="flex flex-col items-center text-center p-2 rounded-lg bg-[#fafafa] border border-[#f3f4f6]">
+                    <div class="flex flex-col items-center text-center p-2 rounded-lg bg-[#fafafa] border border-[#f3f4f6]">
                         <span class="material-symbols-outlined text-black mb-1 text-base" data-icon="token">token</span>
-                        <span>NFT Ledger Deed</span>
-                    </div> -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-<!-- TECHNICAL SPECIFICATIONS BENTO GRID -->
-
-
-    <!-- CUSTOMER REVIEWS & COLLECTOR ARCHIVES (Vertical Timeline Layout) -->
-    <section class="max-w-screen-2xl mx-auto px-4 sm:px-8 py-20 bg-white">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-[#e5e7eb]">
-            <div>
-                <!-- <span class="text-xs font-mono uppercase tracking-widest text-[#4b5563] font-semibold">Collector Testimonials</span> -->
-                <h2 class="text-2xl sm:text-3xl font-display font-bold text-[#0a0a0a] mt-1">Customer Reviews</h2>
-            </div>
-            <!-- Filters & Action Button -->
-            <div class="flex flex-wrap items-center gap-2 mt-4 md:mt-0">
-                <button class="review-filter-btn active bg-black text-white font-medium text-xs px-3.5 py-1.5 rounded-full transition-colors shadow-sm" data-filter="all">
-                        All Reviews (34)
-                </button>
-                <button class="review-filter-btn bg-white hover:bg-[#fafafa] text-[#4b5563] hover:text-[#0a0a0a] text-xs px-3.5 py-1.5 rounded-full border border-[#e5e7eb] transition-colors" data-filter="photos">
-                        With Collector Photos (12)
-                </button>
-                <button class="review-filter-btn bg-white hover:bg-[#fafafa] text-[#4b5563] hover:text-[#0a0a0a] text-xs px-3.5 py-1.5 rounded-full border border-[#e5e7eb] transition-colors" data-filter="five-star">
-                        5 Stars Only (31)
-                </button>
-                <button class="bg-white border border-black hover:bg-neutral-50 text-black text-xs font-mono px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-sm font-semibold" id="write-review-btn">
-                    <span class="material-symbols-outlined text-xs" data-icon="edit_note">edit_note</span>
-                    <span>Submit Archival Entry</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Vertical Timeline Structure -->
-        <div class="relative pl-6 md:pl-10 space-y-12 before:content-[''] before:absolute before:left-2 md:before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-[#e5e7eb]">
-            <!-- Timeline Item 1: Featuring Photo Verification -->
-            <div class="review-item relative group" data-category="photos five-star">
-                <!-- Timeline Node Point -->
-                <div class="absolute -left-[30px] md:-left-[46px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-black group-hover:scale-125 transition-transform shadow-sm">
-                </div>
-                <div class="bg-white border border-[#e5e7eb] rounded-xl p-6 sm:p-8 hover:border-black transition-colors shadow-sm">
-                    <!-- Reviewer Header -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-[#f3f4f6] border border-[#e5e7eb] flex items-center justify-center font-bold text-xs font-mono text-black">
-                                    HL
-                            </div>
-                            <div>
-                                <div class="flex items-center space-x-2">
-                                    <h4 class="text-sm font-semibold text-[#0a0a0a]">Henri Laurent</h4>
-                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
-                                        <span class="material-symbols-outlined text-[10px]" data-icon="verified">verified</span> Verified Collector (No. 01/10)
-                                    </span>
-                                </div>
-                                <p class="text-xs text-[#4b5563] font-mono mt-0.5">Acquired November 2023 • Geneva Atelier Delivery</p>
-                            </div>
-                        </div>
-                        <!-- Rating -->
-                        <div class="flex items-center space-x-1 text-black">
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                        </div>
-                    </div>
-
-                    <!-- Review Text Content -->
-                    <h5 class="text-base font-semibold text-[#0a0a0a] mb-2">The depth of the Geneva stripes and balance wheel finishes defy modern machine horology.</h5>
-                    <p class="text-sm text-[#374151] leading-relaxed mb-6 font-body">
-                                "Having collected timepieces from Patek Philippe, Lange &amp; Söhne, and Vacheron for over twenty years, I anticipated the Sovereign with high expectations. The column-wheel actuation produces an acoustic signature that is pure silk. Under 20x magnification, the inner anglage angles show no tooling marks whatsoever. A crowning masterpiece of independent Swiss horology."
-                    </p>
-                    <!-- Verified Wrist Shots & Movement Thumbnails -->
-                    <div>
-                        <span class="text-[11px] font-mono uppercase tracking-wider text-[#6b7280] block mb-2">Collector Verification Photos:</span>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-20 h-20 rounded-lg overflow-hidden border border-[#e5e7eb] bg-[#fafafa] cursor-pointer hover:border-black transition-colors shadow-sm">
-                                <img alt="Customer wrist check profile view" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1UBjLNCenZ_fJ_GbU_X3-_srcuDgpemTW6z9u7FKfmgCs8e9bfukedv1v1yWcjwb-UfpDuifJSRclMC6nkosdqqgeWSV6xzD-cIHy5iFopgjrAlXGv_nYEu117vh5iSD3huXcI-RVW5pl565alL1IUw1QfUGN3vOv3MoidqoQOKSK4ih5cPbn6L9zyi0IObO210jlFiYv2FibaSoALiy3UR7sy3P-l2FTaoKkiALX_u0Bf_H6YRU3EDpiM"/>
-                            </div>
-                            <div class="w-20 h-20 rounded-lg overflow-hidden border border-[#e5e7eb] bg-[#fafafa] cursor-pointer hover:border-black transition-colors shadow-sm">
-                                <img alt="Movement verification photo" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1WOF-necL0kY7p79hVnAgWCn9m50n0l7jz40tWCLQDtx5hX1lT5Nr_O5H-IGflm5J1qsIN5JivhsjCW8YbxNL0yVdBCnm6slruLVtY0AlZpXDKOdpIXJycSm0ZAjoKZ2uEnsvv-5ZSqajK5xNk-Jf8l0s2bn3Sk4WolCHp2le6dmSAKmihj_IKhbcrLhllK4Fmnv0xQ3gE-VWdUXZAPYd2XaSUQqLY82eXSbHfl0Y_EqOeBirrMYkmK3qc"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Timeline Item 2: Focus on Monopusher Complication -->
-            <div class="review-item relative group" data-category="five-star">
-                <!-- Timeline Node Point -->
-                <div class="absolute -left-[30px] md:-left-[46px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-[#9ca3af] group-hover:border-black group-hover:scale-125 transition-transform shadow-sm">
-
-                </div>
-                <div class="bg-white border border-[#e5e7eb] rounded-xl p-6 sm:p-8 hover:border-black transition-colors shadow-sm">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-[#f3f4f6] border border-[#e5e7eb] flex items-center justify-center font-bold text-xs font-mono text-black">
-                                VM
-                            </div>
-                            <div>
-                                <div class="flex items-center space-x-2">
-                                    <h4 class="text-sm font-semibold text-[#0a0a0a]">Dr. Viktor Meyer</h4>
-                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
-                                        <span class="material-symbols-outlined text-[10px]" data-icon="verified">verified</span> Verified Collector (No. 02/10)
-                                    </span>
-                                </div>
-                                <p class="text-xs text-[#4b5563] font-mono mt-0.5">Acquired January 2024 • Zürich Private Salon</p>
-                            </div>
-                        </div>
-                        <!-- Rating -->
-                        <div class="flex items-center space-x-1 text-black">
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                        </div>
-                    </div>
-
-                    <h5 class="text-base font-semibold text-[#0a0a0a] mb-2">Unmatched presence on the wrist with sublime tourbillon kinetics.</h5>
-                    <p class="text-sm text-[#374151] leading-relaxed font-body">
-                                "The weight distribution of the 18K solid gold case is remarkably balanced against the alligator deployant clasp. The tourbillon cage's gentle 60-second rotation provides a hypnotic spectacle during desk work and evening functions alike. Phoenix's concierge liaison escorted the delivery right to our residence in Küsnacht."
-                    </p>
-                </div>
-            </div>
-
-            <!-- Timeline Item 3: Chronometer Precision In High Altitude -->
-            <div class="review-item relative group" data-category="photos five-star">
-                <!-- Timeline Node Point -->
-                <div class="absolute -left-[30px] md:-left-[46px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-black group-hover:scale-125 transition-transform shadow-sm"></div>
-                <div class="bg-white border border-[#e5e7eb] rounded-xl p-6 sm:p-8 hover:border-black transition-colors shadow-sm">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-[#f3f4f6] border border-[#e5e7eb] flex items-center justify-center font-bold text-xs font-mono text-black">
-                            SC
-                            </div>
-                            <div>
-                                <div class="flex items-center space-x-2">
-                                    <h4 class="text-sm font-semibold text-[#0a0a0a]">Sir Charles Sterling</h4>
-                                    <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
-                                        <span class="material-symbols-outlined text-[10px]" data-icon="verified">verified</span> Verified Collector (No. 03/10)
-                                    </span>
-                                </div>
-                                <p class="text-xs text-[#4b5563] font-mono mt-0.5">Acquired March 2024 • London Mayfair Gallery</p>
-                            </div>
-                        </div>
-
-                        <!-- Rating -->
-                        <div class="flex items-center space-x-1 text-black">
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                            <span class="material-symbols-outlined text-base" data-icon="star" data-weight="fill">star</span>
-                        </div>
-                    </div>
-
-                    <h5 class="text-base font-semibold text-[#0a0a0a] mb-2">Tested chronometric deviation: +0.6 seconds over 14 consecutive days.</h5>
-                    <p class="text-sm text-[#374151] leading-relaxed mb-6 font-body">
-                                "The escapement regulation is simply uncanny. Tested against atomic time references during transatlantic flights, the temperature compensation curve proved virtually flat. The hand-engraved rotor visible via the rear sapphire crystal is an art installation in miniature."
-                    </p>
-                    <div>
-                        <span class="text-[11px] font-mono uppercase tracking-wider text-[#6b7280] block mb-2">Collector Verification Photos:</span>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-20 h-20 rounded-lg overflow-hidden border border-[#e5e7eb] bg-[#fafafa] cursor-pointer hover:border-black transition-colors shadow-sm">
-                                <img alt="Caseback inspection verification" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1XAItZ0oGTPjvrgpnzJtBGhF82J8OsBgZ8I8K9Jqz2AfI7FDrt_uqW6bAE4_usXX5J_-0vNABimlu_Dq45usjTBlatq8TcehgoNl8c79ib9W7RVTE6P-PAbUhaK3RZSmOEwp1CaMTJE6x52coHx-4j3N1arRAL2P8PdCEsbDp7n01WpoCt3FAGT5DHFmXmDgPYRrsVG2XhKrWh_ofHh-aZbc8tuiDIOJX1lgjSasCEBbAQDzetgoPYKXPw"/>
-                            </div>
-                        </div>
+                        <span>Premium Quality</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Rating Section -->
+    <section class="w-full max-w-screen-2xl mx-auto px-4 sm:px-8 py-12 bg-white">
+
+        <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
+
+            <!-- LEFT : Overall Rating -->
+            <div class="flex flex-col justify-center">
+                <p class="text-xs font-mono uppercase tracking-widest text-[#6b7280] mb-3">Customer Rating</p>
+                <div class="flex items-end gap-3">
+                    
+                    <div class="pb-2">
+                        <div class="flex items-center gap-1">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= average_rating %}
+                                    <span class="material-symbols-outlined text-xs"
+                                        style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">
+                                        star
+                                    </span>
+                                {% else %}
+                                    <span
+                                        class="material-symbols-outlined text-xs text-gray-300"
+                                        style="font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;">
+                                        star
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <span class="text-6xl tracking-tight text-[#0a0a0a]">
+                            {{ average_rating }} Based on {{ all_reviews_count }} review{{ all_reviews_count|pluralize }}
+                        </span>
+                    </div>
+                   
+                </div>
+            </div>
+
+
+            <!-- RIGHT : Rating Breakdown -->
+            <div class="rating-breakdown">
+
+                <!-- 5 Stars -->
+                <div class="rating-row">
+                    <span class="rating-label"> 5 Stars</span>
+                    <div class="rating-track">
+                        <div class="rating-fill" style="width: {{ rating_percentages.5 }}%;"></div>
+                    </div>
+                    <span class="rating-count">{{ rating_counts.5 }}</span>
+                </div>
+
+
+                <!-- 4 Stars -->
+                <div class="rating-row">
+                    <span class="rating-label"> 4 Stars</span>
+                    <div class="rating-track">
+                        <div class="rating-fill" style="width: {{ rating_percentages.4 }}%;"></div>
+                    </div>
+                    <span class="rating-count">{{ rating_counts.4 }}</span>
+                </div>
+
+
+                <!-- 3 Stars -->
+                <div class="rating-row">
+                    <span class="rating-label"> 3 Stars</span>
+                    <div class="rating-track">
+                        <div class="rating-fill" style="width: {{ rating_percentages.3 }}%;"></div>
+                    </div>
+                    <span class="rating-count">{{ rating_counts.3 }}</span>
+                </div>
+
+
+                <!-- 2 Stars -->
+                <div class="rating-row">
+                    <span class="rating-label"> 2 Stars</span>
+                    <div class="rating-track">
+                        <div class="rating-fill" style="width: {{ rating_percentages.2 }}%;"></div>
+                    </div>
+                    <span class="rating-count">{{ rating_counts.2 }}</span>
+                </div>
+
+
+                <!-- 1 Star -->
+                <div class="rating-row">
+                    <span class="rating-label"> 1 Stars</span>
+                    <div class="rating-track">
+                        <div class="rating-fill" style="width: {{ rating_percentages.1 }}%;"></div>
+                    </div>
+                    <span class="rating-count">{{ rating_counts.1 }}</span>
+                </div>
+            </div>
+
+            <div class="w-full flex justify-end mb-8">
+                <a href="{% url 'product_review' product.slug %}">
+                    <button
+                        class="bg-black hover:bg-neutral-800 text-white font-bold py-3.5 px-6 rounded-lg text-sm tracking-tight transition-all duration-200 flex items-center justify-center space-x-2 shadow-md active:scale-[0.99]"
+                        id="write-review"
+                        data-product-id="{{ product.product_id }}"
+                        type="button">
+                        <span>Write a Review</span>
+                    </button>
+                </a>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    {% if reviews %}
+        <!-- CUSTOMER REVIEWS & COLLECTOR ARCHIVES (Vertical Timeline Layout) -->
+        <section class="w-full max-w-screen-2xl mx-auto px-4 sm:px-8 py-20 bg-white">
+            <div class="w-full flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-[#e5e7eb]">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-display font-bold text-[#0a0a0a] mt-1">Customer Reviews</h2>
+                </div>
+
+                <!-- Filters & Action Button -->
+                <div class="flex flex-wrap items-center gap-2 mt-4 md:mt-0">
+                    <!-- <button class="review-filter-btn active bg-black text-white font-medium text-xs px-3.5 py-1.5 rounded-full transition-colors shadow-sm" data-filter="all">
+                            All Reviews ({{all_reviews_count}})
+                    </button> -->
+                    <a href="?filter=all" class="review-filter-btn
+                        {% if selected_filter == 'all' %}
+                            bg-black text-white shadow-sm
+                        {% else %}
+                            bg-white text-[#4b5563] border border-[#e5e7eb]
+                            hover:bg-[#fafafa] hover:text-[#0a0a0a]
+                        {% endif %}
+                        font-medium text-xs px-3.5 py-1.5 rounded-full transition-colors">
+                        All Reviews ({{ all_reviews_count }})
+                    </a>
+
+                    <!-- <button class="review-filter-btn bg-white hover:bg-[#fafafa] text-[#4b5563] hover:text-[#0a0a0a] text-xs px-3.5 py-1.5 rounded-full border border-[#e5e7eb] transition-colors" data-filter="photos">
+                            With Photos (<span id="photoReviewCount">0</span>)
+                    </button> -->
+                     <!-- With Photos -->
+                    <a href="?filter=photos&page=1" class="review-filter-btn
+                        {% if selected_filter == 'photos' %}
+                            bg-black text-white shadow-sm
+                        {% else %}
+                            bg-white text-[#4b5563] border border-[#e5e7eb]
+                            hover:bg-[#fafafa] hover:text-[#0a0a0a]
+                        {% endif %}
+                        font-medium text-xs px-3.5 py-1.5 rounded-full transition-colors">
+                        With Photos ({{ photo_reviews_count }})
+                    </a>
+
+                    <!-- <button class="review-filter-btn bg-white hover:bg-[#fafafa] text-[#4b5563] hover:text-[#0a0a0a] text-xs px-3.5 py-1.5 rounded-full border border-[#e5e7eb] transition-colors" data-filter="five-star">
+                            5 Stars Only (<span id="fiveStarReviewCount">0</span>)
+                    </button> -->
+
+                    <!-- 5 Stars -->
+                    <a href="?filter=five-star&page=1" class="review-filter-btn
+                        {% if selected_filter == 'five-star' %}
+                            bg-black text-white shadow-sm
+                        {% else %}
+                            bg-white text-[#4b5563] border border-[#e5e7eb]
+                            hover:bg-[#fafafa] hover:text-[#0a0a0a]
+                        {% endif %}
+                        font-medium text-xs px-3.5 py-1.5 rounded-full transition-colors">
+                        5 Stars Only ({{ five_star_reviews_count }})
+                    </a>
+                    
+                </div>
+            </div>
+
+        
+            <!-- Vertical Timeline Structure -->
+            <div class="relative w-full pl-6 md:pl-10 space-y-12 before:content-[''] before:absolute before:left-2 md:before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-[#e5e7eb]">
+                
+                {% for review in reviews %}
+                <!-- Timeline Item 1: Featuring Photo Verification -->
+                <div class="review-item relative group w-full min-w-0 self-stretch" data-category="photos five-star" data-rating="{{ review.rating }}"
+                    data-has-photos="{% if review.images.exists %}true{% else %}false{% endif %}">
+
+                    <!-- Timeline Node Point -->
+                    <div class="absolute -left-[30px] md:-left-[46px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-black group-hover:scale-125 transition-transform shadow-sm">
+                    </div>
+                    <div class="w-full min-w-0 bg-white border border-[#e5e7eb] rounded-xl p-6 sm:p-8 hover:border-black transition-colors shadow-sm">
+                        <!-- Reviewer Header -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                            
+                            <div class="flex items-center space-x-3">
+                                <span class="material-symbols-outlined text-xl">
+                                    person
+                                </span>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="text-sm font-semibold text-[#0a0a0a]">{{review.display_name}}</h4>
+                                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
+                                            <span class="material-symbols-outlined text-[10px]" data-icon="verified">verified</span> Verified
+                                        </span>
+                                    </div>
+                                    <!-- <p class="text-xs text-[#4b5563] font-mono mt-0.5">{{review.created_at}}</p> -->
+                                </div>
+                            </div>
+                            <!-- Rating -->
+                            <div class="flex items-center space-x-1 text-black">
+                                <!-- Filled Stars -->
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <span class="material-symbols-outlined text-base text-black"
+                                            style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;">
+                                            star
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <!-- Empty Stars -->
+                                {% for i in "12345" %}
+                                    {% if forloop.counter > review.rating %}
+                                        <span class="material-symbols-outlined text-base text-gray-300"
+                                            style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;">
+                                            star
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Review Text Content -->
+                        <h5 class="text-base font-semibold text-[#0a0a0a] mb-2">{{ review.title}}</h5>
+                        <p class="w-full text-sm text-[#374151] leading-relaxed mb-6 font-body ">
+                            {{review.description}}
+                        </p>
+                        <!-- Verified Wrist Shots & Movement Thumbnails -->
+
+                        <div>
+                            <!-- <span class="text-[11px] font-mono uppercase tracking-wider text-[#6b7280] block mb-2">Collector Verification Photos:</span> -->
+                            <div class="flex items-center space-x-3">
+                                {% for image in review.images.all %}
+                                <div class="w-20 h-20 rounded-lg overflow-hidden border border-[#e5e7eb] bg-[#fafafa] cursor-pointer hover:border-black transition-colors shadow-sm">
+                                    <img alt="Customer wrist check profile view" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" src="{{image.image.url}}"/>
+                                </div>
+                                
+                                {% endfor %}
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+                <!-- PAGINATION -->
+                {% if reviews.has_other_pages %}
+                     <div class="flex items-center justify-center gap-2 mt-10">
+                        <!-- Previous -->
+                        {% if reviews.has_previous %}
+
+                            <a href="?filter={{ selected_filter }}&page={{ reviews.previous_page_number }}" class="w-9 h-9 flex items-center justify-center
+                                rounded-full border border-[#e5e7eb] hover:bg-[#f5f5f5] transition">
+                                <span class="material-symbols-outlined text-lg">
+                                    chevron_left
+                                </span>
+                            </a>
+                        {% endif %}
+
+                        <!-- Page Numbers -->
+                        {% for page_num in reviews.paginator.page_range %}
+                            {% if page_num == reviews.number %}
+                                <span class="w-9 h-9 flex items-center justify-center rounded-full bg-black text-white text-sm font-medium">
+                                    {{ page_num }}
+                                </span>
+                            {% else %}
+
+                                <a href="?filter={{ selected_filter }}&page={{ page_num }}" class="w-9 h-9 flex items-center justify-center
+                                    rounded-full border border-[#e5e7eb] text-sm hover:bg-[#f5f5f5] transition">
+                                    {{ page_num }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        <!-- Next -->
+                        {% if reviews.has_next %}
+
+                            <a href="?filter={{ selected_filter }}&page={{ reviews.next_page_number }}" class="w-9 h-9 flex items-center justify-center
+                                rounded-full border border-[#e5e7eb] hover:bg-[#f5f5f5] transition">
+                                <span class="material-symbols-outlined text-lg">
+                                    chevron_right
+                                </span>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+        </section>
+    {% endif %}
 
     <!-- RECOMMENDED FOR YOU (Curated Complementary Timepieces Grid) -->
     <section class="border-t border-[#e5e7eb] bg-[#fafafa] py-20" id="collections">
@@ -484,18 +679,20 @@
 
             <!-- 4-Card Luxury Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for recomend_product in recomend_products %}
                 <!-- Recommendation 1 -->
                 <div class="bg-white border border-[#e5e7eb] rounded-xl p-5 flex flex-col justify-between hover:border-black transition-all duration-300 group shadow-sm">
                     <div>
                         <div class="w-full aspect-square rounded-lg overflow-hidden bg-[#f3f4f6] mb-4 relative">
-                            <img alt="Aethelgard Perpetual Calendar" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial studio portrait of an ultra luxury perpetual calendar dress watch with dark aventurine dial, rose gold case, moonphase complication, and midnight alligator strap under dramatic contrast lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDmxXQcXekFDPVSDs9hzk9-fiQS5qGa9HHxZ-z3ppvBX7aAFBbE7XimO3wOsGD-AgoFv0taOcx0-SOFq1tqjSHOfmPn5_Rzc6jrT5znpnMkWSmLm6bnx5j2Ng6AMmPOT6jpAMk23JyuNio530C87Q15Txn0WtjO0fPEoHBQgzkGqOOJ3MSKJH2StMXmTGtCQ8cQK5NBuoqxfkRBmxuUewzfkXOf46AwrNTilaJVrqXH58psS3yIfej"/>
+                            <img alt="{{recomend_product.name}}" 
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial studio portrait of an ultra luxury perpetual calendar dress watch with dark aventurine dial, rose gold case, moonphase complication, and midnight alligator strap under dramatic contrast lighting." src="{{recomend_product.primary_image.image.url}}"/>
                             <!-- <span class="absolute top-3 left-3 bg-white/95 text-[#0a0a0a] font-mono text-[10px] px-2 py-0.5 rounded border border-[#e5e7eb] shadow-sm font-semibold">
                                 CAL. PX-810
                             </span> -->
                         </div>
                         <!-- <span class="text-[11px] font-mono text-[#6b7280] uppercase tracking-wider">Perpetual Calendar</span> -->
                         <h3 class="text-base font-display font-bold text-[#0a0a0a] mt-1 group-hover:text-neutral-700 transition-colors">
-                                    The Aethelgard Moonphase
+                                    {{recomend_product.name}}
                         </h3>
                         <!-- <p class="text-xs text-[#4b5563] line-clamp-2 mt-1">
                             Aventurine dial with spherical gold moonphase accurate to 122 years.
@@ -504,13 +701,15 @@
                     <div class="mt-6 pt-4 border-t border-[#e5e7eb] flex items-center justify-between">
                         <div>
                             <!-- <span class="text-[10px] font-mono text-[#6b7280] block">ACQUISITION</span> -->
-                            <span class="text-sm font-display font-bold text-[#0a0a0a]">$74,000</span>
+                            <span class="text-sm font-display font-bold text-[#0a0a0a]">₹ {{recomend_product.price}}</span>
                         </div>
-                        <button class="bg-black hover:bg-neutral-800 text-white text-xs font-mono px-3 py-1.5 rounded transition-colors shadow-sm" onclick="quickAcquire('The Aethelgard Moonphase', '$74,000')">
+                        <button id="add-to-bag-btn" data-product-id="{{ recomend_product.product_id }}" type="button"
+                         class="add-to-bag-btn bg-black hover:bg-neutral-800 text-white text-xs font-mono px-3 py-1.5 rounded transition-colors shadow-sm" onclick="quickAcquire('The Aethelgard Moonphase', '$74,000')">
                             Add to cart
                         </button>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -741,6 +940,135 @@
 
 
   </script>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const filterButtons = document.querySelectorAll(".review-filter-btn");
+    const reviewItems = document.querySelectorAll(".review-item");
+
+    const photoReviewCount = document.getElementById("photoReviewCount");
+    const fiveStarReviewCount = document.getElementById("fiveStarReviewCount");
+
+    
+    // ---------------------------------------
+    // Calculate filter counts
+    // ---------------------------------------
+
+    let photoCount = 0;
+    let fiveStarCount = 0;
+
+    reviewItems.forEach(function (review) {
+
+        const rating = parseInt(review.dataset.rating);
+        const hasPhotos = review.dataset.hasPhotos === "true";
+
+        if (hasPhotos) {
+            photoCount++;
+        }
+
+        if (rating === 5) {
+            fiveStarCount++;
+        }
+    });
+
+    photoReviewCount.textContent = photoCount;
+    fiveStarReviewCount.textContent = fiveStarCount;
+
+
+    // ---------------------------------------
+    // Filter reviews
+    // ---------------------------------------
+
+    filterButtons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            const selectedFilter = this.dataset.filter;
+
+
+            // --------------------------------
+            // Active button styling
+            // --------------------------------
+
+            filterButtons.forEach(function (btn) {
+
+                btn.classList.remove(
+                    "active",
+                    "bg-black",
+                    "text-white",
+                    "shadow-sm"
+                );
+
+                btn.classList.add(
+                    "bg-white",
+                    "text-[#4b5563]",
+                    "border",
+                    "border-[#e5e7eb]"
+                );
+
+            });
+
+
+            this.classList.add(
+                "active",
+                "bg-black",
+                "text-white",
+                "shadow-sm"
+            );
+
+            this.classList.remove(
+                "bg-white",
+                "text-[#4b5563]",
+                "border",
+                "border-[#e5e7eb]"
+            );
+
+
+            // --------------------------------
+            // Apply filter
+            // --------------------------------
+
+            reviewItems.forEach(function (review) {
+
+                const rating = parseInt(review.dataset.rating);
+                const hasPhotos = review.dataset.hasPhotos === "true";
+
+                let showReview = false;
+
+
+                if (selectedFilter === "all") {
+
+                    showReview = true;
+
+                } else if (selectedFilter === "photos") {
+
+                    showReview = hasPhotos;
+
+                } else if (selectedFilter === "five-star") {
+
+                    showReview = rating === 5;
+
+                }
+
+
+                if (showReview) {
+
+                    review.classList.remove("hidden");
+
+                } else {
+
+                    review.classList.add("hidden");
+
+                }
+
+            });
+
+        });
+
+    });
+
+});
+</script>
     
     <!-- Footer -->
     {% include "includes/footer.html" %}
