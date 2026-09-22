@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'cart',
     'order',
     'storages',
+    'reviews',
 ]
 
 # AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend']

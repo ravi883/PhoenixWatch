@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "tailwind": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch",
-    "tailwind:build": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --minify"
+    "tailwind:second": "npx @tailwindcss/cli -i ./static/css/second-input.css -o ./static/css/second-output.css --watch",
+
+    "tailwind:build": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --minify",
+    "tailwind:build:second": "npx @tailwindcss/cli -i ./static/css/second-input.css -o ./static/css/second-output.css --minify"
   },
   "repository": {
     "type": "git",
