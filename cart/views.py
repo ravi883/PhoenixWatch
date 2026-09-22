@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from products.models import Products
@@ -68,6 +68,14 @@ def add_to_cart(request, product_id):
     # -----------------------------------
     # GET / CREATE ITEM
     # -----------------------------------
+    if product.stock < quantity:
+        return JsonResponse({
+            "success": False,
+            "message": (
+                f"Only {product.stock} "
+                "items are available."
+            ),
+        }, status=400)
 
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
@@ -83,7 +91,7 @@ def add_to_cart(request, product_id):
 
     if not created:
         new_quantity = ( cart_item.quantity + quantity)
-
+        
         if new_quantity > product.stock:
             return JsonResponse({
                 "success": False,

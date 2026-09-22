@@ -86,49 +86,204 @@
 
         .rating-breakdown {
         width: 100%;
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 14px;
+        }
+
+        .rating-label {
+            width: 55px;
+            flex-shrink: 0;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .rating-track {
+            flex: 1;
+            width: 100%;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 9999px;
+            overflow: hidden;
+            display: block;
+        }
+
+        .rating-fill {
+            height: 100%;
+            min-width: 0;
+            background: #000000;
+            border-radius: 9999px;
+            display: block;
+            transition: width 0.4s ease;
+        }
+
+        .rating-count {
+            width: 30px;
+            flex-shrink: 0;
+            text-align: right;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        #toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.toast {
+    min-width: 320px;
+    max-width: 420px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    transform: translateX(120%);
+    opacity: 0;
+
+    animation:
+        toast-slide-in 0.35s ease forwards,
+        toast-slide-out 0.35s ease 3.65s forwards;
+}
+
+.toast-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.toast-message {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #555;
+}
+
+/* Success */
+.toast-success {
+    border-left: 4px solid #16a34a;
+}
+
+.toast-success .toast-icon {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.toast-success .toast-title {
+    color: #15803d;
+}
+
+/* Error */
+.toast-error {
+    border-left: 4px solid #dc2626;
+}
+
+.toast-error .toast-icon {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.toast-error .toast-title {
+    color: #b91c1c;
+}
+
+/* Warning */
+.toast-warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.toast-warning .toast-icon {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.toast-warning .toast-title {
+    color: #b45309;
+}
+
+/* Info */
+.toast-info {
+    border-left: 4px solid #2563eb;
+}
+
+.toast-info .toast-icon {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.toast-info .toast-title {
+    color: #1d4ed8;
+}
+
+@keyframes toast-slide-in {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
     }
 
-    .rating-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        margin-bottom: 14px;
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes toast-slide-out {
+    from {
+        transform: translateX(0);
+        opacity: 1;
     }
 
-    .rating-label {
-        width: 55px;
-        flex-shrink: 0;
-        font-size: 14px;
-        color: #374151;
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    #toast-container {
+        top: 16px;
+        right: 16px;
+        left: 16px;
     }
 
-    .rating-track {
-        flex: 1;
-        width: 100%;
-        height: 10px;
-        background: #e5e7eb;
-        border-radius: 9999px;
-        overflow: hidden;
-        display: block;
-    }
-
-    .rating-fill {
-        height: 100%;
+    .toast {
         min-width: 0;
-        background: #000000;
-        border-radius: 9999px;
-        display: block;
-        transition: width 0.4s ease;
+        width: 100%;
     }
-
-    .rating-count {
-        width: 30px;
-        flex-shrink: 0;
-        text-align: right;
-        font-size: 14px;
-        color: #374151;
-    }
+}
     </style>
 
 </head>
@@ -403,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <span class="text-6xl tracking-tight text-[#0a0a0a]">
+                        <span class="text-xl tracking-tight text-[#0a0a0a]">
                             {{ average_rating }} Based on {{ all_reviews_count }} review{{ all_reviews_count|pluralize }}
                         </span>
                     </div>
@@ -682,31 +837,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 {% for recomend_product in recomend_products %}
                 <!-- Recommendation 1 -->
                 <div class="bg-white border border-[#e5e7eb] rounded-xl p-5 flex flex-col justify-between hover:border-black transition-all duration-300 group shadow-sm">
-                    <div>
-                        <div class="w-full aspect-square rounded-lg overflow-hidden bg-[#f3f4f6] mb-4 relative">
-                            <img alt="{{recomend_product.name}}" 
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial studio portrait of an ultra luxury perpetual calendar dress watch with dark aventurine dial, rose gold case, moonphase complication, and midnight alligator strap under dramatic contrast lighting." src="{{recomend_product.primary_image.image.url}}"/>
-                            <!-- <span class="absolute top-3 left-3 bg-white/95 text-[#0a0a0a] font-mono text-[10px] px-2 py-0.5 rounded border border-[#e5e7eb] shadow-sm font-semibold">
-                                CAL. PX-810
-                            </span> -->
+                    <a href="{% url 'product-detail' recomend_product.slug %}">
+                        <div>
+                            <div class="w-full aspect-square rounded-lg overflow-hidden bg-[#f3f4f6] mb-4 relative">
+                                <img alt="{{recomend_product.name}}" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial studio portrait of an ultra luxury perpetual calendar dress watch with dark aventurine dial, rose gold case, moonphase complication, and midnight alligator strap under dramatic contrast lighting." src="{{recomend_product.primary_image.image.url}}"/>
+                            </div>
+                            
+                            <h3 class="text-base font-display font-bold text-[#0a0a0a] mt-1 group-hover:text-neutral-700 transition-colors">
+                                {{recomend_product.name}}
+                            </h3>
+                            
                         </div>
-                        <!-- <span class="text-[11px] font-mono text-[#6b7280] uppercase tracking-wider">Perpetual Calendar</span> -->
-                        <h3 class="text-base font-display font-bold text-[#0a0a0a] mt-1 group-hover:text-neutral-700 transition-colors">
-                                    {{recomend_product.name}}
-                        </h3>
-                        <!-- <p class="text-xs text-[#4b5563] line-clamp-2 mt-1">
-                            Aventurine dial with spherical gold moonphase accurate to 122 years.
-                        </p> -->
-                    </div>
+                    </a>
                     <div class="mt-6 pt-4 border-t border-[#e5e7eb] flex items-center justify-between">
                         <div>
-                            <!-- <span class="text-[10px] font-mono text-[#6b7280] block">ACQUISITION</span> -->
                             <span class="text-sm font-display font-bold text-[#0a0a0a]">₹ {{recomend_product.price}}</span>
                         </div>
-                        <button id="add-to-bag-btn" data-product-id="{{ recomend_product.product_id }}" type="button"
+                        <!-- <button id="add-to-bag-btn" data-product-id="{{ recomend_product.product_id }}" type="button"
                          class="add-to-bag-btn bg-black hover:bg-neutral-800 text-white text-xs font-mono px-3 py-1.5 rounded transition-colors shadow-sm" onclick="quickAcquire('The Aethelgard Moonphase', '$74,000')">
                             Add to cart
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 {% endfor %}
@@ -944,5 +1095,6 @@ document.addEventListener("DOMContentLoaded", function () {
     
     <!-- Footer -->
     {% include "includes/footer.html" %}
-
+<!-- Toast Container -->
+<div id="toast-container"></div>
 </body></html>

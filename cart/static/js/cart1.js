@@ -125,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateTotal(itemId,total) {
-        console.log(itemId)
         const totalElements = document.getElementById(`cart-total-${itemId}`);
         if (totalElements) {
              totalElements.textContent = "₹ " + total;
@@ -173,7 +172,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const data = await response.json();
             if (!response.ok || !data.success) {
-                alert(data.message || "Unable to update cart.");
+                // alert(data.message || "Unable to update cart.");
+                showToast(data.message,"error","Unable to update cart.")
                 return;
             }
 
@@ -196,7 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             console.error("Cart update error:", error);
 
-            alert("Something went wrong. Please try again.");
+            
+            showToast("Something went wrong. Please try again.","error");
         }
 
     }
@@ -231,7 +232,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!response.ok || !data.success) {
 
-                alert(data.message || "Unable to remove item.");
+                // alert(data.message || "Unable to remove item.");
+                showToast(data.message,"error", "Unable to remove item.");
 
                 return;
             }
@@ -263,7 +265,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             console.error("Remove cart item error:", error);
 
-            alert("Something went wrong. Please try again.");
+            // alert("Something went wrong. Please try again.");
+            showToast("Something went wrong. Please try again.","error");
 
         }
 
@@ -310,6 +313,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    function showToast(message, type = "info", title = null) {
+    const container = document.getElementById("toast-container");
+
+    if (!container) {
+        console.error("Toast container not found.");
+        return;
+    }
+
+    const toast = document.createElement("div");
+
+    const config = {
+        success: {
+            title: title || "Success",
+            icon: "✓"
+        },
+        error: {
+            title: title || "Error",
+            icon: "!"
+        },
+        warning: {
+            title: title || "Warning",
+            icon: "!"
+        },
+        info: {
+            title: title || "Info",
+            icon: "i"
+        }
+    };
+
+    const current = config[type] || config.info;
+
+    toast.className = `toast toast-${type}`;
+
+    toast.innerHTML = `
+        <div class="toast-icon">
+            ${current.icon}
+        </div>
+
+        <div class="toast-content">
+            <div class="toast-title">
+                ${current.title}
+            </div>
+
+            <div class="toast-message">
+                ${message}
+            </div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // Remove after animation
+    setTimeout(() => {
+        toast.remove();
+    }, 4100);
+}
 
     // =========================================================
     // EVENT DELEGATION
@@ -551,9 +610,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
 
             if (!response.ok || !data.success) {
-                alert(
+                showToast(
                     data.message ||
-                    "Unable to add product to cart."
+                    "Unable to add product to cart.",
+                    "error",
+                    "Unable to Add"
                 );
                 return;
             }
@@ -571,7 +632,8 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
 
             console.error("Add to cart error:", error);
-            alert("Something went wrong. Please try again.");
+            // alert("Something went wrong. Please try again.");
+            showToast("Something went wrong. Please try again.","error","Unable to Add");
         } finally {
             addButton.disabled = false;
         }
