@@ -65,9 +65,13 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
-      # Build Tailwind CSS
-      - name: Build Tailwind CSS
+      # Build Main Tailwind CSS
+      - name: Build Main Tailwind CSS
         run: npm run tailwind:build
+
+      # Build Second Tailwind CSS
+      - name: Build Second Tailwind CSS
+        run: npm run tailwind:build:second
 
       # Configure database environment variables
       - name: Set database environment variables

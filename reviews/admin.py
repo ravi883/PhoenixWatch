@@ -17,7 +17,6 @@ class ProductReviewAdmin(admin.ModelAdmin):
         "product",
         "customer",
         "rating",
-        "title",
         "is_verified_purchase",
         "is_approved",
         "created_at",
