@@ -288,8 +288,6 @@
 
 </head>
 
-
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -836,30 +834,33 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {% for recomend_product in recomend_products %}
                 <!-- Recommendation 1 -->
-                <div class="bg-white border border-[#e5e7eb] rounded-xl p-5 flex flex-col justify-between hover:border-black transition-all duration-300 group shadow-sm">
-                    <a href="{% url 'product-detail' recomend_product.slug %}">
-                        <div>
-                            <div class="w-full aspect-square rounded-lg overflow-hidden bg-[#f3f4f6] mb-4 relative">
-                                <img alt="{{recomend_product.name}}" 
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial studio portrait of an ultra luxury perpetual calendar dress watch with dark aventurine dial, rose gold case, moonphase complication, and midnight alligator strap under dramatic contrast lighting." src="{{recomend_product.primary_image.image.url}}"/>
+                    {% if recomend_product.slug != product.slug %}
+                        <div class="bg-white border border-[#e5e7eb] rounded-xl p-5 flex flex-col justify-between hover:border-black transition-all duration-300 group shadow-sm">
+                            <a href="{% url 'product-detail' recomend_product.slug %}">
+                                <div>
+                                    <div class="w-full aspect-square rounded-lg overflow-hidden bg-[#f3f4f6] mb-4 relative">
+                                        <img alt="{{recomend_product.name}}" 
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial studio portrait of an ultra luxury perpetual calendar dress watch with dark aventurine dial, rose gold case, moonphase complication, and midnight alligator strap under dramatic contrast lighting." src="{{recomend_product.primary_image.image.url}}"/>
+                                    </div>
+                                    
+                                    <h3 class="text-base font-display font-bold text-[#0a0a0a] mt-1 group-hover:text-neutral-700 transition-colors">
+                                        {{recomend_product.name}}
+                                    </h3>
+                                    <h5>{{recomend_product.color}} | {{recomend_product.strap_type}}</h5>
+                                    
+                                </div>
+                            </a>
+                            <div class="mt-6 pt-4 border-t border-[#e5e7eb] flex items-center justify-between">
+                                <div>
+                                    <span class="text-sm font-display font-bold text-[#0a0a0a]">₹ {{recomend_product.price}}</span>
+                                </div>
+                                <!-- <button id="add-to-bag-btn" data-product-id="{{ recomend_product.product_id }}" type="button"
+                                class="add-to-bag-btn bg-black hover:bg-neutral-800 text-white text-xs font-mono px-3 py-1.5 rounded transition-colors shadow-sm" onclick="quickAcquire('The Aethelgard Moonphase', '$74,000')">
+                                    Add to cart
+                                </button> -->
                             </div>
-                            
-                            <h3 class="text-base font-display font-bold text-[#0a0a0a] mt-1 group-hover:text-neutral-700 transition-colors">
-                                {{recomend_product.name}}
-                            </h3>
-                            
                         </div>
-                    </a>
-                    <div class="mt-6 pt-4 border-t border-[#e5e7eb] flex items-center justify-between">
-                        <div>
-                            <span class="text-sm font-display font-bold text-[#0a0a0a]">₹ {{recomend_product.price}}</span>
-                        </div>
-                        <!-- <button id="add-to-bag-btn" data-product-id="{{ recomend_product.product_id }}" type="button"
-                         class="add-to-bag-btn bg-black hover:bg-neutral-800 text-white text-xs font-mono px-3 py-1.5 rounded transition-colors shadow-sm" onclick="quickAcquire('The Aethelgard Moonphase', '$74,000')">
-                            Add to cart
-                        </button> -->
-                    </div>
-                </div>
+                    {%endif %}
                 {% endfor %}
             </div>
         </div>

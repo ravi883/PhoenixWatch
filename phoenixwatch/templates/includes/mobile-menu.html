@@ -14,7 +14,7 @@
                 <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'track-order' %}">Track Orders</a>
                 {% if request.session.customer_id is not none %}
                     <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'profile' %}">Profile</a>
-                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="#">Your Orders</a>
+                    <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'order-history' %}">Your Orders</a>
                     <a class="font-label-caps text-headline-md text-primary border-b border-outline-variant pb-2" href="{% url 'logout' %}">Logout</a>
                 {% endif %}
                 {% if request.session.customer_id is none %}

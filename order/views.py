@@ -16,6 +16,59 @@ from django.db import transaction
 def track_order_view(request):
     return render(request,"track_orders.html")
 
+def order_history_view(request):
+    customer_id = request.session.get("customer_id")
+
+    if not customer_id:
+        return redirect("login")
+
+    all_orders = (
+        Order.objects
+        .filter(customer_id=customer_id)
+        .prefetch_related("items__product")
+        .order_by("-created_at")
+    )
+
+    status_filter = request.GET.get("status", "all")
+
+    if status_filter == "transit":
+        orders = all_orders.filter(
+            status__in=[
+                Order.Status.CONFIRMED,
+                Order.Status.PROCESSING,
+                Order.Status.SHIPPED,
+                Order.Status.OUT_FOR_DELIVERY,
+            ]
+        )
+
+    elif status_filter == "delivered":
+        orders = all_orders.filter(status=Order.Status.DELIVERED)
+
+    else:
+        orders = all_orders
+
+    delivered_orders = all_orders.filter(status=Order.Status.DELIVERED)
+
+    transit_orders = all_orders.filter(
+        status__in=[
+            Order.Status.CONFIRMED,
+            Order.Status.PROCESSING,
+            Order.Status.SHIPPED,
+            Order.Status.OUT_FOR_DELIVERY,
+        ]
+    )
+
+    context = {
+        "orders": orders,
+        "all_orders": all_orders,
+        "delivered_orders": delivered_orders,
+        "transit_orders": transit_orders,
+        "status_filter": status_filter,
+    }
+
+    return render(request, "order_history.html",context)
+    
+
 @transaction.atomic
 def create_order_view(request):
 
@@ -82,7 +135,7 @@ def create_order_view(request):
     # ----------------------------------------------------------
     # DELIVERY DETAILS
     # ----------------------------------------------------------
-    shipping_first_name = request.POST.get("shipping_first_name ", "").strip()
+    shipping_first_name = request.POST.get("shipping_first_name", "").strip()
     shipping_last_name = request.POST.get("shipping_last_name","").strip()
     shipping_phone = request.POST.get("shipping_phone", "").strip()
     shipping_address  = request.POST.get("shipping_address","").strip()
