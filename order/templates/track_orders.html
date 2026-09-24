@@ -46,19 +46,33 @@
 
         <!-- Tracking Form Bento Box -->
         <div class="relative z-10 w-full max-w-xl bg-surface-container-lowest premium-shadow rounded-lg px-8 py-10 mb-section-gap border border-surface-variant">
-            <form class="space-y-stack-lg flex flex-col items-center">
+            <form class="space-y-stack-lg flex flex-col items-center" method="post">
                 {% csrf_token %}
+                {% if messages %}
+                        {% for message in messages %}
+                            {% if "error" in message.tags %}
+                                <div class="mb-4 p-3 rounded bg-red-100 text-red-700 text-sm message-alert">
+                                {{ message }}
+                                </div>
+                            {% else %}
+                                <div class="mb-4 p-3 rounded bg-green-100 text-green-700 message-alert">
+                                {{ message }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                {% endif %}
                 <div class="w-full">
                     <label class="block font-label-caps text-label-caps text-on-surface mb-stack-sm text-left" for="order-id">Order Number</label>
-                    <input class="w-full bg-surface-container-low border-b border-outline-variant focus:border-primary text-on-surface font-body-md text-body-md p-stack-md outline-none transition-colors rounded-none" id="order-id" placeholder="e.g. ORD..." type="text"/>
+                    <input class="w-full bg-surface-container-low border-b border-outline-variant focus:border-primary text-on-surface font-body-md text-body-md p-stack-md outline-none transition-colors rounded-none" id="order-id" name="order_id" placeholder="e.g. ORD..." type="text"/>
+                    
                 </div>
 
                 <div class="w-full">
                     <label class="block font-label-caps text-label-caps text-on-surface mb-stack-sm text-left" for="email">Email Address</label>
-                    <input class="w-full bg-surface-container-low border-b border-outline-variant focus:border-primary text-on-surface font-body-md text-body-md p-stack-md outline-none transition-colors rounded-none" id="email" placeholder="Enter your email" type="email"/>
+                    <input class="w-full bg-surface-container-low border-b border-outline-variant focus:border-primary text-on-surface font-body-md text-body-md p-stack-md outline-none transition-colors rounded-none" id="email" name="email" placeholder="Enter your email" type="email"/>
                 </div>
 
-                <button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-stack-md px-margin-mobile rounded-lg hover:bg-on-primary-fixed transition-all duration-300 mt-stack-md" type="button">
+                <button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-stack-md px-margin-mobile rounded-lg hover:bg-on-primary-fixed transition-all duration-300 mt-stack-md" type="submit">
                     Track Order
                 </button>
             </form>
