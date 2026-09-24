@@ -18,6 +18,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from order.models import Coupon
 
 
 def signup(request):
@@ -199,11 +200,41 @@ def checkout_view(request):
         return redirect("cart")
 
     ##CALCULATE SUBTOTAL 
-    subtotal = Decimal("0.00")
+    subtotal = cart.subtotal
 
-    for item in cart_items:
-        item.item_total = (item.product.price * item.quantity)
-        subtotal += item.item_total
+    ## COUPON CODE
+    if request.method== "POST":
+        coupon = request.POST.get("coupon")
+        if not coupon:
+            messages.warning(request, "Enter Coupon Code.",extra_tags="coupon")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
+        coupon_obj = Coupon.objects.filter(coupon_code__iexact=coupon)
+        
+        if not coupon_obj:
+            messages.warning(request, "Invalid Coupon.",extra_tags="coupon")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
+        if cart.coupon:
+            messages.warning(request, "Coupon already exists.",extra_tags="coupon")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        if not cart.subtotal > coupon_obj.first().minimum_order_amount:
+            messages.warning(request,f"Amount should be greater than {coupon_obj.first().minimum_order_amount}",extra_tags="coupon")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        if coupon_obj.first().is_expired:
+            messages.warning(request, "Coupon Expired.",extra_tags="coupon")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        cart.coupon = coupon_obj[0]
+        cart.coupon_code = coupon
+        cart.discount_amount = cart.discount_price
+        cart.save()
+
+        messages.success(request, "Coupon applied.",extra_tags="coupon")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
 
     advance_amount = (cart.subtotal * Decimal("0.20")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     remaining_amount = (cart.subtotal - advance_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
@@ -318,3 +349,14 @@ def reset_password(request, uidb64, token):
 
     return render(request,"reset_password.html",{ "form": form, "customer": customer},
     )
+
+
+def remove_coupon_view(request, cart_id):
+    cart = Cart.objects.get(id=cart_id)
+    cart.coupon = None
+    cart.coupon_code = ''
+    cart.discount_amount = cart.discount_price
+    cart.save()
+
+    messages.success(request, "Coupon Removed.",extra_tags="coupon")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -16,6 +16,15 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+class Coupon(BaseModel):
+    coupon_code = models.CharField(max_length=50)
+    discount_percentage = models.IntegerField(default=10)
+    minimum_order_amount = models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    is_expired = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.coupon_code
+
 class Order(BaseModel):
 
     class Status(models.TextChoices):
@@ -33,6 +42,9 @@ class Order(BaseModel):
     status = models.CharField(max_length=30,choices=Status.choices,default=Status.PENDING,db_index=True)
     subtotal = models.DecimalField(max_digits=12, decimal_places=2)
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
+    coupon_code = models.CharField(max_length=50, blank=True)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
 
     class Meta:
