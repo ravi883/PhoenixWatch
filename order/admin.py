@@ -7,6 +7,7 @@ from .models import (
     OrderDeliveryDetail,
     OrderBillingDetail,
     OrderPaymentDetail,
+    Coupon
 )
 
 
@@ -110,6 +111,7 @@ class OrderAdmin(admin.ModelAdmin):
         "customer",
         "status",
         "total_amount",
+        "discount_amount",
         "advance_amount_display",
         "remaining_amount_display",
         "payment_status_display",
@@ -119,6 +121,9 @@ class OrderAdmin(admin.ModelAdmin):
     fields = (
         "order_id",
         "customer",
+        "coupon",
+        "coupon_code",
+        "discount_amount",
         "total_amount",
         "status",
         "created_at",
@@ -301,3 +306,9 @@ class OrderPaymentDetailsAdmin(admin.ModelAdmin):
         "razorpay_payment_id",
         "razorpay_signature",
     )
+
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    # fields = ['id','coupon_code','is_expired']
+
+    list_display=['id','coupon_code','is_expired']

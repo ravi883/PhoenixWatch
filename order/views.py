@@ -111,25 +111,15 @@ def create_order_view(request):
 
         if product.stock < item.quantity:
             messages.error( request, f"Only {product.stock} unit(s) of "f"{product.name} are available." )
-            return redirect("order:checkout")
+            return redirect("checkout")
 
-    # ----------------------------------------------------------
-    # CALCULATE TOTAL FROM DATABASE
-    # ----------------------------------------------------------
-
-    subtotal = Decimal("0.00")
-    for item in cart_items:
-        subtotal += (item.product.price * item.quantity )
-
-    subtotal = subtotal.quantize(Decimal("0.01"),rounding=ROUND_HALF_UP)
-
+    subtotal = cart.subtotal
     # ----------------------------------------------------------
     # 20% ADVANCE
     # ----------------------------------------------------------
 
     advance_percentage = Decimal("20.00")
     advance_amount = ( subtotal * advance_percentage / Decimal("100")).quantize(Decimal("0.01"),rounding=ROUND_HALF_UP)
-
     remaining_amount = (subtotal - advance_amount).quantize( Decimal("0.01"),rounding=ROUND_HALF_UP)
 
     # ----------------------------------------------------------
@@ -215,6 +205,9 @@ def create_order_view(request):
         status=Order.Status.PENDING,
         subtotal=subtotal,
         total_amount=subtotal,
+        coupon = cart.coupon,
+        coupon_code = cart.coupon_code,
+        discount_amount = cart.discount_amount
     )
 
     # ----------------------------------------------------------

@@ -3,13 +3,17 @@ from django.core.validators import MinValueValidator
 
 from customers.models import Customer,BaseModel
 from products.models import Products
-
+from order.models import Coupon
+from decimal import Decimal, ROUND_HALF_UP
 
 class Cart(models.Model):
     customer = models.OneToOneField(Customer,on_delete=models.CASCADE,related_name="cart",null=True,blank=True)
     session_key = models.CharField(max_length=100,unique=True,null=True,blank=True,db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
+    coupon_code = models.CharField(max_length=50, blank=True)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         db_table = "cart"
@@ -29,10 +33,27 @@ class Cart(models.Model):
 
     @property
     def subtotal(self):
-        return sum(
+        cart_total = sum(
+                    item.line_total
+                    for item in self.items.select_related("product")
+                    )
+            
+        if self.coupon:
+            total_discount = ((cart_total * Decimal(self.coupon.discount_percentage))/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)            
+            return cart_total - total_discount
+        return cart_total
+
+    @property
+    def discount_price(self):
+        cart_total = sum(
             item.line_total
             for item in self.items.select_related("product")
         )
+
+        if not self.coupon:
+            return Decimal("0.00")
+
+        return ((cart_total * Decimal(self.coupon.discount_percentage))/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
 
 class CartItem(models.Model):
