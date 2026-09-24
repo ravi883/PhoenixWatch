@@ -12,8 +12,48 @@ from order.models import (
 
 )
 from django.db import transaction
+from .forms import TrackOrderForm
+from django.http import HttpResponseRedirect
 
 def track_order_view(request):
+    order = None
+
+    if request.method == "POST":
+        form = TrackOrderForm(request.POST)
+
+        if form.is_valid():
+
+            order_id = form.cleaned_data["order_id"].strip()
+            if not order_id:
+                messages.error(request, "Enter Order ID.",extra_tags="coupon")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            
+            email = form.cleaned_data["email"].strip().lower()
+            
+            if not email:
+                messages.error(request, "Enter Email ID.",extra_tags="coupon")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+            try:
+                order = Order.objects.select_related("customer").get(
+                    order_id=order_id,
+                    customer__email__iexact=email,
+                )
+
+            except Order.DoesNotExist:
+                messages.error(request, "No order found with this Order ID and email address.",extra_tags="coupon")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    else:
+        form = TrackOrderForm()
+
+    return render(
+        request,
+        "track_orders.html",
+        {
+            "order": order,
+        },
+    )
     return render(request,"track_orders.html")
 
 def order_history_view(request):
