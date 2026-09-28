@@ -1,0 +1,364 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Order Confirmed | PhoenixWatch</title>
+
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+<!-- <script src="https://cdn.tailwindcss.com"></script> -->
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet"
+>
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .serif {
+        font-family: 'Playfair Display', serif;
+    }
+
+    .success-circle {
+        animation: scaleIn 0.5s ease-out;
+    }
+
+    .success-check {
+        animation: checkmark 0.5s 0.25s ease-out forwards;
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+    }
+
+    @keyframes scaleIn {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        70% {
+            transform: scale(1.08);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes checkmark {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+</style>
+
+
+</head>
+
+<body class="min-h-screen bg-[#faf9f7] text-[#171717]">
+
+<!-- Header -->
+<header class="border-b border-gray-200 bg-white">
+    <div class="mx-auto flex h-16 max-w-7xl items-center justify-center px-5 sm:px-8">
+        <a
+            href="{% url 'home' %}"
+            class="serif text-2xl font-bold tracking-wide text-black sm:text-3xl"
+        >
+            Phoenix
+        </a>
+    </div>
+</header>
+
+
+<!-- Main -->
+<main class="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+
+    <div class="mx-auto max-w-3xl">
+
+        <!-- Success Icon -->
+        <div class="flex justify-center">
+
+            <div
+                class="success-circle flex h-20 w-20 items-center justify-center rounded-full bg-green-100 sm:h-24 sm:w-24"
+            >
+                <div
+                    class="flex h-14 w-14 items-center justify-center rounded-full bg-green-600 sm:h-16 sm:w-16"
+                >
+                    <svg
+                        class="h-8 w-8 text-white sm:h-9 sm:w-9"
+                        viewBox="0 0 52 52"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            class="success-check"
+                            d="M14 27L22 35L39 17"
+                            stroke="currentColor"
+                            stroke-width="5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Heading -->
+        <div class="mt-7 text-center">
+
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-green-600">
+                Payment Successful
+            </p>
+
+            <h1 class="serif mt-2 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+                Thank You For Your Order
+            </h1>
+
+            <p class="mx-auto mt-4 max-w-xl text-sm leading-6 text-gray-600 sm:text-base">
+                Your payment has been successfully received and your order has been confirmed.
+                We will notify you when your order is shipped.
+            </p>
+
+        </div>
+
+
+        <!-- Order Card -->
+        <div class="mt-10 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+
+            <!-- Card Header -->
+            <div class="border-b border-gray-200 px-5 py-5 sm:px-7">
+
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                            Order ID
+                        </p>
+
+                        <p class="mt-1 break-all text-base font-semibold text-gray-900 sm:text-lg">
+                            {{ order.order_id }}
+                        </p>
+                    </div>
+
+                    <span
+                        class="inline-flex w-fit items-center rounded-full bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700"
+                    >
+                        Confirmed
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Order Information -->
+            <div class="grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+
+                <!-- Date -->
+                <div class="px-5 py-5 sm:px-7">
+                    <p class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                        Order Date
+                    </p>
+
+                    <p class="mt-2 text-sm font-semibold text-gray-900">
+                        {{ order.created_at|date:"d M Y" }}
+                    </p>
+
+                    <p class="mt-1 text-xs text-gray-500">
+                        {{ order.created_at|date:"h:i A" }}
+                    </p>
+                </div>
+
+
+                <!-- Payment -->
+                <div class="px-5 py-5 sm:px-7">
+                    <p class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                        Payment Status
+                    </p>
+
+                    <p class="mt-2 text-sm font-semibold capitalize text-green-600">
+                        {{ order.payment_details.status }}
+                    </p>
+                </div>
+
+
+                <!-- Total -->
+                <div class="flex flex-col sm:flex-row">
+
+                    <!-- TOTAL PAID AMOUNT -->
+                    <div class="flex-1 px-5 py-5 sm:px-7">
+                        <p class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                            TOTAL PAID AMOUNT
+                        </p>
+
+                        {% if order.payment_details.status == "pre_paid" %}
+                            <p class="mt-2 text-lg font-bold text-gray-900">
+                                ₹{{ order.total_amount|floatformat:2 }}
+                            </p>
+                        {% elif order.payment_details.status == "partially_paid" %}
+                            <p class="mt-2 text-lg font-bold text-gray-900">
+                                ₹{{ order.payment_details.advance_amount|floatformat:2 }}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- REMAINING AMOUNT -->
+                    {% if order.payment_details.status == "partially_paid" %}
+                        <div class="flex-1 px-5 py-5 sm:px-7  sm:border-t-0 sm:border-l border-gray-200">
+                            <p class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                                REMAINING AMOUNT
+                            </p>
+
+                            <p class="mt-2 text-lg font-bold text-gray-900">
+                                ₹{{ order.payment_details.remaining_amount|floatformat:2 }}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                
+            </div>
+
+
+            <!-- Customer Information -->
+            <div class="border-t border-gray-200 px-5 py-6 sm:px-7">
+
+                <h2 class="text-sm font-semibold text-gray-900">
+                    Delivery Information
+                </h2>
+
+                <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                            Customer
+                        </p>
+
+                        <p class="mt-1 text-sm text-gray-900">
+                            {{ order.delivery_details.first_name }}
+                            {{ order.delivery_details.last_name }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wider text-gray-500">
+                            Email
+                        </p>
+
+                        <p class="mt-1 break-all text-sm text-gray-900">
+                            {{ order.customer.email }}
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Payment Message -->
+            <div class="border-t border-gray-200 bg-gray-50 px-5 py-5 sm:px-7">
+
+                <div class="flex gap-3">
+
+                    <div class="mt-0.5 shrink-0">
+                        <svg
+                            class="h-5 w-5 text-green-600"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 12.75L11.25 15 15 9.75"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-900">
+                            Payment confirmed
+                        </p>
+
+                        <p class="mt-1 text-xs leading-5 text-gray-600 sm:text-sm">
+                            Your payment has been verified successfully.
+                            Please keep your order ID for future reference.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Buttons -->
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+
+            <a
+                href="{% url 'track-order' %}"
+                class="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-7 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+            >
+                Track Your Order
+            </a>
+
+            <a
+                href="{% url 'home' %}"
+                class="inline-flex min-h-12 items-center justify-center rounded-xl border border-gray-300 bg-white px-7 py-3 text-sm font-semibold text-gray-900 transition hover:bg-gray-50"
+            >
+                Continue Shopping
+            </a>
+
+        </div>
+
+
+        <!-- Help -->
+        <div class="mt-10 text-center">
+
+            <p class="text-sm text-gray-500">
+                Need help with your order?
+            </p>
+
+            <a
+                href=""
+                class="mt-1 inline-block text-sm font-semibold text-gray-900 underline underline-offset-4 hover:text-gray-600"
+            >
+                Contact PhoenixWatch
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- Footer -->
+<footer class="border-t border-gray-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-6 text-center sm:px-8">
+        <p class="text-xs text-gray-500">
+            © {% now "Y" %} PhoenixWatch. All rights reserved.
+        </p>
+    </div>
+</footer>
+```
+
+</body>
+</html>

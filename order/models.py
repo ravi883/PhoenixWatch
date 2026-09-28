@@ -45,6 +45,7 @@ class Order(BaseModel):
     coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
     coupon_code = models.CharField(max_length=50, blank=True)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    confirmation_email_sent = models.BooleanField(default=False)
     
 
     class Meta:

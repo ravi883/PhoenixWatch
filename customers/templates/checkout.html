@@ -70,6 +70,161 @@
             max-height: 1000px; /* Arbitrary large max-height */
             opacity: 1;
         }
+
+        #toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            min-width: 320px;
+            max-width: 420px;
+            padding: 16px 18px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+
+            transform: translateX(120%);
+            opacity: 0;
+
+            animation:
+                toast-slide-in 0.35s ease forwards,
+                toast-slide-out 0.35s ease 3.65s forwards;
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .toast-message {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #555;
+        }
+
+        /* Success */
+        .toast-success {
+            border-left: 4px solid #16a34a;
+        }
+
+        .toast-success .toast-icon {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .toast-success .toast-title {
+            color: #15803d;
+        }
+
+        /* Error */
+        .toast-error {
+            border-left: 4px solid #dc2626;
+        }
+
+        .toast-error .toast-icon {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .toast-error .toast-title {
+            color: #b91c1c;
+        }
+
+        /* Warning */
+        .toast-warning {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .toast-warning .toast-icon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .toast-warning .toast-title {
+            color: #b45309;
+        }
+
+        /* Info */
+        .toast-info {
+            border-left: 4px solid #2563eb;
+        }
+
+        .toast-info .toast-icon {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .toast-info .toast-title {
+            color: #1d4ed8;
+        }
+
+        @keyframes toast-slide-in {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes toast-slide-out {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            #toast-container {
+                top: 16px;
+                right: 16px;
+                left: 16px;
+            }
+
+            .toast {
+                min-width: 0;
+                width: 100%;
+            }
+        }
     </style>
 
 <script>
@@ -284,11 +439,11 @@
                     </section>
 
                     <div class="md:col-span-2 flex flex-col md:flex-row gap-4 justify-end">
-                        <button type="submit" value="prepaid"
+                        <button type="submit" name="payment_type" value="prepaid"
                          class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-colors w-full tracking-wider">
                             Order Now - Get Surprise Gift On PrePaid Orders
                         </button>
-                        <button type="submit" value="pay_now"
+                        <button type="submit" name="payment_type" value="pay_now"
                          class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-colors w-full tracking-wider">
                             Pay Now (20% Advance to Confirm Your Orders)
                         </button>
@@ -442,9 +597,14 @@
 
     <!-- Footer -->
     {% include "includes/footer.html" %}
-    
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+ <script>
+document.addEventListener("DOMContentLoaded", function () {
+
     const billingRadios = document.querySelectorAll('input[name="billing_option"]');
     const billingFormWrapper = document.getElementById('billing-form-wrapper');
 
@@ -460,4 +620,280 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-</script></body></html>
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("checkout-form");
+
+    if (!form) {
+        console.error("❌ checkout-form NOT FOUND");
+        return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+
+        // VERY IMPORTANT
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        const validation = window.checkoutValidation;
+
+        if (!validation) {
+            console.error("❌ Checkout validation not loaded");
+            return;
+        }
+
+        let valid = true;
+
+        valid = validation.validateEmail(document.getElementById("email")) && valid;
+        valid = validation.validateShipping() && valid;
+        valid = validation.validateBilling() && valid;
+
+
+        // ❌ Validation fail
+        if (!valid) {
+            const firstError =  form.querySelector(".checkout-field-error");
+
+            if (firstError) {
+                firstError.previousElementSibling?.focus();
+
+                firstError.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
+            return;
+        }
+
+
+        // ✅ Validation pass
+        // Razorpay fetch code continue thase
+
+        const submitButton = event.submitter;
+
+        if (!submitButton) {
+            console.error("❌ No submit button found");
+            return;
+        }
+
+        const paymentType = submitButton.value;
+
+        submitButton.disabled = true;
+
+        const formData = new FormData(form);
+        formData.set("payment_type", paymentType);
+
+        try {
+
+            const response = await fetch(
+                form.action,
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+            if (!data.success) {
+                alert(data.message || "Unable to create order.");
+                submitButton.disabled = false;
+                return;
+            }
+
+            if (typeof Razorpay === "undefined") {
+                alert("Razorpay SDK failed to load.");
+                submitButton.disabled = false;
+                return;
+            }
+
+            const options = {
+                key: data.razorpay_key_id,
+                amount: data.amount,
+                currency: "INR",
+                name: "PhoenixWatch",
+                description:
+                    paymentType === "prepaid"
+                        ? "Prepaid Order"
+                        : "20% Advance Payment",
+
+                order_id: data.razorpay_order_id,
+
+                prefill: {
+                    name: data.customer.name,
+                    email: data.customer.email,
+                    contact: data.customer.contact
+                },
+
+                theme: {
+                    color: "#528FF0"
+                },
+                
+                handler: function (paymentResponse) {
+
+                    console.log("✅ Razorpay Payment Success:",paymentResponse);
+                    verifyPayment(paymentResponse, data.order_id);
+                },
+
+                modal: {
+                    ondismiss: function () {
+                        submitButton.disabled = false;
+                    }
+                }
+            };
+
+
+            const razorpay = new Razorpay(options);
+
+            razorpay.on("payment.failed", function (response) {
+                alert("Payment failed: " +response.error.description);
+                showToast(
+                    response.error.description ||
+                    "Payment failed.",
+                    "error"
+                );
+                submitButton.disabled = false;
+            });
+
+            razorpay.open();
+
+        } catch (error) {
+
+            console.error("❌ ERROR:", error);
+
+            // alert("Something went wrong. Please try again.");
+            showToast(
+                    "Something went wrong. Please try again."||
+                    "Try Again",
+                    "error"
+                );
+
+            submitButton.disabled = false;
+        }
+    });
+
+
+    async function verifyPayment(paymentResponse, orderId) {
+
+        console.log("🔐 Verifying payment...");
+
+        const csrfToken = form.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+        try {
+            const response = await fetch(
+                "{% url 'verify_razorpay_payment' %}",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken,
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+
+                    body: JSON.stringify({
+
+                        razorpay_payment_id:paymentResponse.razorpay_payment_id,
+                        razorpay_order_id:paymentResponse.razorpay_order_id,
+                        razorpay_signature:paymentResponse.razorpay_signature,
+                        order_id: orderId
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (data.success) {
+                showToast(
+                    data.message ||
+                    "Payment successfull.",
+                    "success"
+                );
+
+                window.location.href = data.redirect_url;
+
+            } else {
+                // alert(data.message ||"Payment verification failed.");
+                showToast(data.message ||"Payment verification failed.","error");
+            }
+
+        } catch (error) {
+            console.error("❌ Verification error:",error);
+            // alert("Payment verification failed.");
+            showToast(
+                    "Payment failed." ||
+                    "Payment verification failed.",
+                    "error"
+                );
+        }
+    }
+
+    function showToast(message, type = "info", title = null) {
+        const container = document.getElementById("toast-container");
+
+        if (!container) {
+            console.error("Toast container not found.");
+            return;
+        }
+
+        const toast = document.createElement("div");
+
+        const config = {
+            success: {
+                title: title || "Success",
+                icon: "✓"
+            },
+            error: {
+                title: title || "Error",
+                icon: "!"
+            },
+            warning: {
+                title: title || "Warning",
+                icon: "!"
+            },
+            info: {
+                title: title || "Info",
+                icon: "i"
+            }
+        };
+
+        const current = config[type] || config.info;
+
+        toast.className = `toast toast-${type}`;
+
+        toast.innerHTML = `
+            <div class="toast-icon">
+                ${current.icon}
+            </div>
+
+            <div class="toast-content">
+                <div class="toast-title">
+                    ${current.title}
+                </div>
+
+                <div class="toast-message">
+                    ${message}
+                </div>
+            </div>
+        `;
+
+        container.appendChild(toast);
+
+        // Remove after animation
+        setTimeout(() => {
+            toast.remove();
+        }, 4100);
+    }
+
+});
+</script>
+
+
+
+</body></html>

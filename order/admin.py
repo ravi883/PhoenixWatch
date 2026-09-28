@@ -100,6 +100,10 @@ class OrderPaymentDetailsInline(admin.StackedInline):
         "total_amount",
         "advance_amount",
         "remaining_amount",
+        "payment_method",
+        "razorpay_order_id",
+        "razorpay_payment_id",
+        "razorpay_signature",
     )
 
 
@@ -126,6 +130,7 @@ class OrderAdmin(admin.ModelAdmin):
         "discount_amount",
         "total_amount",
         "status",
+        "confirmation_email_sent",
         "created_at",
         "updated_at",
     )

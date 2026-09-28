@@ -319,37 +319,45 @@ document.addEventListener("DOMContentLoaded", function () {
     // Form submit
     // --------------------------------------------------
 
-    form.addEventListener("submit", function (event) {
+    // form.addEventListener("submit", function (event) {
 
-        event.preventDefault();
-        let valid = true;
+    //     event.preventDefault();
+    //     let valid = true;
 
-        // Contact
-        valid = validateEmail(document.getElementById("email")) && valid;
+    //     // Contact
+    //     valid = validateEmail(document.getElementById("email")) && valid;
 
-        // Shipping
-        valid = validateShipping() && valid;
+    //     // Shipping
+    //     valid = validateShipping() && valid;
 
-        // Billing
-        valid = validateBilling() && valid;
+    //     // Billing
+    //     valid = validateBilling() && valid;
 
-        if (!valid) {
-            const firstError = form.querySelector( ".checkout-field-error");
+    //     if (!valid) {
+    //         const firstError = form.querySelector( ".checkout-field-error");
 
-            if (firstError) {
-                firstError.previousElementSibling?.focus();
-                firstError.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-            }
-            return;
-        }
+    //         if (firstError) {
+    //             firstError.previousElementSibling?.focus();
+    //             firstError.scrollIntoView({
+    //                 behavior: "smooth",
+    //                 block: "center"
+    //             });
+    //         }
+    //         return;
+    //     }
 
-        // Everything valid
-        form.submit();
+    //     // Everything valid
+    //     form.submit();
 
-    });
+    // });
+
+    window.checkoutValidation = {
+
+        validateEmail,
+        validateShipping,
+        validateBilling
+
+    };
 
 
     // --------------------------------------------------
