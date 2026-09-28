@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from cart.models import *
 from decimal import Decimal, ROUND_HALF_UP
 from order.models import (
@@ -14,6 +14,15 @@ from order.models import (
 from django.db import transaction
 from .forms import TrackOrderForm
 from django.http import HttpResponseRedirect
+from .razorpay_client import razorpay_client
+from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.urls import reverse
+import razorpay
+import json
+from .utils import send_order_confirmation_email
+
 
 def track_order_view(request):
     order = None
@@ -54,7 +63,7 @@ def track_order_view(request):
             "order": order,
         },
     )
-    return render(request,"track_orders.html")
+
 
 def order_history_view(request):
     customer_id = request.session.get("customer_id")
@@ -129,6 +138,15 @@ def create_order_view(request):
         messages.error( request, "Customer account not found.")
         return redirect("login")
 
+    # PAYMENT TYPE
+    payment_type = request.POST.get("payment_type", "").strip()
+    
+    if payment_type not in ["prepaid", "pay_now"]:
+        return JsonResponse({
+            "success": False,
+            "message": "Invalid payment option."
+        }, status=400)
+
     # Get cart
     cart = Cart.objects.filter(customer=customer).first()
 
@@ -162,6 +180,16 @@ def create_order_view(request):
     advance_amount = ( subtotal * advance_percentage / Decimal("100")).quantize(Decimal("0.01"),rounding=ROUND_HALF_UP)
     remaining_amount = (subtotal - advance_amount).quantize( Decimal("0.01"),rounding=ROUND_HALF_UP)
 
+    if payment_type == "prepaid":
+        amount_to_pay = subtotal
+
+    else:
+        amount_to_pay = advance_amount
+
+    amount_to_pay = amount_to_pay.quantize(
+        Decimal("0.01"),
+        rounding=ROUND_HALF_UP
+    )
     # ----------------------------------------------------------
     # DELIVERY DETAILS
     # ----------------------------------------------------------
@@ -323,7 +351,7 @@ def create_order_view(request):
     # PAYMENT DETAILS
     # ----------------------------------------------------------
 
-    OrderPaymentDetail.objects.create(
+    payment_detail = OrderPaymentDetail.objects.create(
         order=order,
         total_amount=subtotal,
         advance_amount=advance_amount,
@@ -343,9 +371,430 @@ def create_order_view(request):
     # Don't clear cart yet.
     # Clear it after successful Razorpay payment.
 
-    return redirect(
-        "order-payment",
+    amount_in_paise = int(
+        amount_to_pay * Decimal("100")
     )
 
+    razorpay_order = razorpay_client.order.create({
+        "amount": amount_in_paise,
+        "currency": "INR",
+        "receipt": order.order_id,
+        "notes": {
+            "order_id": order.order_id,
+            "customer_id": str(customer_id),
+            "payment_type": payment_type,
+        },
+    })
+
+    payment_detail.razorpay_order_id = (
+        razorpay_order["id"]
+    )
+
+    payment_detail.save(
+        update_fields=["razorpay_order_id"]
+    )
+
+    response = {
+        "success": True,
+        "order_id": order.order_id,
+        "razorpay_order_id": razorpay_order["id"],
+        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+        "amount": amount_in_paise,
+        "amount_display": str(amount_to_pay),
+        "payment_type": payment_type,
+        "customer": {
+            "name": (
+                f"{customer.first_name} "
+                f"{customer.last_name}"
+            ).strip(),
+
+            "email": customer.email,
+            "contact": customer.phone_number,
+        },
+    }
+    return JsonResponse(response)
+
+
 def order_payment_view(request):
-    return render(request, "order_payment.html")
+    customer_id = request.session.get("customer_id")
+
+    if not customer_id:
+        messages.warning(request, "Please login before proceeding.")
+        return redirect("login")
+
+    order = (
+    Order.objects
+    .select_related("payment_details", "customer")
+    .filter(
+        customer_id=customer_id,
+        status=Order.Status.PENDING,
+    )
+    .order_by("-created_at")
+    .first()
+)
+
+    payment_detail = order.payment_details
+
+    # Already paid
+    if payment_detail.status in [
+        OrderPaymentDetail.PaymentStatus.PARTIALLY_PAID,
+        OrderPaymentDetail.PaymentStatus.PRE_PAID,
+        OrderPaymentDetail.PaymentStatus.PAID,
+    ]:
+        return redirect("order-success", order_id=order.order_id)
+
+    if not payment_detail.razorpay_order_id:
+
+        amount_in_paise = int(
+            payment_detail.advance_amount * 100
+        )
+
+        razorpay_order = razorpay_client.order.create({
+            "amount": amount_in_paise,
+            "currency": "INR",
+            "receipt": order.order_id,
+            "notes": {
+                "order_id": order.order_id,
+                "customer_id": str(customer_id),
+            },
+        })
+
+        payment_detail.razorpay_order_id = razorpay_order["id"]
+        payment_detail.save(
+            update_fields=["razorpay_order_id"]
+        )
+
+        context = {
+            "order": order,
+            "payment_detail": payment_detail,
+            "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+        }
+
+    return render(request, "order_payment.html", context)
+
+
+@require_POST
+@transaction.atomic
+def verify_razorpay_payment(request):
+
+    customer_id = request.session.get("customer_id")
+
+    if not customer_id:
+
+        return JsonResponse({
+            "success": False,
+            "message": "Please login again."
+        }, status=401)
+
+    
+    data = json.loads(request.body)
+    razorpay_payment_id = data.get("razorpay_payment_id")
+    razorpay_order_id = data.get("razorpay_order_id")
+    razorpay_signature = data.get("razorpay_signature")
+    order_id = data.get("order_id")
+
+
+    if not all([
+        razorpay_payment_id,
+        razorpay_order_id,
+        razorpay_signature,
+        order_id,
+    ]):
+
+        return JsonResponse({
+            "success": False,
+            "message": "Invalid payment response."
+        }, status=400)
+
+    # ==========================================================
+    # GET ORDER
+    # ==========================================================
+
+    try:
+
+        order = (
+            Order.objects
+            .select_for_update()
+            .select_related(
+                "customer",
+            )
+            .get(
+                order_id=order_id,
+                customer_id=customer_id,
+            )
+        )
+
+    except Order.DoesNotExist:
+
+        return JsonResponse({
+            "success": False,
+            "message": "Order not found."
+        }, status=404)
+
+    payment_detail = order.payment_details
+
+    # ==========================================================
+    # VERIFY RAZORPAY ORDER ID
+    # ==========================================================
+
+    if (
+        payment_detail.razorpay_order_id
+        != razorpay_order_id
+    ):
+
+        return JsonResponse({
+            "success": False,
+            "message": "Invalid Razorpay order."
+        }, status=400)
+
+    # ==========================================================
+    # VERIFY SIGNATURE
+    # ==========================================================
+
+    try:
+
+        razorpay_client.utility.verify_payment_signature({
+            "razorpay_order_id": razorpay_order_id,
+            "razorpay_payment_id": razorpay_payment_id,
+            "razorpay_signature": razorpay_signature,
+        })
+
+    except razorpay.errors.SignatureVerificationError:
+
+        return JsonResponse({
+            "success": False,
+            "message": "Payment verification failed."
+        }, status=400)
+
+    # ==========================================================
+    # CHECK IF ALREADY PAID
+    # ==========================================================
+
+    if payment_detail.status in [
+        OrderPaymentDetail.PaymentStatus.PARTIALLY_PAID,
+        OrderPaymentDetail.PaymentStatus.PRE_PAID,
+        OrderPaymentDetail.PaymentStatus.PAID,
+    ]:
+
+        return JsonResponse({
+            "success": True,
+            "message": "Payment already verified.",
+            "redirect_url": (
+                f"/order-success/{order.order_id}/"
+            ),
+        })
+
+    # ==========================================================
+    # GET RAZORPAY PAYMENT
+    # ==========================================================
+
+    razorpay_payment = razorpay_client.payment.fetch(
+        razorpay_payment_id
+    )
+
+    payment_status = razorpay_payment.get("status")
+
+    if payment_status != "captured":
+
+        return JsonResponse({
+            "success": False,
+            "message": (
+                f"Payment is not captured. "
+                f"Current status: {payment_status}"
+            )
+        }, status=400)
+
+    # ==========================================================
+    # AMOUNT VERIFICATION
+    # ==========================================================
+
+    paid_amount = Decimal(
+        str(razorpay_payment["amount"])
+    ) / Decimal("100")
+
+    paid_amount = paid_amount.quantize(
+        Decimal("0.01")
+    )
+
+    # Determine expected amount.
+    #
+    # If payment_detail.razorpay_order_id belongs to this order,
+    # fetch Razorpay order and verify amount from Razorpay itself.
+
+    razorpay_order = razorpay_client.order.fetch(
+        razorpay_order_id
+    )
+
+    expected_amount = (
+        Decimal(str(razorpay_order["amount"]))
+        / Decimal("100")
+    )
+
+    expected_amount = expected_amount.quantize(
+        Decimal("0.01")
+    )
+
+    if paid_amount != expected_amount:
+
+        return JsonResponse({
+            "success": False,
+            "message": "Payment amount mismatch."
+        }, status=400)
+
+    # ==========================================================
+    # UPDATE PAYMENT
+    # ==========================================================
+
+    payment_detail.razorpay_payment_id = (
+        razorpay_payment_id
+    )
+
+    payment_detail.razorpay_signature = (
+        razorpay_signature
+    )
+
+    # ==========================================================
+    # DETERMINE PREPAID / 20% PAYMENT
+    # ==========================================================
+
+    if paid_amount == payment_detail.total_amount:
+
+        # 100% prepaid
+        payment_detail.status = (
+            OrderPaymentDetail
+            .PaymentStatus
+            .PRE_PAID
+        )
+
+        payment_detail.advance_amount = Decimal("0.00")
+        payment_detail.remaining_amount = Decimal("0.00")
+
+        order.status = Order.Status.CONFIRMED
+
+        status_note = (
+            "Full prepaid payment received "
+            "successfully."
+        )
+
+    else:
+
+        # 20% advance
+        payment_detail.status = (
+            OrderPaymentDetail
+            .PaymentStatus
+            .PARTIALLY_PAID
+        )
+
+        payment_detail.remaining_amount = (
+            payment_detail.total_amount
+            - paid_amount
+        ).quantize(
+            Decimal("0.01")
+        )
+
+        order.status = Order.Status.CONFIRMED
+
+        status_note = (
+            "20% advance payment received "
+            "successfully."
+        )
+    order.save()
+    payment_detail.save()
+
+    # ==========================================================
+    # ORDER STATUS
+    # ==========================================================
+
+    OrderStatus.objects.create(
+        order=order,
+        status=Order.Status.CONFIRMED,
+        note=status_note,
+    )
+
+    # ==========================================================
+    # REDUCE STOCK
+    # ==========================================================
+
+    order_items = (
+        OrderItem.objects
+        .filter(order=order)
+        .select_related("product")
+    )
+
+    for order_item in order_items:
+
+        product = (
+            Products.objects
+            .select_for_update()
+            .get(pk=order_item.product_id)
+        )
+
+        if product.stock < order_item.quantity:
+
+            return JsonResponse({
+                "success": False,
+                "message": (
+                    f"Stock is no longer available "
+                    f"for {product.name}."
+                )
+            }, status=400)
+
+        product.stock -= order_item.quantity
+
+        product.save(
+            update_fields=["stock"]
+        )
+
+    # ==========================================================
+    # CLEAR CART
+    # ==========================================================
+
+    cart = Cart.objects.filter(
+        customer_id=customer_id
+    ).first()
+
+    if cart:
+
+        CartItem.objects.filter(
+            cart=cart
+        ).delete()
+
+        # If your Cart model has these fields:
+        cart.coupon = None
+        cart.coupon_code = ""
+        cart.discount_amount = Decimal("0.00")
+        cart.save()
+
+    # ==========================================================
+    # SUCCESS
+    # ==========================================================
+
+    if not order.confirmation_email_sent:
+
+        send_order_confirmation_email(order)
+
+        order.confirmation_email_sent = True
+        order.save(update_fields=["confirmation_email_sent"])
+
+    return JsonResponse({
+        "success": True,
+        "message": "Payment successful.",
+        "order_id": order.order_id,
+        "redirect_url": reverse(
+            "order_success",
+            kwargs={
+                "order_id": order.order_id
+            }
+        ),
+    })
+
+def order_success_view(request, order_id):
+
+    customer_id = request.session.get("customer_id")
+
+    if not customer_id:
+        return redirect("login")
+
+    order = get_object_or_404(Order, order_id=order_id, customer_id=customer_id)
+
+    return render(request, "order-success.html",{"order": order},)
