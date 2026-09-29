@@ -117,7 +117,7 @@
                     <div style="padding-bottom: 10px;"
                         class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body-md text-body-md text-primary placeholder-on-surface-variant/50 focus:ring-1 focus:ring-outline transition-shadow">
                         <label class="sr-only" for="phone">Phone Number</label>
-                        <input class="minimal-input" id="phone" name="phone_number"  placeholder="Phone Number(987....)" value="{% if not form.phone_number.errors %}{{ form.phone_number.value|default:'' }}{% endif %}" type="tel"/>
+                        <input class="minimal-input" id="phone" name="phone_number"  placeholder="+91 987654321*" value="{% if not form.phone_number.errors %}{{ form.phone_number.value|default:'' }}{% endif %}" type="tel"/>
                     </div>
                     {% for error in form.phone_number.errors %}
                         <div class="field-error">

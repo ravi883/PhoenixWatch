@@ -28,7 +28,7 @@ def signup(request):
         if form.is_valid():
             customer = form.save()
             # messages.success(request, "Account created successfully! You can now login.")
-            return redirect('/customers/login/')
+            return redirect('login')
     else:
         form = CustomerSignupForm()
     return render(request,"signup.html",{"form": form})
