@@ -21,8 +21,12 @@ from django.views.decorators.http import require_POST
 from django.urls import reverse
 import razorpay
 import json
+import logging
 from .utils import send_order_confirmation_email
+from .whatsapp import send_whatsapp_message
 
+
+logger = logging.getLogger(__name__)    
 
 def track_order_view(request):
     order = None
@@ -775,6 +779,32 @@ def verify_razorpay_payment(request):
 
         order.confirmation_email_sent = True
         order.save(update_fields=["confirmation_email_sent"])
+
+    try:
+        whatsapp_result = send_whatsapp_message(
+            order.delivery_details.phone_number,
+            order,
+        )
+
+        if not whatsapp_result.get("success"):
+            logger.warning(
+                "WhatsApp notification failed for order %s. "
+                "Payment/order will remain successful. Error: %s",
+                order.order_id,
+                whatsapp_result.get("error"),
+            )
+
+    except Exception as e:
+        # Absolute safety net.
+        # Even if whatsapp.py itself has an unexpected error,
+        # payment/order processing will continue.
+
+        logger.exception(
+            "Unexpected WhatsApp error for order %s. "
+            "Payment/order will remain successful.",
+            order.order_id,
+    )
+
 
     return JsonResponse({
         "success": True,
