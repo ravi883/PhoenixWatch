@@ -18,7 +18,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
-from order.models import Coupon
+from order.models import Coupon, Order
 
 
 def signup(request):
@@ -213,6 +213,12 @@ def checkout_view(request):
         
         if not coupon_obj:
             messages.warning(request, "Invalid Coupon.",extra_tags="coupon")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
+        coupon_used = Order.objects.filter(customer=customer,coupon=coupon_obj[0]).first()
+
+        if coupon_used:
+            messages.warning(request, "You have already used this coupon.", extra_tags="coupon")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         
         if cart.coupon:
