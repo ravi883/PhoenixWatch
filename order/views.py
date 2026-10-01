@@ -545,6 +545,11 @@ def verify_razorpay_payment(request):
         payment_detail.razorpay_order_id
         != razorpay_order_id
     ):
+        payment_detail.status = (
+            OrderPaymentDetail
+            .PaymentStatus
+            .FAILED
+        )
 
         return JsonResponse({
             "success": False,
@@ -562,6 +567,12 @@ def verify_razorpay_payment(request):
             "razorpay_payment_id": razorpay_payment_id,
             "razorpay_signature": razorpay_signature,
         })
+
+        payment_detail.status = (
+            OrderPaymentDetail
+            .PaymentStatus
+            .FAILED
+        )
 
     except razorpay.errors.SignatureVerificationError:
 
@@ -599,6 +610,12 @@ def verify_razorpay_payment(request):
     payment_status = razorpay_payment.get("status")
 
     if payment_status != "captured":
+
+        payment_detail.status = (
+            OrderPaymentDetail
+            .PaymentStatus
+            .FAILED
+        )
 
         return JsonResponse({
             "success": False,
@@ -640,6 +657,11 @@ def verify_razorpay_payment(request):
 
     if paid_amount != expected_amount:
 
+        payment_detail.status = (
+            OrderPaymentDetail
+            .PaymentStatus
+            .FAILED
+        )
         return JsonResponse({
             "success": False,
             "message": "Payment amount mismatch."
@@ -702,6 +724,7 @@ def verify_razorpay_payment(request):
             "20% advance payment received "
             "successfully."
         )
+
     order.save()
     payment_detail.save()
 
