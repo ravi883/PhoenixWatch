@@ -190,14 +190,14 @@ def checkout_view(request):
     ##GET Cart
     cart = Cart.objects.filter(customer=customer).first()
     if not cart:
-        messages.warning(request,"Your cart is empty.")
-        return redirect("cart")
+        # messages.warning(request,"Your cart is empty.")
+        return redirect("cart:cart")
 
     ##GET Cart Items
     cart_items = (CartItem.objects.filter(cart=cart).select_related("product","product__category","product__watch_type","product__strap_type"))
     if not cart_items.exists():
-        messages.warning(request, "Your cart is empty.")
-        return redirect("cart")
+        # messages.warning(request, "Your cart is empty.")
+        return redirect("cart:cart")
 
     ##CALCULATE SUBTOTAL 
     subtotal = cart.subtotal
