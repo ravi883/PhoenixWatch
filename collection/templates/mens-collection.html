@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phoenix - Timeless Precision</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
+<script src="{% static 'js/cart1.js' %}"></script>
+<style>
+        :root {
+            --primary-color: #000000;
+            --surface-color: #fcf9f8;
+            --text-color: #1b1c1c;
+        }      
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased" style="font-family: 'Inter', sans-serif;">
+    <!-- TopNavBar -->
+    {% include "includes/header.html" %}
+
+    <!-- Mobile Menu -->
+    {% include "includes/mobile-menu.html" %}
+    
+    <!-- Cart Drawer -->
+    {% include "includes/cart-drawer.html" %}
+
+    <main class="flex-grow pt-24 md:pt-32">
+        <!-- Hero Section -->
+        <section class="w-full mb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+            <div class="relative h-[614px] md:h-[716px] w-full rounded-lg overflow-hidden flex items-center justify-center">
+                <div class="absolute inset-0 bg-cover bg-center" data-alt="" 
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBvJX3hBV9sTZlJWZtr93Mibv0GJcVD5Bdg5CtW0_zrtppNkZDLk3wzq9t79mvbKBbq_-plr3P_jJqvsNMFZFjn4lUv3YatapGBk8EIdUp8DJVc0jsA9aMlU_WIAXTt9_LHj3CaVPRQKGCPwurXc0hOPq5UTuikRFiOJ_-X2X_zNp8XexkSKv6eSbt6IKdFFmfXchnij3h6zD2McYctLIWtx9rymyBLJmfSY2CcP8YVWijN5U2v8Orb')"></div>
+                <div class="absolute inset-0 bg-tertiary/30 mix-blend-multiply"></div>
+                <div class="relative z-10 text-center text-on-tertiary">
+                    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 drop-shadow-lg">Men's Collection</h1>
+                    <p class="font-body-lg text-body-lg max-w-2xl mx-auto drop-shadow-md">Precision engineering meets timeless elegance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Gallery Grid -->
+        <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-section-gap">
+            <div class="flex justify-between items-center mb-stack-lg border-b border-surface-container pb-4">
+                <span class="font-label-caps text-label-caps text-secondary">Showing {{ products.paginator.count }} Timepieces</span>
+                <button class="flex items-center gap-2 font-label-caps text-label-caps text-primary hover:text-secondary transition-colors">
+                                    Sort By <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-gutter gap-y-16">
+                {% for product in products %}
+                    <!-- Product Card 1 -->
+                    <a href="{% url 'product-detail' product.slug %}">
+                        <div class="group flex flex-col">
+                            <div class="relative aspect-[4/5] bg-surface-container-low rounded-lg overflow-hidden mb-stack-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+                                {% if product.primary_image %}
+                                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="{{ product.name }}" 
+                                    src="{{ product.primary_image.image.url }}"/>
+                                {% endif %}
+                                <!-- <div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded font-label-caps text-label-caps text-primary">New</div> -->
+                            </div>
+
+                            <div class="text-center">
+                                <h3 class="font-headline-md text-headline-md text-primary mb-1">{{ product.name }}</h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant mb-2">{{ product.watch_type}} • {{ product.strap_type}}</p>
+                                <p class="font-body-lg text-body-lg text-primary">RS. {{ product.price }}</p>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if products.has_other_pages %}
+                <div class="mt-section-gap flex justify-center items-center gap-stack-md font-body-md text-body-md">
+                    {% if products.has_previous %}
+                        <a href="?page={{ products.previous_page_number }}" class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors">
+                            <span class="material-symbols-outlined text-sm">
+                                arrow_back
+                            </span>
+                        </a>
+                    {% endif %}
+
+                    {% for num in products.paginator.page_range %}
+                        {% if products.number == num %}
+                            <a href="?page={{ num }}" class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-on-primary transition-colors">
+                                {{ num }}
+                            </a>
+                        {% else %}
+                            <a href="?page={{ num }}" class="w-10 h-10 flex items-center justify-center rounded-full text-secondary hover:bg-surface-container transition-colors">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if products.has_next %}
+                        <a href="?page={{ products.next_page_number }}" class="flex items-center gap-2 text-primary hover:text-secondary transition-colors ml-4 font-label-caps text-label-caps">
+                            Next
+                            <span class="material-symbols-outlined text-sm">
+                                arrow_forward
+                            </span>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <!-- Footer -->
+    {% include "includes/footer.html" %}
+
+</body></html>

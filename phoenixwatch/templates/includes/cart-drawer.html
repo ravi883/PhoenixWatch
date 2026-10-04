@@ -1,0 +1,90 @@
+{% csrf_token %}
+
+<div id="cart-drawer" class="fixed inset-0 z-[100] invisible transition-all duration-300">
+    <!-- Overlay -->
+    <div id="cart-overlay" class="absolute inset-0 z-[100] bg-black/40 opacity-0 transition-opacity duration-300"></div>
+
+    <!-- Cart Content -->
+    <div id="cart-content" class="absolute right-0 top-0 z-[101] h-full w-full max-w-md bg-surface p-6 translate-x-full transition-transform duration-300 shadow-lg flex flex-col">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8 border-b border-outline-variant pb-4" >
+            <h2 class="font-headline-md text-headline-md text-primary">
+                Shopping Cart
+            </h2>
+
+            <button type="button" id="close-cart" class="p-2 text-primary hover:bg-surface-variant rounded-full transition-colors">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </button>
+        </div>
+
+
+        <!-- Cart Items -->
+        <div id="cart-drawer-items" class="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-6" >
+            {% include 'cart-drawer-items.html' %}
+        </div>
+    </div>
+</div>
+<script>
+(function() {
+    const openBtn = document.getElementById('open-mobile-menu');
+    const closeBtn = document.getElementById('close-mobile-menu');
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const content = document.getElementById('mobile-menu-content');
+
+    function openMenu() {
+        drawer.classList.remove('invisible');
+        setTimeout(() => {
+            overlay.classList.add('opacity-100');
+            content.classList.remove('-translate-x-full');
+        }, 10);
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        overlay.classList.remove('opacity-100');
+        content.classList.add('-translate-x-full');
+        setTimeout(() => {
+            drawer.classList.add('invisible');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    if (openBtn) openBtn.addEventListener('click', openMenu);
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    if (overlay) overlay.addEventListener('click', closeMenu);
+    
+    
+    const cartBtns = document.querySelectorAll('.cart-toggle-btn');
+    const closeCartBtn = document.getElementById('close-cart');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartContent = document.getElementById('cart-content');
+
+    function openCart() {
+        cartDrawer.classList.remove('invisible');
+        setTimeout(() => {
+            cartOverlay.classList.add('opacity-100');
+            cartContent.classList.remove('translate-x-full');
+        }, 10);
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+        cartOverlay.classList.remove('opacity-100');
+        cartContent.classList.add('translate-x-full');
+        setTimeout(() => {
+            cartDrawer.classList.add('invisible');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    cartBtns.forEach(btn => btn.addEventListener('click', openCart));
+    if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
+    if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+})();
+    
+</script>

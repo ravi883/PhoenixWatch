@@ -1,0 +1,899 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phoenix Horology - Checkout</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<!-- <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/> -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<script src="{% static 'js/cart1.js' %}"></script>
+<script src="{% static 'js/checkout_fields_validations.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+<style>
+        body {
+            background-color: #fcf9f8; /* background */
+            color: #1b1c1c; /* on-background */
+        }
+        
+        /* Ambient shadow for elevation */
+        .ambient-shadow {
+            box-shadow: 0 4px 40px rgba(0,0,0,0.05);
+        }
+
+        /* Input styling overrides */
+        input[type="text"], input[type="email"], input[type="tel"], select {
+            background-color: #f6f3f2; /* surface-container-low */
+            border: none;
+            border-bottom: 1px solid #c4c7c7; /* outline-variant */
+            border-radius: 0.5rem 0.5rem 0 0;
+            padding: 12px 16px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-bottom: 2px solid #000000; /* primary */
+            background-color: #f0eded; /* surface-container */
+        }
+        
+        /* Custom radio button */
+        input[type="radio"] {
+            accent-color: #000000;
+        }
+        
+        .radio-card {
+            border: 1px solid #c4c7c7;
+            transition: all 0.2s ease;
+        }
+        
+        .radio-card.selected {
+            border-color: #000000;
+            background-color: #fcf9f8;
+        }
+
+        /* Smooth Expand/Collapse transition for Billing Form */
+        #billing-form-wrapper {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, padding 0.4s ease-in-out;
+        }
+
+        #billing-form-wrapper.expanded {
+            max-height: 1000px; /* Arbitrary large max-height */
+            opacity: 1;
+        }
+
+        #toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            min-width: 320px;
+            max-width: 420px;
+            padding: 16px 18px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+
+            transform: translateX(120%);
+            opacity: 0;
+
+            animation:
+                toast-slide-in 0.35s ease forwards,
+                toast-slide-out 0.35s ease 3.65s forwards;
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .toast-message {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #555;
+        }
+
+        /* Success */
+        .toast-success {
+            border-left: 4px solid #16a34a;
+        }
+
+        .toast-success .toast-icon {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .toast-success .toast-title {
+            color: #15803d;
+        }
+
+        /* Error */
+        .toast-error {
+            border-left: 4px solid #dc2626;
+        }
+
+        .toast-error .toast-icon {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .toast-error .toast-title {
+            color: #b91c1c;
+        }
+
+        /* Warning */
+        .toast-warning {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .toast-warning .toast-icon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .toast-warning .toast-title {
+            color: #b45309;
+        }
+
+        /* Info */
+        .toast-info {
+            border-left: 4px solid #2563eb;
+        }
+
+        .toast-info .toast-icon {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .toast-info .toast-title {
+            color: #1d4ed8;
+        }
+
+        @keyframes toast-slide-in {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes toast-slide-out {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            #toast-container {
+                top: 16px;
+                right: 16px;
+                left: 16px;
+            }
+
+            .toast {
+                min-width: 0;
+                width: 100%;
+            }
+        }
+    </style>
+
+<script>
+    setTimeout(function () {
+        const messages = document.querySelectorAll(".message-alert");
+
+        messages.forEach(function (message) {
+            message.style.transition = "opacity 0.5s ease";
+            message.style.opacity = "0";
+
+            setTimeout(function () {
+                message.remove();
+            }, 500);
+        });
+    }, 3000);
+</script>
+
+</head>
+<body class="antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-primary selection:text-on-primary">
+    <!-- Top Navigation (Simplified for Checkout) -->
+    <header class="w-full bg-surface/80 backdrop-blur-md shadow-sm fixed top-0 z-50 transition-all duration-200 ease-in-out border-b border-surface-container-highest">
+        <div class="px-margin-desktop py-4 max-w-container-max mx-auto flex justify-between items-center">
+            <a class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors duration-300" href="{% url 'home' %}">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+                <span class="font-label-caps text-label-caps uppercase">Back to Bag</span>
+            </a>
+            <a class="font-headline-md text-headline-md text-primary tracking-tight" href="{% url 'home' %}">Phoenix</a>
+            <!-- Empty div to balance flex layout -->
+             <a href="{% url 'cart:cart' %}">
+                <button type="button" aria-label="Cart" class="p-2 hover:opacity-80 transition-opacity relative">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_bag</span>
+                    <span class="absolute top-1 right-1 bg-error text-on-error rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">{{cart_count}}</span>
+                </button>
+            </a>
+            <!-- <div class="w-[100px]"></div> -->
+        
+        </div>
+        
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-[100px] pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:gap-[64px] items-start">
+            <!-- Left Column: Forms -->
+            <div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-stack-lg">
+                <h3 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary">Checkout</h3>
+                <form method="POST" action="{% url 'create-order' %}" id="checkout-form" novalidate>
+                    {% csrf_token%}
+                    {% if messages %}
+                        {% for message in messages %}
+                                {% if "coupon" not in message.tags %}
+                                    {% if "error" in message.tags %}
+                                        <div class="mb-4 p-3 rounded bg-red-100 text-red-700 text-sm message-alert">
+                                        {{ message }}
+                                        </div>
+                                    {% else %}
+                                        <div class="mb-4 p-3 rounded bg-green-100 text-green-700 message-alert">
+                                        {{ message }}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <!-- Section 1: Contact -->
+                    <section class="bg-surface-container-lowest p-stack-lg rounded-lg ambient-shadow">
+                        <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md">1. Contact Information</h2>
+                        <div class="grid grid-cols-1 gap-stack-sm">
+                            <div>
+                                <label class="sr-only" for="email">Email Address</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant"
+                                value="{{ customer.email|default:'' }}" id="email" placeholder="Email Address" type="email" readonly/>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 2: Shipping -->
+                    <section class="bg-surface-container-lowest p-stack-lg rounded-lg ambient-shadow">
+                        <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md">2. Shipping Address</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+                            <div class="md:col-span-1">
+                                <label class="sr-only" for="firstName">First Name</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" 
+                                name="shipping_first_name" value="{{ customer.first_name|default:'' }}" id="shippingFirstName" placeholder="First Name" type="text"/>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label class="sr-only" for="lastName">Last Name</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" 
+                                 name="shipping_last_name" value="{{ customer.last_name|default:'' }}" id="shippingLastName" placeholder="Last Name" type="text"/>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="sr-only" for="address">Address</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" 
+                                name="shipping_address" value="{{ customer.address|default:'' }}" id="shippingAddress" placeholder="Address" type="text" required/>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label class="sr-only" for="city">City</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" 
+                                name="shipping_city" value="{{ customer.city|default:'' }}" id="shippingCity" placeholder="City" type="text"/>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label class="sr-only" for="State">State</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant"
+                                name="shipping_state" value="{{ customer.state|default:'' }}" id="shippingState" placeholder="State" type="text"/>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label class="sr-only" for="postalCode">Postal Code</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" 
+                                name="shipping_pincode" value="{{ customer.pincode|default:'' }}" id="shippingPostalCode" placeholder="Postal Code" type="text"/>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label class="sr-only" for="country">Country/Region</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant"
+                                name="shipping_country" value="{{ customer.country|default:'' }}" id="shippingCountry" placeholder="Country" type="text"/>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="sr-only" for="phone">Phone</label>
+                                <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" 
+                                name="shipping_phone" value="{{ customer.phone_number|default:'' }}" id="shippingPhone" placeholder="Phone" type="tel"/>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-surface-container-lowest p-stack-lg rounded-lg ambient-shadow">
+                        <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md">3. Billing Address</h2>
+                        <div class="flex flex-col gap-stack-sm">
+                            <label class="flex items-center gap-4 p-4 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors">
+                                <input checked="" class="w-4 h-4" name="billing_option" type="radio" value="same" id="billingSame"/>
+                                <span class="font-body-md text-body-md text-on-surface">Same as shipping address</span>
+                            </label>
+                            <label class="flex items-center gap-4 p-4 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors">
+                                <input class="w-4 h-4" name="billing_option" type="radio" value="different" id="billingDifferent"/>
+                                <span class="font-body-md text-body-md text-on-surface">Use a different billing address</span>
+                            </label>
+                        </div>
+
+                        <!-- Dynamic Billing Form -->
+                        <div class="mt-stack-md pt-stack-md border-t border-outline-variant" id="billing-form-wrapper">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+                                <div class="md:col-span-1">
+                                    <label class="sr-only" for="billingFirstName">First Name</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingFirstName"
+                                    name="billing_first_name" placeholder="First Name" type="text"/>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="sr-only" for="billingLastName">Last Name</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingLastName" 
+                                    name="billing_last_name" placeholder="Last Name" type="text"/>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="sr-only" for="billingPhone">Phone Number</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingPhone"
+                                    name="billing_phone_number" placeholder="Phone Number" type="tel"/>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="sr-only" for="billingEmail">Email Address</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingEmail"
+                                    name="billing_email" placeholder="Email Address" type="email"/>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="sr-only" for="billingAddress">Street Address</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingAddress"
+                                    name="billing_address" placeholder="Street Address" type="text"/>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="sr-only" for="billingCity">City</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingCity"
+                                    name="billing_city" placeholder="City" type="text"/>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="sr-only" for="billingState">State</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingState"
+                                    name="billing_state" placeholder="State" type="text"/>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="sr-only" for="billingPincode">Pincode (Postal Code)</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingPincode"
+                                    name="billing_pincode" placeholder="Pincode (Postal Code)" type="text"/>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <label class="sr-only" for="billingCountry">Country</label>
+                                    <input class="font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" id="billingCountry"
+                                    name="billing_country" placeholder="Country" type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 4: Payment -->
+                    <section class="bg-surface-container-lowest p-stack-lg rounded-lg ambient-shadow mb-stack-lg">
+                        <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md">4. Payment</h2>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-stack-md text-sm">All transactions are secure and encrypted.</p>
+                        <div class="border border-outline-variant rounded-lg overflow-hidden">
+                            <div class="bg-surface-container p-4 flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-4">
+                                    <input checked="" class="w-4 h-4" name="payment_method" type="radio" value="razorpay"/>
+                                    <div class="flex flex-col">
+                                        <span class="font-body-md text-body-md font-medium text-on-surface">Pay with Razorpay</span>
+                                        <p class="text-xs text-on-surface-variant">Cards, UPI, Netbanking, and Wallets</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <img alt="Razorpay" class="h-6 w-auto"
+                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8c0inPDAoybUyxhgdANj6i8ik3kRQE-KpU-DSc6LVI_87opMEkU-kG-4v5GDGUvwHPChS0mjj48bCPxMoYtf6R7SiTYtcK-up73VdilvvnsvxzYv6_8sDlTAjXfDDsgIdXPj3EWwGtauuIlu8pTp0Uvi9CvX_yEY5xCSv45HTMgCtS4O3jWNN1UOf0BD_EyyIyJJqkdaj4mGo4DMvzur4Q4HkmkGww7Na4PsJhtCU1l0jiAsqbUeZ"/>
+                                </div>
+                            </div>
+                            <div class="bg-surface-container-lowest p-4 border-t border-outline-variant">
+                                <p class="font-body-md text-body-md text-sm text-on-surface-variant">
+                                    You will be redirected to Razorpay's secure payment gateway to complete your transaction. All major payment methods are supported.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="md:col-span-2 flex flex-col md:flex-row gap-4 justify-end">
+                        <button type="submit" name="payment_type" value="prepaid"
+                         class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-colors w-full tracking-wider">
+                            Order Now - Get Surprise Gift On PrePaid Orders
+                        </button>
+                        <button type="submit" name="payment_type" value="pay_now"
+                         class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-colors w-full tracking-wider">
+                            Pay Now (20% Advance to Confirm Your Orders)
+                        </button>
+                    </div>
+                </form>   
+            </div>
+
+            <!-- Right Column: Order Summary (Sticky) -->
+            <aside class="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-[120px]">
+                <div class="bg-surface-container-lowest p-stack-lg rounded-lg ambient-shadow border border-surface-container-highest">
+                    <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-lg border-b border-surface-container-highest pb-4">Order Summary</h2>
+
+                    {% for item in cart_items %}
+                    <!-- Product Item -->
+                        <div class="flex gap-4 mb-stack-lg border-b border-surface-container-highest pb-6">
+                            <div class="w-24 h-24 bg-surface-container rounded flex-shrink-0 relative overflow-hidden">
+                                <img alt="{{ item.product.primary_image.alt_text|default:item.product.name }}" class="w-full h-full object-cover object-center absolute inset-0" src="{{item.product.primary_image.image.url}}"/>
+                                <!-- Badge -->
+                                <span class="absolute top-0 right-0 bg-secondary text-on-secondary font-label-caps text-[9px] px-1.5 py-0.5 rounded-bl-sm">{{item.quantity}}</span>
+                            </div>
+                            <div class="flex flex-col justify-between flex-grow">
+                                <div>
+                                    <h3 class="font-body-md text-body-md font-medium text-on-surface">{{item.product.name}}</h3>
+                                    <p class="font-body-md text-body-md text-sm text-on-surface-variant">{{item.product.color}} / {{item.product.strap_type}}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-body-md text-body-md font-medium text-on-surface">₹ {{item.line_total}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="w-full justify-between items-end mb-stack-lg">
+                        <form method="POST" class="w-full">
+                            {% csrf_token %}
+
+                            <div class="flex flex-col sm:flex-row gap-3 items-end">
+                                <!-- Coupon Input -->
+                                <div class="w-full">
+                                    <label for="coupon-code" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Have Coupon?
+                                    </label>
+
+                                    <input type="text" id="coupon-code" name="coupon" placeholder="Enter coupon code"  autocomplete="off"
+                                        value="{% if cart.coupon %}{{ cart.coupon.coupon_code }}{% endif %}"
+                                        class="w-full px-4 py-12 border border-gray-300 rounded-lg
+                                            text-sm focus:outline-none focus:ring-2
+                                            focus:ring-black focus:border-transparent
+                                            transition">
+                                </div>
+
+                                <!-- Apply Button -->
+                                <div class="w-full sm:w-auto">
+                                    <button id="coupon_button" type="submit"
+                                        class="w-full sm:w-auto px-9 py-3 bg-black text-white
+                                            rounded-lg text-sm font-semibold
+                                            hover:bg-gray-800 transition-colors">
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Coupon Message -->
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if "coupon" in message.tags %}
+                                        {% if "success" in message.tags %}
+                                            <div class="mt-3 p-3 rounded-lg bg-green-100 text-green-700 text-sm message-alert">
+                                                {{ message }}
+                                            </div>
+
+                                            {% elif "warning" in message.tags %}
+                                                <div class="mt-3 p-3 rounded-lg bg-red-100 text-red-700 text-sm message-alert">
+                                                    {{ message }}
+                                                </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </form>
+
+                        <!-- Applied Coupon -->
+                        {% if cart.coupon %}
+                            <div class="mt-4 flex items-center justify-between p-3 rounded-lg bg-green-50 border border-green-200">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-green-600 text-lg">
+                                        local_offer
+                                    </span>
+                                    <div>
+                                        <p class="text-xs text-gray-500">
+                                            Coupon applied
+                                        </p>
+                                        <p class="text-sm font-semibold text-green-700">
+                                            {{ cart.coupon.coupon_code }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <a  href="{% url 'remove_coupon' cart.id %}" id="remove_coupon"
+                                    class="text-sm font-semibold text-red-600 hover:text-red-700 transition">
+                                    Remove
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- Cost Breakdown -->
+                    <div class="flex flex-col gap-2 mb-stack-lg border-b border-surface-container-highest pb-6">
+                        <div class="flex justify-between items-center text-on-surface-variant">
+                            <span class="font-body-md text-body-md">Advance Payment (20%)</span>
+                            <span class="font-body-md text-body-md font-medium">₹ {{advance_amount}}</span>
+                        </div>
+
+                        <div class="flex justify-between items-center text-on-surface-variant">
+                            <span class="font-body-md text-body-md">Pay on Delivery(COD)</span>
+                            <span class="font-body-md text-body-md font-medium">₹ {{remaining_amount}}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-on-surface-variant">
+                            <span class="font-body-md text-body-md">Shipping </span>
+                            <span class="font-body-md text-body-md font-medium" id="shipping-cost-display">Free</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Total -->
+                    <div class="flex justify-between items-end mb-stack-lg">
+                        <span class="font-body-lg text-body-lg text-on-surface">Total</span>
+                        <div class="text-right">
+                            <!-- <span class="font-label-caps text-label-caps text-on-surface-variant mr-2">INR</span> -->
+                            <span class="font-headline-lg text-headline-lg text-primary" id="cart-subtotal" style="font-family: 'Inter', sans-serif;">₹ {{cart.subtotal}}</span>
+                        </div>
+                    </div>
+
+                    <!-- Desktop CTA -->
+                    <!-- <button class="hidden lg:block bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-all shadow-md hover:shadow-lg w-full tracking-wider">
+                        Pay Now
+                    </button> -->
+                    <!-- <div></div>
+                    <button class="hidden lg:block bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-lg hover:bg-surface-tint transition-all shadow-md hover:shadow-lg w-full tracking-wider">
+                        Continue Shopping
+                    </button> -->
+
+                    <!-- <div class="mt-4 flex items-center justify-center gap-2 text-on-surface-variant text-sm">
+                        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        <span class="">Secure Checkout</span>
+                    </div> -->
+                </div>
+            </aside>
+        </div>
+        
+    </main>
+
+    <!-- Footer -->
+    {% include "includes/footer.html" %}
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+ <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const billingRadios = document.querySelectorAll('input[name="billing_option"]');
+    const billingFormWrapper = document.getElementById('billing-form-wrapper');
+
+    billingRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'different') {
+                billingFormWrapper.classList.add('expanded');
+                billingFormWrapper.classList.remove('pt-0', 'mt-0', 'border-t-0');
+            } else {
+                billingFormWrapper.classList.remove('expanded');
+                // Optional: remove padding/margin smoothly when collapsing to avoid spacing issues
+            }
+        });
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("checkout-form");
+
+    if (!form) {
+        console.error("❌ checkout-form NOT FOUND");
+        return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+
+        // VERY IMPORTANT
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        const validation = window.checkoutValidation;
+
+        if (!validation) {
+            console.error("❌ Checkout validation not loaded");
+            return;
+        }
+
+        let valid = true;
+
+        valid = validation.validateEmail(document.getElementById("email")) && valid;
+        valid = validation.validateShipping() && valid;
+        valid = validation.validateBilling() && valid;
+
+
+        // ❌ Validation fail
+        if (!valid) {
+            const firstError =  form.querySelector(".checkout-field-error");
+
+            if (firstError) {
+                firstError.previousElementSibling?.focus();
+
+                firstError.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
+            return;
+        }
+
+
+        // ✅ Validation pass
+        // Razorpay fetch code continue thase
+
+        const submitButton = event.submitter;
+
+        if (!submitButton) {
+            console.error("❌ No submit button found");
+            return;
+        }
+
+        const paymentType = submitButton.value;
+
+        submitButton.disabled = true;
+
+        const formData = new FormData(form);
+        formData.set("payment_type", paymentType);
+
+        try {
+
+            const response = await fetch(
+                form.action,
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+            if (!data.success) {
+                alert(data.message || "Unable to create order.");
+                submitButton.disabled = false;
+                return;
+            }
+
+            if (typeof Razorpay === "undefined") {
+                alert("Razorpay SDK failed to load.");
+                submitButton.disabled = false;
+                return;
+            }
+
+            const options = {
+                key: data.razorpay_key_id,
+                amount: data.amount,
+                currency: "INR",
+                name: "PhoenixWatch",
+                description:
+                    paymentType === "prepaid"
+                        ? "Prepaid Order"
+                        : "20% Advance Payment",
+
+                order_id: data.razorpay_order_id,
+
+                prefill: {
+                    name: data.customer.name,
+                    email: data.customer.email,
+                    contact: data.customer.contact
+                },
+
+                theme: {
+                    color: "#528FF0"
+                },
+                
+                handler: function (paymentResponse) {
+
+                    console.log("✅ Razorpay Payment Success:",paymentResponse);
+                    verifyPayment(paymentResponse, data.order_id);
+                },
+
+                modal: {
+                    ondismiss: function () {
+                        submitButton.disabled = false;
+                    }
+                }
+            };
+
+
+            const razorpay = new Razorpay(options);
+
+            razorpay.on("payment.failed", function (response) {
+                alert("Payment failed: " +response.error.description);
+                showToast(
+                    response.error.description ||
+                    "Payment failed.",
+                    "error"
+                );
+                submitButton.disabled = false;
+            });
+
+            razorpay.open();
+
+        } catch (error) {
+
+            console.error("❌ ERROR:", error);
+
+            // alert("Something went wrong. Please try again.");
+            showToast(
+                    "Something went wrong. Please try again."||
+                    "Try Again",
+                    "error"
+                );
+
+            submitButton.disabled = false;
+        }
+    });
+
+
+    async function verifyPayment(paymentResponse, orderId) {
+
+        console.log("🔐 Verifying payment...");
+
+        const csrfToken = form.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+        try {
+            const response = await fetch(
+                "{% url 'verify_razorpay_payment' %}",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken,
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+
+                    body: JSON.stringify({
+
+                        razorpay_payment_id:paymentResponse.razorpay_payment_id,
+                        razorpay_order_id:paymentResponse.razorpay_order_id,
+                        razorpay_signature:paymentResponse.razorpay_signature,
+                        order_id: orderId
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (data.success) {
+                showToast(
+                    data.message ||
+                    "Payment successfull.",
+                    "success"
+                );
+
+                window.location.href = data.redirect_url;
+
+            } else {
+                // alert(data.message ||"Payment verification failed.");
+                showToast(data.message ||"Payment verification failed.","error");
+            }
+
+        } catch (error) {
+            console.error("❌ Verification error:",error);
+            // alert("Payment verification failed.");
+            showToast(
+                    "Payment failed." ||
+                    "Payment verification failed.",
+                    "error"
+                );
+        }
+    }
+
+    function showToast(message, type = "info", title = null) {
+        const container = document.getElementById("toast-container");
+
+        if (!container) {
+            console.error("Toast container not found.");
+            return;
+        }
+
+        const toast = document.createElement("div");
+
+        const config = {
+            success: {
+                title: title || "Success",
+                icon: "✓"
+            },
+            error: {
+                title: title || "Error",
+                icon: "!"
+            },
+            warning: {
+                title: title || "Warning",
+                icon: "!"
+            },
+            info: {
+                title: title || "Info",
+                icon: "i"
+            }
+        };
+
+        const current = config[type] || config.info;
+
+        toast.className = `toast toast-${type}`;
+
+        toast.innerHTML = `
+            <div class="toast-icon">
+                ${current.icon}
+            </div>
+
+            <div class="toast-content">
+                <div class="toast-title">
+                    ${current.title}
+                </div>
+
+                <div class="toast-message">
+                    ${message}
+                </div>
+            </div>
+        `;
+
+        container.appendChild(toast);
+
+        // Remove after animation
+        setTimeout(() => {
+            toast.remove();
+        }, 4100);
+    }
+
+});
+</script>
+
+
+
+</body></html>

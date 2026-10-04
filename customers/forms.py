@@ -107,49 +107,60 @@ class CustomerSignupForm(forms.ModelForm):
         return email
 
     def clean_phone_number(self):
-
         phone_number = self.cleaned_data.get(
             "phone_number",
             ""
         ).strip()
 
-        # Remove spaces, + and -
-        phone_number = re.sub(
-            r"[\s\-+]",
-            "",
-            phone_number
-        )
+        # Remove spaces and hyphens
+        phone_number = re.sub(r"[\s-]", "", phone_number)
 
         if not phone_number:
             raise forms.ValidationError(
                 "Phone number is required."
             )
 
-        if not phone_number.isdigit():
+        # +91 must be present
+        if not phone_number.startswith("+91"):
+            raise forms.ValidationError(
+                "Phone number must start with +91."
+            )
+
+        # Remove +91 prefix
+        number = phone_number[3:]
+
+        if not number:
+            raise forms.ValidationError(
+                "Please enter a valid phone number."
+            )
+
+        if not number.isdigit():
             raise forms.ValidationError(
                 "Phone number must contain only digits."
             )
 
         # Indian 10 digit number
-        if len(phone_number) != 10:
+        if len(number) != 10:
             raise forms.ValidationError(
-                "Phone number must contain exactly 10 digits."
+                "Phone number must contain exactly 10 digits after +91."
             )
 
-        if phone_number[0] not in "6789":
+        if number[0] not in "6789":
             raise forms.ValidationError(
-                "Please enter a valid phone number."
+                "Please enter a valid Indian phone number."
             )
+
+        # Store normalized number as +91XXXXXXXXXX
+        normalized_phone = f"+91{number}"
 
         if Customer.objects.filter(
-            phone_number=phone_number
+            phone_number=normalized_phone
         ).exists():
-
             raise forms.ValidationError(
                 "An account with this phone number already exists."
             )
 
-        return phone_number
+        return normalized_phone
 
     def clean_password(self):
 
@@ -264,7 +275,12 @@ class ProfileUpdateForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
-            "phone_number"
+            "phone_number",
+            "address",
+            "city",
+            "state",
+            "country",
+            "pincode"
         ]
 
     def __init__(self, *args, **kwargs):
@@ -393,18 +409,34 @@ class ProfileUpdateForm(forms.ModelForm):
                     "This phone number is already registered."
                 )
 
+        if "address" in changed_fields:
+        
+            address = cleaned_data.get("address","").strip()
+            if not address:
+                self.add_error(
+                    "address",
+                    "Address is required."
+                )
+
+            elif len(address) < 5:
+                self.add_error(
+                    "address",
+                    "Address must contain at least 5 characters."
+                )
+
         if "city" in changed_fields:
 
             city = cleaned_data.get("city", "").strip()
 
             if not city:
+                print("city:",city)
                 self.add_error(
                     "city",
                     "City is required."
                 )
 
             elif not re.fullmatch(
-                r"[A-Za-z ]+",
+                r"[A-Za-z]+(?: [A-Za-z]+)*",
                 city
             ):
                 self.add_error(
@@ -423,7 +455,7 @@ class ProfileUpdateForm(forms.ModelForm):
                 )
 
             elif not re.fullmatch(
-                r"[A-Za-z ]+",
+                r"[A-Za-z]+(?: [A-Za-z]+)*",
                 state
             ):
                 self.add_error(
@@ -442,7 +474,7 @@ class ProfileUpdateForm(forms.ModelForm):
                 )
 
             elif not re.fullmatch(
-                r"[A-Za-z ]+",
+                r"[A-Za-z]+(?: [A-Za-z]+)*",
                 country
             ):
                 self.add_error(
@@ -602,3 +634,33 @@ class ChangePasswordForm(forms.Form):
             )
 
         return confirm_password
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(required=True)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+
+        if not Customer.objects.filter(email__iexact=email).exists():
+            # Do not reveal whether an account exists.
+            # View will always show the same message.
+            return email
+        return email
+
+
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(required=True, min_length=8)
+    confirm_password = forms.CharField(required=True)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError(
+                "Passwords do not match."
+            )
+
+        return cleaned_data

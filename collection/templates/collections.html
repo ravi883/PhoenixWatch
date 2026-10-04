@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phoenix - Timeless Precision</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
+<script src="{% static 'js/cart1.js' %}"></script>
+<style>
+        :root {
+            --primary-color: #000000;
+            --surface-color: #fcf9f8;
+            --text-color: #1b1c1c;
+        }      
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+    <!-- TopNavBar -->
+    {% include "includes/header.html" %}
+
+    <!-- Mobile Menu -->
+    {% include "includes/mobile-menu.html" %}
+    
+    <!-- Cart Drawer -->
+    {% include "includes/cart-drawer.html" %}
+
+    <main class="flex-grow">
+        <!-- 3. Header Section (Directly mirroring the reference layout) -->
+        <section class="pt-16 pb-12 md:pt-24 md:pb-16 text-center px-6">
+            <div class="max-w-3xl mx-auto space-y-4">
+                <h1 class="font-display-lg md:text-display-lg text-display-lg-mobile text-primary tracking-tight font-normal"
+                 style="padding-top:20px; font-size:55px;">
+                    Collections
+                 </h1>
+                <!-- <p class="font-body-md text-body-md text-secondary max-w-xl mx-auto leading-relaxed">
+                        Explore the six foundational pillars of Phoenix Haute Horlogerie, engineered with unyielding mechanical rigor and aesthetic purity.
+                    </p> -->
+            </div>
+        </section>
+
+        <!-- 4. Collections Grid (Exact visual syntax: 3 columns, rounded card, centered floating pill badge) -->
+        <section class="max-w-container-max mx-auto px-6 md:px-16 pb-20" id="collections-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {% for category in categories %}
+                    <!-- Collection Card 1: Grand Complications -->
+                    {% if category.category_type == "watch" %}
+                        <a class="group relative block card-zoom overflow-hidden rounded-xl bg-surface-container-low transition-all duration-300" 
+                        href="{% url 'watch-type-products' category.slug %}">
+                    {% else %}
+                        <a class="group relative block card-zoom overflow-hidden rounded-xl bg-surface-container-low transition-all duration-300" 
+                        href="{% url 'strap_type_products' category.slug %}">
+                    {% endif %}
+                        <div class="aspect-[4/5] w-full overflow-hidden bg-surface-container">
+                            <img class="w-full h-full object-cover transition-transform duration-700 ease-out" data-alt="{{ category.name }}"
+                             src="{{ category.image.url }}"/>
+                        </div>
+                        <!-- Floating Pill/Badge at bottom center -->
+                        <div class="absolute inset-x-0 bottom-6 md:bottom-8 flex justify-center px-4 pointer-events-none">
+                            <div class="pointer-events-auto bg-surface-container-lowest/95 backdrop-blur-md px-8 py-3.5 rounded-lg badge-shadow border border-surface-container-high transition-all duration-300 group-hover:scale-105 group-hover:bg-surface-container-lowest">
+                                <span class="font-label-caps text-label-caps uppercase tracking-widest text-primary font-semibold block text-center">
+                                        {{ category.name }}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+
+            </div>
+
+            <!-- 5. Minimalist Centered Pagination (Directly mirroring the reference structure: [1] [2] [3] [4] [>]) -->
+            {% if categories.has_other_pages %}
+                <div class="mt-16 flex items-center justify-center gap-2">
+                    {% if categories.has_previous %}
+                        <a href="?page={{ categories.previous_page_number }}" aria-label="Previous Page"
+                            class="w-10 h-10 flex items-center justify-center bg-surface-container-lowest text-on-surface border border-surface-container-high hover:border-primary rounded-lg">
+                            <span class="material-symbols-outlined text-[16px]">
+                                chevron_left
+                            </span>
+                        </a>
+                    {% endif %}
+
+                    {% for num in categories.paginator.page_range %}
+                        {% if categories.number == num %}   
+                            <a href="?page={{ num }}" aria-current="page"
+                                class="w-10 h-10 flex items-center justify-center bg-primary text-on-primary font-label-caps text-label-caps font-semibold rounded-lg shadow-sm">
+                                {{ num }}
+                            </a>
+                        {% else %}
+                            <a href="?page={{ num }}"
+                                class="w-10 h-10 flex items-center justify-center bg-surface-container-lowest text-on-surface border border-surface-container-high hover:border-primary font-label-caps text-label-caps transition-colors duration-150 rounded-lg">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if categories.has_next %}
+                        <a href="?page={{ categories.next_page_number }}" aria-label="Next Page"
+                            class="w-10 h-10 flex items-center justify-center bg-surface-container-lowest text-on-surface border border-surface-container-high hover:border-primary rounded-lg">
+                            <span class="material-symbols-outlined text-[16px]">
+                                chevron_right
+                            </span>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <!-- Footer -->
+    {% include "includes/footer.html" %}
+
+</body></html>
