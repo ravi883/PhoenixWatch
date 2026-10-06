@@ -17,7 +17,7 @@ Your order {order.order_id} has been confirmed.
 
 Order Total: ₹{order.total_amount}
 
-Thank you for shopping with PhoenixWatch.
+Thank you for shopping with Phoenixwala.
 
 Regards,
 PhoenixWatch
@@ -50,13 +50,13 @@ PhoenixWatch
         </p>
 
         <p>
-            Thank you for shopping with <strong>PhoenixWatch</strong>.
+            Thank you for shopping with <strong>Phoenixwala</strong>.
         </p>
 
         <br>
 
         <p>Regards,<br>
-        PhoenixWatch Team</p>
+        Phoenixwala Team</p>
     </body>
     </html>
     """
