@@ -1,0 +1,75 @@
+name: Deploy Development
+
+on:
+  workflow_run:
+    workflows:
+      - Django CI
+    types:
+      - completed
+
+jobs:
+
+  deploy:
+
+    name: Deploy to Development Server
+
+    if: >
+      ${{ github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.head_branch == 'develop' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy Development
+        uses: appleboy/ssh-action@v1.2.2
+
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+
+          script: |
+
+            set -e
+
+            echo "================================="
+            echo "Starting Development Deployment"
+            echo "================================="
+
+            cd /var/www/phoenixwatch-dev
+
+            echo "Pulling latest develop branch..."
+
+            git fetch origin develop
+            git reset --hard origin/develop
+
+            echo "Activating virtual environment..."
+
+            source venv/bin/activate
+
+            echo "Installing Python dependencies..."
+
+            pip install -r requirements.txt
+
+            echo "Running migrations..."
+
+            python manage.py migrate --noinput
+
+            echo "Collecting static files..."
+
+            python manage.py collectstatic --noinput
+
+            echo "Restarting Development server..."
+
+            sudo systemctl restart phoenixwatch-dev
+
+            echo "Checking Development server..."
+
+            sudo systemctl is-active --quiet phoenixwatch-dev
+
+            echo "================================="
+            echo "Development Deployment Successful"
+            echo "================================="
+
+            
