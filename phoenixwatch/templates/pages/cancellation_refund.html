@@ -1,0 +1,366 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phoenix - Timeless Precision</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Playfair+Display:wght@500;600&amp;display=swap" rel="stylesheet"/>
+
+
+<link rel="stylesheet" href="{% static 'css/output.css' %}">
+<script src="{% static 'js/cart1.js' %}"></script>
+<style>
+        :root {
+            --primary-color: #000000;
+            --surface-color: #fcf9f8;
+            --text-color: #1b1c1c;
+        }    
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+    <!-- TopNavBar -->
+    {% include "includes/header.html" %}
+
+    <section class="bg-white" style="padding-top: 110px;">
+    <div class="mx-auto max-w-5xl px-6 py-16 lg:px-8">
+
+        <div class="mb-10">
+            <h1 class="text-4xl font-bold text-gray-900">
+                Cancellation & Refund Policy
+            </h1>
+
+            <p class="mt-3 text-sm text-gray-500">
+                Last Updated: 6 October 2026
+            </p>
+        </div>
+
+        <div class="space-y-10 leading-7 text-gray-700">
+
+            <div>
+                <p>
+                    This Cancellation & Refund Policy explains the conditions
+                    under which orders placed through Phoenixwala may be
+                    cancelled, returned or refunded.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    1. Order Cancellation by Customer
+                </h2>
+
+                <p class="mt-4">
+                    Customers may request cancellation of an order before the
+                    order has been dispatched.
+                </p>
+
+                <p class="mt-4">
+                    To request cancellation, please contact us as soon as possible
+                    with your order number.
+                </p>
+
+                <p class="mt-4">
+                    Once an order has been dispatched, cancellation may not be possible.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    2. Cancellation by Phoenixwala
+                </h2>
+
+                <p class="mt-4">
+                    Phoenixwala may cancel an order in circumstances including:
+                </p>
+
+                <ul class="mt-4 list-disc space-y-2 pl-6">
+                    <li>Product becoming unavailable</li>
+                    <li>Incorrect product pricing or information</li>
+                    <li>Payment failure</li>
+                    <li>Suspected fraudulent activity</li>
+                    <li>Incorrect or incomplete customer information</li>
+                    <li>Delivery restrictions</li>
+                    <li>Other circumstances beyond our reasonable control</li>
+                </ul>
+
+                <p class="mt-4">
+                    If payment has already been received for an order cancelled
+                    by Phoenixwala, the eligible amount will be refunded.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    3. Advance Payment
+                </h2>
+
+                <p class="mt-4">
+                    For selected orders, Phoenixwala may require an online
+                    advance payment of <strong>20% of the order value</strong>
+                    before processing the order.
+                </p>
+
+                <p class="mt-4">
+                    The remaining amount may be payable according to the payment
+                    option shown at checkout.
+                </p>
+
+                <p class="mt-4">
+                    The exact payment terms applicable to an order will be
+                    displayed before payment is completed.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    4. Refund for Customer Cancellation
+                </h2>
+
+                <p class="mt-4">
+                    If a customer cancels an eligible order before dispatch,
+                    the refundable amount will be processed according to the
+                    applicable cancellation terms.
+                </p>
+
+                <p class="mt-4">
+                    Any applicable non-refundable charges, if clearly communicated
+                    at checkout, may be deducted where permitted.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    5. Damaged or Defective Products
+                </h2>
+
+                <p class="mt-4">
+                    If you receive a damaged or defective product, please contact
+                    us within <strong>48 hours of delivery</strong>.
+                </p>
+
+                <p class="mt-4">
+                    Please provide:
+                </p>
+
+                <ul class="mt-4 list-disc space-y-2 pl-6">
+                    <li>Order number</li>
+                    <li>Photographs of the package</li>
+                    <li>Photographs of the product</li>
+                    <li>Video of the package/product where reasonably possible</li>
+                    <li>Description of the issue</li>
+                </ul>
+
+                <p class="mt-4">
+                    We will review the issue and determine the appropriate resolution.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    6. Incorrect Product
+                </h2>
+
+                <p class="mt-4">
+                    If you receive a product different from the product you
+                    ordered, please contact us within
+                    <strong>48 hours of delivery</strong>.
+                </p>
+
+                <p class="mt-4">
+                    After verification, we may arrange a replacement, return
+                    or refund as applicable.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    7. Return Conditions
+                </h2>
+
+                <p class="mt-4">
+                    A return may be accepted only if the product meets the
+                    applicable return conditions.
+                </p>
+
+                <p class="mt-4">
+                    The product should generally be:
+                </p>
+
+                <ul class="mt-4 list-disc space-y-2 pl-6">
+                    <li>Unused</li>
+                    <li>In its original condition</li>
+                    <li>In the original packaging</li>
+                    <li>Complete with included accessories</li>
+                    <li>Accompanied by the original invoice/order information</li>
+                </ul>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    8. Non-Returnable Situations
+                </h2>
+
+                <p class="mt-4">
+                    A return or refund may not be available where:
+                </p>
+
+                <ul class="mt-4 list-disc space-y-2 pl-6">
+                    <li>The product has been used or damaged by the customer</li>
+                    <li>The product is damaged due to improper handling</li>
+                    <li>Original packaging or accessories are missing where required</li>
+                    <li>The return request is made outside the applicable return period</li>
+                    <li>The issue is caused by normal wear and tear</li>
+                    <li>The product has been modified or repaired without authorization</li>
+                </ul>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    9. Refund Processing
+                </h2>
+
+                <p class="mt-4">
+                    Once a refund is approved, we will initiate the refund
+                    through the applicable payment method or process.
+                </p>
+
+                <p class="mt-4">
+                    Depending on the payment provider and customer's bank,
+                    the refund may take approximately
+                    <strong>5–10 business days</strong> to appear in the
+                    customer's account.
+                </p>
+
+                <p class="mt-4">
+                    Actual processing times may vary.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    10. Payment Gateway Refunds
+                </h2>
+
+                <p class="mt-4">
+                    Where a payment was processed through Razorpay or another
+                    payment gateway, the refund may be processed through the
+                    same payment channel where supported.
+                </p>
+
+                <p class="mt-4">
+                    The time taken for the amount to reflect in the customer's
+                    account depends on the payment gateway and banking institution.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    11. Shipping Charges
+                </h2>
+
+                <p class="mt-4">
+                    Shipping charges may be non-refundable unless the return or
+                    refund is due to an error attributable to Phoenixwala,
+                    such as an incorrect product being shipped or an eligible
+                    defective product.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    12. Failed or Unsuccessful Payment
+                </h2>
+
+                <p class="mt-4">
+                    If an amount has been deducted from your bank account but
+                    the order/payment was not successfully completed, please
+                    contact us with the transaction details.
+                </p>
+
+                <p class="mt-4">
+                    We will verify the payment status with the payment gateway
+                    and take appropriate action.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    13. Duplicate Payment
+                </h2>
+
+                <p class="mt-4">
+                    If you believe that you have been charged more than once
+                    for the same order, please contact us with the relevant
+                    transaction details.
+                </p>
+
+                <p class="mt-4">
+                    After verification, any confirmed duplicate payment will
+                    be refunded.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    14. How to Request a Cancellation, Return or Refund
+                </h2>
+
+                <p class="mt-4">
+                    Please contact us using:
+                </p>
+
+                <div class="mt-4 rounded-lg bg-gray-50 p-5">
+                    <p><strong>Email:</strong> phoenixwalaofficial@gmail.com</p>
+                    <p><strong>Phone:</strong> +91 7666803079</p>
+                </div>
+
+                <p class="mt-5">
+                    Please provide:
+                </p>
+
+                <ul class="mt-4 list-disc space-y-2 pl-6">
+                    <li>Order number</li>
+                    <li>Customer name</li>
+                    <li>Registered mobile number</li>
+                    <li>Reason for cancellation, return or refund</li>
+                    <li>Relevant photographs or videos, where applicable</li>
+                </ul>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mt-4">
+                    15. Contact Us
+                </h2>
+
+                <div class="mt-4 rounded-lg bg-gray-50 p-5">
+                    <p><strong>Email:</strong> phoenixwalaofficial@gmail.com</p>
+                    <p><strong>Phone:</strong> +91 7666803079</p>
+                    <!-- <p><strong>Address:</strong> [business address]</p> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+     <!-- Footer -->
+    {% include "includes/footer.html" %}
+
+</body>
+</html>

@@ -366,3 +366,23 @@ def remove_coupon_view(request, cart_id):
 
     messages.success(request, "Coupon Removed.",extra_tags="coupon")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def terms(request):
+    return render(request, "pages/terms.html")
+
+def privacy(request):
+    return render(request, "pages/privacy.html")
+
+def about(request):
+    return render(request, "pages/about.html")
+
+def contact(request):
+    return render(request, "pages/contact.html")
+
+def shipping(request):
+    return render(request, "pages/shipping.html")
+
+def cancellation_refund(request):
+    return render(request, "pages/cancellation_refund.html")
+

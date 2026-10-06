@@ -19,9 +19,9 @@
             <div class="flex flex-col">
                 <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">THE BRAND</h4>
                 <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">About Us</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="{% url 'about' %}">About Us</a>
                     <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="{% url 'all-collection-view' %}">Collections</a>
-                    <!-- <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Boutiques</a> -->
+                    
                 </div>
             </div>
 
@@ -29,8 +29,11 @@
             <div class="flex flex-col">
                 <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">LEGAL</h4>
                 <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Privacy Policy</a>
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Shipping &amp; Returns</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="{% url 'terms' %}">Terms & Conditions</a>
+                    <!-- <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="{% url 'shipping' %}">Privacy Policy</a> -->
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="{% url 'privacy' %}">Privacy Policy</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="{% url 'shipping' %}">Shipping Policy</a>
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="{% url 'cancellation_refund' %}">Cancellation and Refund</a>
                 </div>
             </div>
 
@@ -38,11 +41,11 @@
             <div class="flex flex-col">
                 <h4 class="font-label-caps text-label-caps text-primary mb-stack-md">SUPPORT</h4>
                 <div class="flex flex-col gap-stack-sm">
-                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="#">Contact Us</a>
-                    <p class="font-body-md text-body-md text-on-surface-variant mt-2">
+                    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 underline-offset-4 transition-opacity duration-200" href="{% url 'contact' %}">Contact Us</a>
+                    <!-- <p class="font-body-md text-body-md text-on-surface-variant mt-2">
                                     1-800-PHOENIX<br/>
                                     support@phoenix.com
-                    </p>
+                    </p> -->
                 </div>
             </div>
         </div>
