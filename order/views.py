@@ -798,10 +798,17 @@ def verify_razorpay_payment(request):
 
     if not order.confirmation_email_sent:
 
-        send_order_confirmation_email(order)
+        try:
+            send_order_confirmation_email(order)
 
-        order.confirmation_email_sent = True
-        order.save(update_fields=["confirmation_email_sent"])
+            order.confirmation_email_sent = True
+            order.save(update_fields=["confirmation_email_sent"])
+
+        except Exception as e:
+            logger.exception(
+            "Failed to send confirmation email for order %s",
+            order.id
+        )
 
     try:
         whatsapp_result = send_whatsapp_message(
