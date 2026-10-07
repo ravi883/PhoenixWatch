@@ -61,14 +61,11 @@ jobs:
             python manage.py collectstatic --noinput
 
             echo "Restarting Production server..."
-
-            sudo systemctl restart phoenixwatch-prod
+            sudo -n /usr/bin/systemctl restart phoenixwatch-prod
 
             echo "Checking Production server..."
-
-            sudo systemctl is-active --quiet phoenixwatch-prod
+            sudo -n /usr/bin/systemctl is-active --quiet phoenixwatch-prod
 
             echo "================================="
             echo "Production Deployment Successful"
             echo "================================="
-            

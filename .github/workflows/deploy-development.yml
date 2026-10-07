@@ -62,11 +62,11 @@ jobs:
 
             echo "Restarting Development server..."
 
-            sudo systemctl restart phoenixwatch-dev
+            sudo -n /usr/bin/systemctl restart phoenixwatch-dev
 
             echo "Checking Development server..."
 
-            sudo systemctl is-active --quiet phoenixwatch-dev
+            sudo -n /usr/bin/systemctl is-active --quiet phoenixwatch-dev
 
             echo "================================="
             echo "Development Deployment Successful"
