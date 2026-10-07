@@ -61,12 +61,15 @@ jobs:
             python manage.py collectstatic --noinput
 
             echo "Restarting Development server..."
+
             sudo -n /usr/bin/systemctl restart phoenixwatch-dev
 
             echo "Checking Development server..."
+
             sudo -n /usr/bin/systemctl is-active --quiet phoenixwatch-dev
 
             echo "================================="
             echo "Development Deployment Successful"
             echo "================================="
 
+            
