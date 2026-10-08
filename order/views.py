@@ -185,7 +185,7 @@ def create_order_view(request):
     remaining_amount = (subtotal - advance_amount).quantize( Decimal("0.01"),rounding=ROUND_HALF_UP)
 
     if payment_type == "prepaid":
-        amount_to_pay = subtotal
+        amount_to_pay = (subtotal - (subtotal*Decimal("10.00")/ Decimal("100"))).quantize( Decimal("0.01"),rounding=ROUND_HALF_UP)
 
     else:
         amount_to_pay = advance_amount
@@ -276,7 +276,7 @@ def create_order_view(request):
         customer=customer,
         status=Order.Status.PENDING,
         subtotal=subtotal,
-        total_amount=subtotal,
+        total_amount=amount_to_pay if payment_type == "prepaid" else subtotal,
         coupon = cart.coupon,
         coupon_code = cart.coupon_code,
         discount_amount = cart.discount_amount
@@ -354,17 +354,21 @@ def create_order_view(request):
     # ----------------------------------------------------------
     # PAYMENT DETAILS
     # ----------------------------------------------------------
-
+    
     payment_detail = OrderPaymentDetail.objects.create(
         order=order,
-        total_amount=subtotal,
-        advance_amount=advance_amount,
-        remaining_amount=remaining_amount,
+        total_amount=amount_to_pay if payment_type == "prepaid" else subtotal,
+        advance_amount=00 if payment_type == "prepaid" else advance_amount,
+        remaining_amount=00 if payment_type == "prepaid" else remaining_amount,
         status=(
             OrderPaymentDetail
             .PaymentStatus
-            .ADVANCE_PENDING
-        ),
+            .PRE_PAID
+        )if payment_type == "prepaid" else (
+                OrderPaymentDetail
+                .PaymentStatus
+                .ADVANCE_PENDING
+            ),
         payment_method=(
             OrderPaymentDetail
             .PaymentMethod
@@ -810,30 +814,30 @@ def verify_razorpay_payment(request):
             order.id
         )
 
-    try:
-        whatsapp_result = send_whatsapp_message(
-            order.delivery_details.phone_number,
-            order,
-        )
+    # try:
+    #     whatsapp_result = send_whatsapp_message(
+    #         order.delivery_details.phone_number,
+    #         order,
+    #     )
 
-        if not whatsapp_result.get("success"):
-            logger.warning(
-                "WhatsApp notification failed for order %s. "
-                "Payment/order will remain successful. Error: %s",
-                order.order_id,
-                whatsapp_result.get("error"),
-            )
+    #     if not whatsapp_result.get("success"):
+    #         logger.warning(
+    #             "WhatsApp notification failed for order %s. "
+    #             "Payment/order will remain successful. Error: %s",
+    #             order.order_id,
+    #             whatsapp_result.get("error"),
+    #         )
 
-    except Exception as e:
-        # Absolute safety net.
-        # Even if whatsapp.py itself has an unexpected error,
-        # payment/order processing will continue.
+    # except Exception as e:
+    #     # Absolute safety net.
+    #     # Even if whatsapp.py itself has an unexpected error,
+    #     # payment/order processing will continue.
 
-        logger.exception(
-            "Unexpected WhatsApp error for order %s. "
-            "Payment/order will remain successful.",
-            order.order_id,
-    )
+    #     logger.exception(
+    #         "Unexpected WhatsApp error for order %s. "
+    #         "Payment/order will remain successful.",
+    #         order.order_id,
+    # )
 
 
     return JsonResponse({
@@ -858,3 +862,144 @@ def order_success_view(request, order_id):
     order = get_object_or_404(Order, order_id=order_id, customer_id=customer_id)
 
     return render(request, "order-success.html",{"order": order},)
+
+
+@transaction.atomic
+def cancel_order_view(request, order_id):
+
+    if request.method != "POST":
+        return redirect("order-history")
+
+    customer_id = request.session.get("customer_id")
+
+    if not customer_id:
+        messages.warning(
+            request,
+            "Please login before cancelling an order."
+        )
+        
+        return redirect("login")
+
+    order = get_object_or_404(
+        Order.objects.select_for_update(),
+        order_id=order_id,
+        customer_id=customer_id,
+    )
+
+    if order.status not in [Order.Status.PENDING,Order.Status.CONFIRMED]:
+        messages.error(request,"This order cannot be cancelled.")
+        return redirect("order-history")
+
+
+    payment_detail = (
+        OrderPaymentDetail.objects
+        .select_for_update()
+        .filter(order=order)
+        .first()
+    )
+
+    refund_created = False
+
+    if payment_detail:
+
+        payment_status = payment_detail.status
+
+        paid_statuses = [OrderPaymentDetail.PaymentStatus.PARTIALLY_PAID, OrderPaymentDetail.PaymentStatus.PRE_PAID]
+
+        if payment_status in paid_statuses:
+
+            if not payment_detail.razorpay_payment_id:
+
+                messages.error(request,"Payment information is missing. " "Please contact support.")
+                return redirect("order-history")
+
+            if (payment_status== OrderPaymentDetail.PaymentStatus.PARTIALLY_PAID):
+                refund_amount = payment_detail.advance_amount
+
+            else:
+                refund_amount = payment_detail.total_amount
+
+            refund_amount = refund_amount.quantize(Decimal("0.01"))
+            refund_amount_in_paise = int(refund_amount * Decimal("100"))
+
+            # ------------------------------------------
+            # CREATE RAZORPAY REFUND
+            # ------------------------------------------
+
+            try:
+
+                refund = razorpay_client.payment.refund(
+                    payment_detail.razorpay_payment_id,
+                    {
+                        "amount": refund_amount_in_paise,
+                    }
+                )
+
+            except Exception as e:
+
+                transaction.set_rollback(True)
+
+                print("Razorpay refund error:",str(e))
+
+                messages.error(
+                    request,
+                    "We could not process your refund. "
+                    "Your order has not been cancelled. "
+                    "Please try again or contact support."
+                )
+
+                return redirect("order-history")
+
+
+            # ------------------------------------------
+            # SAVE REFUND INFORMATION
+            # ------------------------------------------
+
+            if hasattr(payment_detail, "razorpay_refund_id"):
+                payment_detail.razorpay_refund_id = (refund["id"])
+
+
+            payment_detail.status = (OrderPaymentDetail.PaymentStatus.REFUNDED)
+            update_fields = ["status"]
+
+            if hasattr(payment_detail,"razorpay_refund_id"):
+                update_fields.append("razorpay_refund_id")
+
+
+            payment_detail.save(update_fields=update_fields)
+            refund_created = True
+
+            order_items = (OrderItem.objects.filter(order=order))
+
+            for item in order_items:
+
+                product = (
+                    Products.objects
+                    .select_for_update()
+                    .get(pk=item.product_id)
+                )
+
+                product.stock += item.quantity
+                product.save(update_fields=["stock"])
+
+    order.status = Order.Status.CANCELLED
+    order.save(update_fields=["status"])
+
+
+    if refund_created:
+        note = ("Order cancelled by customer. "
+            "Razorpay refund initiated." )
+
+    else:
+        note = ("Order cancelled by customer.")
+
+    OrderStatus.objects.create(order=order, status=Order.Status.CANCELLED, note=note )
+
+    if refund_created:
+        messages.success( request,"Your order has been cancelled.")
+
+    else:
+        messages.success(request, "Your order has been cancelled successfully.")
+
+    return redirect("order-history")
+

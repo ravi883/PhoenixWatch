@@ -90,6 +90,7 @@ class OrderPaymentDetailsInline(admin.StackedInline):
         "razorpay_order_id",
         "razorpay_payment_id",
         "razorpay_signature",
+        "razorpay_refund_id",
         "created_at",
         "updated_at",
     )
@@ -104,6 +105,7 @@ class OrderPaymentDetailsInline(admin.StackedInline):
         "razorpay_order_id",
         "razorpay_payment_id",
         "razorpay_signature",
+        "razorpay_refund_id",
     )
 
 
