@@ -15,4 +15,9 @@ urlpatterns = [
         order_success_view,
         name="order_success",
     ),
+    path(
+        "<str:order_id>/cancel/",
+        cancel_order_view,
+        name="cancel_order",
+    ),
 ]

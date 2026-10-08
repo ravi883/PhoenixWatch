@@ -21,7 +21,23 @@
       font-size: 20px;
       line-height: 1;
     }
+    
   </style>
+
+  <script>
+    setTimeout(function () {
+        const messages = document.querySelectorAll(".message-alert");
+
+        messages.forEach(function (message) {
+            message.style.transition = "opacity 0.5s ease";
+            message.style.opacity = "0";
+
+            setTimeout(function () {
+                message.remove();
+            }, 500);
+        });
+    }, 3000);
+</script>
 </head>
 <body class="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col selection:bg-primary selection:text-on-primary">
 
@@ -38,7 +54,19 @@
     <!-- Main Canvas -->
     <main class="flex-grow pt-20 md:pt-24 pb-20 max-w-7xl w-full mx-auto px-4 md:px-8" style="padding-top: 120px;"> 
         <!-- Breadcrumb Navigation -->
-
+        {% if messages %}
+            {% for message in messages %}
+                {% if "error" in message.tags or "warning" in message.tags %}
+                    <div class="mb-4 p-3 rounded bg-red-100 text-red-700 text-sm message-alert">
+                    {{ message }}
+                    </div>
+                {% else %}
+                    <div class="mb-4 p-3 rounded bg-green-100 text-green-700 message-alert">
+                    {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <!-- Page Header & Overview Stats -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-outline-variant/60 mb-8">
             <div class="max-w-2xl">
@@ -171,7 +199,7 @@
 
                                         </div>
 
-                                    {% else %}
+                                    {% elif order.status != "pending" and  order.status != "cancelled" %}  
                                         <div class="flex items-center gap-3 w-full md:w-auto justify-end">
                                             <button class="px-4 py-2 rounded-lg text-xs font-semibold bg-primary text-white hover:bg-primary-container transition-colors flex items-center gap-1.5 shadow-sm" type="button">
                                                 <span class="material-symbols-outlined text-base" data-icon="local_shipping">local_shipping</span>
@@ -263,12 +291,46 @@
                                         <span class="material-symbols-outlined text-base" data-icon="download">download</span>
                                             Download Invoice
                                     </button>
-                                {% else %}
+                                {% elif order.status != "pending" and order.status != "cancelled" %}
                                     <button class="px-4 py-2 rounded-lg text-xs font-semibold bg-on-surface text-surface hover:bg-on-surface-variant transition-colors flex items-center gap-1.5 shadow-sm" type="button">
                                         <span class="material-symbols-outlined text-base" data-icon="navigation">navigation</span>
                                                 Track Shipment (All {{order.items.count}} Items)
                                     </button>
                                 {% endif %}
+
+                                {% if order.status == "pending" or order.status == "confirmed" %}
+                                    <form method="POST" action="{% url 'cancel_order' order.order_id %}" id="cancel-order-form-{{ order.order_id }}" >
+                                        {% csrf_token %} 
+                                        <button type="button" onclick="openCancelModal('{{ order.order_id }}')" 
+                                            class="px-3.5 py-2 rounded-lg text-xs font-semibold border border-outline-variant hover:bg-surface-container transition-colors text-on-surface flex items-center gap-1.5" > 
+                                            Cancel Order
+                                        </button> 
+                                    </form>
+                                {% endif %} 
+
+                                <!-- Cancel Confirmation Modal --> 
+                                <div id="cancel-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm px-4" > 
+                                    <div class="w-full max-w-md rounded-2xl bg-surface p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="cancel-modal-title" >
+                                            <!-- Icon --> 
+                                        <div class="flex justify-center mb-4"> 
+                                            <div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center"> 
+                                                <span class="material-symbols-outlined text-error text-2xl"> warning </span> 
+                                            </div> 
+                                        </div> 
+                                         
+                                        <h3 id="cancel-modal-title" class="text-lg font-semibold text-on-surface text-center" > Cancel Order? </h3> 
+                                        <p class="mt-2 text-sm text-on-surface-variant text-center leading-6"> Are you sure you want to cancel this order?</p> 
+                                        <div class="flex gap-3 mt-6"> 
+                                            <button type="button" onclick="closeCancelModal()" 
+                                                class="flex-1 px-4 py-2.5 rounded-lg border border-outline-variant text-sm font-semibold text-on-surface hover:bg-surface-container transition-colors" > 
+                                                Keep Order 
+                                            </button> 
+                                            <button type="button" onclick="confirmCancelOrder()" class="flex-1 px-4 py-2.5 rounded-lg bg-error text-on-error text-sm font-semibold hover:opacity-90 transition-opacity" > 
+                                                Yes, Cancel 
+                                            </button>
+                                        </div> 
+                                    </div> 
+                                </div>
                             </div>
                     </div>
                 </article>
@@ -280,4 +342,83 @@
     <!-- Footer (Shared Component Anchor) -->
     {% include "includes/footer.html" %}
 
+    <script>
+    let cancelOrderId = null;
+
+
+    function openCancelModal(orderId) {
+
+        cancelOrderId = orderId;
+
+        const modal = document.getElementById("cancel-modal");
+
+        if (!modal) {
+            console.error("Cancel modal not found.");
+            return;
+        }
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+
+        document.body.classList.add("overflow-hidden");
+    }
+
+
+    function closeCancelModal() {
+
+        const modal = document.getElementById("cancel-modal");
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+
+        document.body.classList.remove("overflow-hidden");
+
+        cancelOrderId = null;
+    }
+
+
+    function confirmCancelOrder() {
+
+        if (!cancelOrderId) {
+            return;
+        }
+
+        const form = document.getElementById(
+            "cancel-order-form-" + cancelOrderId
+        );
+
+        if (!form) {
+            console.error("Cancel order form not found.");
+            return;
+        }
+
+        form.submit();
+    }
+
+
+    // Close when clicking outside the modal
+    document
+        .getElementById("cancel-modal")
+        ?.addEventListener("click", function (event) {
+
+            if (event.target === this) {
+                closeCancelModal();
+            }
+
+        });
+
+
+    // Close with ESC key
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+            closeCancelModal();
+        }
+
+    });
+</script>
 </body></html>

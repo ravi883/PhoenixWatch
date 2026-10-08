@@ -107,6 +107,7 @@ class OrderPaymentDetail(BaseModel):
     razorpay_order_id = models.CharField(max_length=255, blank=True, null=True)
     razorpay_payment_id = models.CharField(max_length=255, blank=True, null=True)
     razorpay_signature = models.CharField(max_length=500, blank=True, null=True)
+    razorpay_refund_id = models.CharField(max_length=100,blank=True,null=True)
 
     class Meta:
         db_table = "order_payment_detail"
