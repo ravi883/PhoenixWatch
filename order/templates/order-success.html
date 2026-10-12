@@ -4,63 +4,73 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PP0N5L05R"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-1PP0N5L05R');
+        </script>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-<title>Order Confirmed | PhoenixWatch</title>
+        <title>Order Confirmed | PhoenixWatch</title>
 
-<link rel="stylesheet" href="{% static 'css/output.css' %}">
+        <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
-<!-- <script src="https://cdn.tailwindcss.com"></script> -->
+        <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 
-<link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-    rel="stylesheet"
->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+            rel="stylesheet"
+        >
 
-<style>
-    body {
-        font-family: 'Inter', sans-serif;
-    }
+        <style>
+            body {
+                font-family: 'Inter', sans-serif;
+            }
 
-    .serif {
-        font-family: 'Playfair Display', serif;
-    }
+            .serif {
+                font-family: 'Playfair Display', serif;
+            }
 
-    .success-circle {
-        animation: scaleIn 0.5s ease-out;
-    }
+            .success-circle {
+                animation: scaleIn 0.5s ease-out;
+            }
 
-    .success-check {
-        animation: checkmark 0.5s 0.25s ease-out forwards;
-        stroke-dasharray: 100;
-        stroke-dashoffset: 100;
-    }
+            .success-check {
+                animation: checkmark 0.5s 0.25s ease-out forwards;
+                stroke-dasharray: 100;
+                stroke-dashoffset: 100;
+            }
 
-    @keyframes scaleIn {
-        0% {
-            transform: scale(0);
-            opacity: 0;
-        }
-        70% {
-            transform: scale(1.08);
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
+            @keyframes scaleIn {
+                0% {
+                    transform: scale(0);
+                    opacity: 0;
+                }
+                70% {
+                    transform: scale(1.08);
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
 
-    @keyframes checkmark {
-        to {
-            stroke-dashoffset: 0;
-        }
-    }
-</style>
+            @keyframes checkmark {
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+        </style>
 
 
-</head>
+    </head>
 
 <body class="min-h-screen bg-[#faf9f7] text-[#171717]">
 
