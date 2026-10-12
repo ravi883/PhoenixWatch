@@ -22,7 +22,7 @@ from django.urls import reverse
 import razorpay
 import json
 import logging
-from .utils import send_order_confirmation_email
+from .utils import send_order_confirmation_email, build_shipment_payload
 from .whatsapp import send_whatsapp_message
 
 
@@ -796,6 +796,7 @@ def verify_razorpay_payment(request):
         cart.discount_amount = Decimal("0.00")
         cart.save()
 
+    build_shipment_payload(order)
     # ==========================================================
     # SUCCESS
     # ==========================================================
