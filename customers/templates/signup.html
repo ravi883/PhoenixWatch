@@ -1,54 +1,65 @@
 {% load static %}
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Chronova - Premium Signup</title>
+<html class="light" lang="en">
+    <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PP0N5L05R"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-<!-- <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/> -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+        gtag('config', 'G-1PP0N5L05R');
+        </script>
 
-<link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Chronova - Premium Signup</title>
 
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-        }
-        
-        /* Custom minimal input styles */
-        .minimal-input {
-            width: 100%;
-            background-color: transparent;
-            border: none;
-            border-bottom: 1px solid theme('colors.outline-variant');
-            padding: theme('spacing.stack-sm') 0;
-            font-family: theme('fontFamily.body-md');
-            font-size: 16px;
-            color: theme('colors.on-surface');
-            transition: border-color 0.3s ease;
-        }
-        .minimal-input:focus {
-            outline: none;
-            border-bottom-color: theme('colors.primary');
-            box-shadow: none;
-        }
-        .minimal-input::placeholder {
-            color: theme('colors.on-surface-variant');
-            opacity: 0.6;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/> -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
 
-        .field-error {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            }
+            
+            /* Custom minimal input styles */
+            .minimal-input {
+                width: 100%;
+                background-color: transparent;
+                border: none;
+                border-bottom: 1px solid theme('colors.outline-variant');
+                padding: theme('spacing.stack-sm') 0;
+                font-family: theme('fontFamily.body-md');
+                font-size: 16px;
+                color: theme('colors.on-surface');
+                transition: border-color 0.3s ease;
+            }
+            .minimal-input:focus {
+                outline: none;
+                border-bottom-color: theme('colors.primary');
+                box-shadow: none;
+            }
+            .minimal-input::placeholder {
+                color: theme('colors.on-surface-variant');
+                opacity: 0.6;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .field-error {
+                color: red;
+                font-size: 14px;
+                margin-top: 5px;
+            }
+        </style>
+    </head>
 
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
     <!-- TopNavBar (Web) -->
