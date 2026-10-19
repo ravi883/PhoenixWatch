@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render , get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 
 from .forms import CustomerSignupForm, CustomerLoginForm, ProfileUpdateForm, ChangePasswordForm, ForgotPasswordForm, ResetPasswordForm
@@ -19,6 +19,9 @@ from django.utils.encoding import force_bytes
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from order.models import Coupon, Order
+from products.models import Products
+from reviews.models import ProductReview
+from django.db.models import Avg
 
 
 def signup(request):
@@ -71,7 +74,22 @@ def home_view(request):
     # Only first 5 for homepage
     home_categories = categories[:5]
 
-    return render(request, "home.html",{ "banners": banners , 'headlines' : headlines, "categories": home_categories,"best_sellers": best_sellers,})
+    
+    for product in best_sellers:
+        reviews = ProductReview.objects.filter(
+            product=product,
+            is_approved=True
+        )
+
+        product.all_reviews_count = reviews.count()
+
+        product.average_rating = (
+            reviews.aggregate(average=Avg("rating"))["average"] or 0
+        )
+    
+        
+    return render(request, "home.html",{ "banners": banners , 'headlines' : headlines, "categories": home_categories,"best_sellers": best_sellers,
+                                        })
 
 def logout_view(request):
     if request.session.keys():  

@@ -207,7 +207,7 @@
 
     <!-- BEGIN: ProductCatalogGrid -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" data-purpose="product-collection-grid" >
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 transition-all duration-300" id="product-grid">
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 transition-all duration-300" id="product-grid">
             <!-- Product Card 1 -->
             {% for product in products %}
             <article class="product-card group flex flex-col bg-white border border-sand hover:border-gold transition-all duration-300 p-3 relative">
@@ -229,11 +229,11 @@
                                 <div>
                                     <!-- <span class="text-xs text-stone-400 line-through mr-1.5">$38,000</span> -->
                                     <span class="text-sm font-serif font-semibold text-charcoal">₹ {{ product.price}}</span>
-                                </div>
-                                <button class="bg-alabaster border border-stone-300 hover:border-gold hover:bg-gold hover:text-black px-3 py-1.5 text-[10px] tracking-widest uppercase transition-colors" 
-                                   type="submit" onclick="addToBag('{{ product.product_id }}', '{{ product.name|escapejs }}', '{{ product.price }}')">
+                                    <button class="add-to-bag-btn bg-alabaster border border-stone-300 hover:border-gold hover:bg-gold hover:text-black px-3 py-1.5 text-[10px] tracking-widest uppercase transition-colors" 
+                                    id="add-to-bag-btn" data-product-id="{{ product.product_id }}" type="button">
                                     Add to Cart
-                                </button>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </article>
