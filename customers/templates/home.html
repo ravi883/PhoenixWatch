@@ -52,22 +52,28 @@
                 position: relative;
                 overflow: hidden;
                 width: 100%;
-                height: 80vh;
+                /* height: 80vh; */
             }
             .carousel-slide {
-                position: absolute;
-                top: 0;
+                display: none;
+                position: relative;
+                width: 100%;
+                aspect-ratio: 1920 / 650; 
+                background-size: 100% 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                /* top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
                 opacity: 0;
                 transition: opacity 0.8s ease-in-out;
                 background-size: cover;
-                background-position: center;
+                background-position: center; */
             }
             .carousel-slide.active {
-                opacity: 1;
-                z-index: 10;
+                 display: flex;
+                 align-items: center;
             }
             .carousel-overlay {
                 position: absolute;
@@ -249,6 +255,54 @@
                     width: 100%;
                 }
             }
+
+            @media (max-width: 767px) {
+                .carousel-container {
+                    width: 100%;
+                    height: auto;
+                    overflow: hidden;
+                }
+
+                .carousel-slide {
+                    aspect-ratio: 16 / 9;
+                    background-size: 100% 100%;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+
+                .carousel-slide.active {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+
+            @media (max-width: 767px) {
+                .carousel-content {
+                    position: absolute;
+                    bottom: 12px;
+                    left: 16px;
+                    right: 16px;
+                    z-index: 12;
+                    color: white;
+                }
+
+                .carousel-content h2 {
+                    font-size: clamp(18px, 5vw, 28px);
+                    line-height: 1.2;
+                    margin-bottom: 8px;
+                }
+
+                .carousel-content p {
+                    font-size: 13px;
+                    line-height: 1.4;
+                    margin-bottom: 12px;
+                }
+
+                .carousel-content a {
+                    padding: 10px 16px;
+                    font-size: 12px;
+                }
+            }
         </style>
     </head>
 
@@ -284,7 +338,7 @@
                 <!-- Slide 1 -->
 
                 {% for banner in banners %}
-                    <div class="carousel-slide active" data-alt="" style="background-image: url('{{banner.image.url}}');">
+                    <div class="carousel-slide {% if forloop.first %}active{% endif %}" data-alt="" style="background-image: url('{{banner.image.url}}');">
                         <div class="carousel-overlay"></div>
                         <div class="carousel-content max-w-2xl px-margin-mobile md:px-margin-desktop">
                             <h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-stack-md text-on-primary">{{ banner.title }}</h2>
