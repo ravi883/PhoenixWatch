@@ -96,7 +96,7 @@ def product_detail_view(request, slug):
     page_number = request.GET.get("page")
 
     reviews_page = paginator.get_page(page_number)
-    
+    print(average_rating)
     return render(
         request,
         "product-detail.html",
@@ -113,7 +113,7 @@ def product_detail_view(request, slug):
             "five_star_reviews_count": five_star_reviews_count,
             "rating_counts": rating_counts,
             "rating_percentages": rating_percentages,
-            "average_rating":round(average_rating, 1),
+            "average_rating":round(float(average_rating), 1),
 
             # Current filter
             "selected_filter": selected_filter,
