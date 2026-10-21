@@ -372,23 +372,21 @@
                 <h3 class="font-headline-lg text-headline-lg text-primary">Shop by Category</h3>
                 <a class="font-label-caps text-label-caps text-secondary hover:text-primary underline decoration-1 underline-offset-4 hidden md:inline-block" href="{% url 'all-collection-view' %}">VIEW ALL CATEGORIES</a>
             </div>
-            <div class="grid grid-cols-6 gap-x-3 gap-y-6 pb-4 md:grid-cols-5 md:gap-gutter">
+            <div class="grid grid-cols-3 gap-x-3 gap-y-6 pb-4 md:grid-cols-5 md:gap-gutter">
 
                 {% for category in categories %}
                     {% if category.category_type == "watch" %}
                         <a href="{% url 'watch-type-products' category.slug %}"
                         class="group flex flex-col items-center
-                            {% if forloop.counter <= 3 %}col-span-2{% endif %}
-                            {% if forloop.counter == 4 %}col-start-2 col-span-2{% endif %}
-                            {% if forloop.counter == 5 %}col-start-4 col-span-2{% endif %}
-                            md:col-span-1 md:col-start-auto">
-                                                {% else %}
-                                                    <a href="{% url 'strap_type_products' category.slug %}"
-                                                    class="group flex flex-col items-center
-                            {% if forloop.counter <= 3 %}col-span-2{% endif %}
-                            {% if forloop.counter == 4 %}col-start-2 col-span-2{% endif %}
-                            {% if forloop.counter == 5 %}col-start-4 col-span-2{% endif %}
-                            md:col-span-1 md:col-start-auto">
+                        {% if forloop.counter == 4 %}col-start-1 ml-[100%]{% endif %}
+                            {% if forloop.counter == 5 %}col-start-2 ml-[110%]{% endif %}
+                            md:col-auto md:ml-0">
+                    {% else %}
+                        <a href="{% url 'strap_type_products' category.slug %}"
+                        class="group flex flex-col items-center
+                        {% if forloop.counter == 4 %}col-start-1 ml-[100%]{% endif %}
+                            {% if forloop.counter == 5 %}col-start-2 ml-[110%]{% endif %}
+                            md:col-auto md:ml-0">
                     {% endif %}
 
                     <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44
