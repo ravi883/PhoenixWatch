@@ -318,7 +318,7 @@
     {% include "includes/cart-drawer.html" %}
 
     
-    <main class="flex-grow pt-[57px] lg:pt-[80px]"> 
+    <main class="flex-grow pt-[88px] lg:pt-[104px]"> 
         <!-- News Ticker -->
         {% if headlines %}
         <div class="ticker-wrap font-label-caps text-label-caps tracking-widest">
@@ -425,10 +425,10 @@
                             <div class="relative overflow-hidden aspect-square bg-[#f5f3ef] flex items-center justify-center mb-3">
                                 <img alt="{{ product.name }}" class="card-zoom-img object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                                     src="{{ product.primary_image.image.url }}"/>
-                                    <div class="absolute top-2 right-2 z-10 flex items-center gap-1 bg-white/95 px-2 py-1 rounded-md shadow-sm">
+                                    <!-- <div class="absolute top-2 right-2 z-10 flex items-center gap-1 bg-white/95 px-2 py-1 rounded-md shadow-sm">
                                         <span class="material-symbols-outlined text-base text-gold" style="font-variation-settings:'FILL' 1;">star</span>
                                         <span class="text-xs font-semibold text-charcoal">{{ product.average_rating|floatformat:1 }}</span>
-                                    </div>
+                                    </div> -->
                             </div>
                         </a>
 
