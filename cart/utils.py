@@ -42,3 +42,27 @@ def get_or_create_cart(request):
     )
 
     return cart
+
+def merge_guest_cart_to_customer(request, customer):
+    """
+    Merge guest cart items into the logged-in customer's cart.
+    """
+
+    session_key = request.session.session_key
+
+    if not session_key:
+        return
+
+    guest_cart = Cart.objects.filter(
+        session_key=session_key,
+        customer=None,
+    ).first()
+
+    if not guest_cart:
+        return
+
+    guest_cart.session_key = None
+    guest_cart.customer = customer
+
+    guest_cart.save()
+

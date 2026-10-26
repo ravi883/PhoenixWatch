@@ -22,6 +22,7 @@ from order.models import Coupon, Order
 from products.models import Products
 from reviews.models import ProductReview
 from django.db.models import Avg
+from cart.utils import merge_guest_cart_to_customer
 
 
 def signup(request):
@@ -42,7 +43,9 @@ def login_view(request):
         form = CustomerLoginForm(request.POST)
         if form.is_valid():
             customer = form.customer
-            # Store customer ID in session
+            merge_guest_cart_to_customer(request, customer)
+
+            # Store customer ID in sessionx
             request.session["customer_id"] = customer.id
             # messages.success(request, "Login successful.")
             return redirect("home")
